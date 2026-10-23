@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 5 | التخطيط والتصميم المتجاوب — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة الخامسة من مساق SYBS 2309: التخطيط والتصميم المتجاوب — وحدات القياس في CSS (px, %, rem, em, vh, vw, fr)، مقدمة إلى Flexbox، مقدمة إلى Grid، الفرق بينهما، Media Queries، والتصميم من الهاتف أولاً (Mobile-first).">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 5</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 5: التخطيط والتصميم المتجاوب</h1>
+            <p class="lecture-lead">
+                حتى الآن بنينا صفحة تُقرأ، لكنها لا تزال <strong>عموداً واحداً</strong> من الأعلى إلى الأسفل.
+                في هذه المحاضرة نضيف العمق الأفقي والتجاوب: نبدأ بـ<strong>وحدات القياس</strong> لفهم
+                لماذا لا نستخدم <code>px</code> فقط، ثم نتعلّم <strong>Flexbox</strong> لتوزيع العناصر
+                على محور، و<strong>Grid</strong> لبناء شبكات ثنائية الأبعاد، ثم نربطها بـ
+                <strong>Media Queries</strong> لتصبح الصفحة تقرأ نفسها على الهاتف والحاسوب واللوحي.
+                هذا هو الأسبوع الذي يحوّل صفحة الملف الشخصي البسيطة إلى صفحة حديثة حقيقية.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 5</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 1 · الواجهة الأمامية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script5.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script5.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#responsive">لماذا التصميم المتجاوب</a></li>
+                        <li><a href="#units">وحدات القياس في CSS</a></li>
+                        <li><a href="#flexbox-intro">مقدمة إلى Flexbox</a></li>
+                        <li><a href="#flexbox-details">Flexbox: التوزيع والمحاذاة والالتفاف</a></li>
+                        <li><a href="#grid-intro">مقدمة إلى Grid</a></li>
+                        <li><a href="#flex-vs-grid">الفرق بين Flexbox وGrid</a></li>
+                        <li><a href="#media-queries">Media Queries والتصميم من الهاتف أولاً</a></li>
+                        <li><a href="#devtools">اختبار التخطيطات في أدوات المطور</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> Flexbox وGrid ليسا بديلين عن بعضهما؛ هما أداتان
+                    <strong>متكاملتان</strong>. تعلّم متى تُستخدم كل واحدة، ولا تحاول استخدام واحدة
+                    لكل شيء.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على بناء تخطيطات حديثة متجاوبة، تختار الوحدة
+                        المناسبة لكل قيمة، وتوزّع عناصر الصفحة أفقيًا وعموديًا بثقة، وتتحكم في عرض
+                        الصفحة عبر أحجام الشاشات دون أن تنهار.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>التمييز بين الوحدات المطلقة والنسبية</li>
+                                <li>فهم محاور Flexbox وخصائص الحاوية والعنصر</li>
+                                <li>فهم شبكة Grid ووحدة <code>fr</code></li>
+                                <li>كتابة Media Queries بأسلوب Mobile-first</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>تحويل عناصر إلى صف واحد بـ Flexbox</li>
+                                <li>بناء شبكة بطاقات تلقائية التجاوب</li>
+                                <li>كتابة نقاط توقف (breakpoints) منطقية</li>
+                                <li>اختبار التخطيطات في وضع الأجهزة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>بناء واجهات تعمل على أي حجم شاشة</li>
+                                <li>اختيار الأداة المناسبة لكل سيناريو</li>
+                                <li>تجنّب أكوام من الاستعلامات المتشابكة</li>
+                                <li>الاستعداد لمحاضرة JavaScript التفاعلية</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Responsive -->
+                <section class="lecture-section" id="responsive" aria-labelledby="responsive-title">
+                    <h2 class="section-title" id="responsive-title">
+                        <i class="fas fa-mobile-screen"></i> لماذا التصميم المتجاوب
+                    </h2>
+                    <p>
+                        قبل عصر الهواتف، كانت المواقع تُصمَّم لعرض ثابت (غالباً 960px أو 1024px).
+                        اليوم، أكثر من نصف الزيارات تأتي من شاشات مختلفة الأحجام: هواتف صغيرة،
+                        هواتف كبيرة، أجهزة لوحية، حواسيب محمولة، شاشات 4K. التصميم المتجاوب
+                        (<strong>Responsive Design</strong>) هو ببساطة: <strong>تصميم واحد</strong>
+                        يتكيف مع كل هذه الأحجام دون أن يصبح غير قابل للاستخدام.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-droplet"></i> تخطيط سائل</h3>
+                            <ul>
+                                <li>عروض تعتمد على <code>%</code> أو <code>fr</code></li>
+                                <li>لا عرض ثابت قسري</li>
+                                <li>يتمدد ويتقلص مع الشاشة</li>
+                                <li>أساس كل تجاوب</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-image"></i> وسائط مرنة</h3>
+                            <ul>
+                                <li><code>img { max-width: 100%; }</code></li>
+                                <li>الصور تتقلص مع الحاوية</li>
+                                <li>لا فيديو أفقي يفوت الشاشة</li>
+                                <li>جودة الحفاظ على النسب</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-sliders"></i> استعلامات وسائط</h3>
+                            <ul>
+                                <li>تغيير التخطيط عند نقاط محددة</li>
+                                <li><code>@media (min-width: 768px)</code></li>
+                                <li>يفصل بين أحجام الأجهزة</li>
+                                <li>بديل ذكي للتخطيطات الثابتة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-hand-pointer"></i> أهداف لمس مناسبة</h3>
+                            <ul>
+                                <li>الحجم الأدنى المستحسن 44×44px</li>
+                                <li>مسافات كافية بين الأزرار</li>
+                                <li>منع النقر بالخطأ</li>
+                                <li>مهم للوصولية أيضاً</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>مبدأ الهاتف أولاً (Mobile-first):</strong> ابدأ بتصميم الهاتف —
+                            عمود واحد، خطوط واضحة، أزرار كبيرة — ثم أضف التحسينات للشاشات الأكبر
+                            باستخدام <code>@media (min-width: …)</code>. هذا يضمن أنك لا تحاول
+                            "ضغط" تخطيط كبير داخل هاتف صغير.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Units -->
+                <section class="lecture-section" id="units" aria-labelledby="units-title">
+                    <h2 class="section-title" id="units-title">
+                        <i class="fas fa-ruler-combined"></i> وحدات القياس في CSS
+                    </h2>
+                    <p>
+                        اختيار الوحدة الصحيحة هو نصف التجاوب. الوحدات تنقسم إلى قسمين:
+                        <strong>مطلقة</strong> لا تتغير بحسب السياق (مثل <code>px</code>)،
+                        <strong>ونسبية</strong> تعتمد على شيء آخر — حجم الجذر، الأب، أو أبعاد
+                        الشاشة.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>الوحدة</th>
+                                    <th>النوع</th>
+                                    <th>تُحسب نسبة إلى</th>
+                                    <th>الاستخدام المفضل</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>px</code></td>
+                                    <td>مطلقة</td>
+                                    <td>بكسل الشاشة</td>
+                                    <td>الحدود، الظلال، التفاصيل الدقيقة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>%</code></td>
+                                    <td>نسبية</td>
+                                    <td>الأب</td>
+                                    <td>عروض مرنة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>em</code></td>
+                                    <td>نسبية</td>
+                                    <td>حجم خط العنصر الأب</td>
+                                    <td>مسافات تتناسب مع نص مكون</td>
+                                </tr>
+                                <tr>
+                                    <td><code>rem</code></td>
+                                    <td>نسبية</td>
+                                    <td>حجم خط جذر المستند</td>
+                                    <td>حجم النصوص والمسافات الكبيرة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>vh</code> / <code>vw</code></td>
+                                    <td>نسبية</td>
+                                    <td>1% من ارتفاع/عرض نافذة العرض</td>
+                                    <td>أقسام بملء الشاشة، وسائد بصرية</td>
+                                </tr>
+                                <tr>
+                                    <td><code>vmin</code> / <code>vmax</code></td>
+                                    <td>نسبية</td>
+                                    <td>الأصغر/الأكبر من vw وvh</td>
+                                    <td>تخطيطات تعتمد على الشاشة كاملة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>ch</code></td>
+                                    <td>نسبية</td>
+                                    <td>عرض المحرف "0"</td>
+                                    <td>عرض يسهل القراءة (65ch شائع)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>fr</code></td>
+                                    <td>خاصة بـGrid</td>
+                                    <td>جزء من المساحة المتاحة</td>
+                                    <td>توزيع أعمدة Grid</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> units.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>/* تجربة سريعة: كيف تتغير الوحدات؟ */
+html { font-size: 18px; }
+
+.box-px    { width: 320px; }                    /* ثابت لا يتغير */
+.box-pct   { width: 80%; }                      /* نسبة من الأب */
+.box-rem   { width: 20rem; padding: 1.5rem; }   /* 20 × 18px */
+.box-em    { font-size: 20px; padding: 2em; }   /* 2 × 20 = 40px */
+.box-vh    { min-height: 100vh; }               /* يملأ الشاشة طولاً */
+.box-ch    { max-width: 65ch; }                 /* عرض مريح للقراءة */
+
+/* أنماط المستند الأساسي — نمط مقترح */
+html {
+    font-size: 1rem;   /* 1rem = 16px عادة */
+}
+body {
+    font-size: 1rem;        /* استخدم rem للنصوص */
+    line-height: 1.7;       /* بلا وحدة — نسبة إلى font-size */
+}</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>قاعدة عملية:</strong> استخدم <code>rem</code> للنصوص والمسافات
+                            الكبيرة، <code>px</code> للحدود والظلال، <code>%</code> و<code>fr</code>
+                            للعروض داخل التخطيطات، و<code>vh</code> لأقسام تحتاج ملء الشاشة.
+                            لا تخلط الوحدات داخل نفس الخاصية بلا سبب.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>تنبيه:</strong> <code>vh</code> له مشكلة معروفة في متصفحات
+                            الهاتف — ارتفاع شريط العنوان/الإعدادات يتغير مع التمرير، فيتغير ارتفاع
+                            العناصر بملء الشاشة. بديل حديث: <code>100dvh</code> (dynamic viewport
+                            height). استخدمه عند توفره.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Flexbox intro -->
+                <section class="lecture-section" id="flexbox-intro" aria-labelledby="flexbox-intro-title">
+                    <h2 class="section-title" id="flexbox-intro-title">
+                        <i class="fas fa-arrows-left-right"></i> مقدمة إلى Flexbox
+                    </h2>
+                    <p>
+                        <strong>Flexbox</strong> هو نموذج تخطيط أحادي البعد: يوزّع العناصر على
+                        <strong>محور واحد</strong> (صف أو عمود). مُثالي لشريط تنقل، زر مع أيقونة،
+                        قائمة بطاقات في صف، أو توسيط عنصر في وسطه تماماً.
+                    </p>
+
+                    <p>
+                        عند وضع <code>display: flex</code> على عنصر، يصبح هو <strong>الحاوية
+                        المرنة (flex container)</strong>، وكل أبنائه المباشرين يصبحون
+                        <strong>عناصر مرنة (flex items)</strong>. يمكنك بعدها التحكم باتجاه
+                        المحور، وكيفية التوزيع، والمحاذاة العمودية، والتفاف العناصر.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-arrow-right"></i> المحور الرئيسي</h3>
+                            <ul>
+                                <li>صف افتراضيًا (Main axis)</li>
+                                <li><code>flex-direction: row</code></li>
+                                <li>تتحكم به <code>justify-content</code></li>
+                                <li>يمكن قلبه بـ<code>row-reverse</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-arrow-down"></i> المحور المتقاطع</h3>
+                            <ul>
+                                <li>عمودي افتراضيًا (Cross axis)</li>
+                                <li>عكس اتجاه المحور الرئيسي</li>
+                                <li>تتحكم به <code>align-items</code></li>
+                                <li>لعمل عمود: <code>flex-direction: column</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> flexbox-basic.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>.nav {
+    display: flex;              /* يفعّل Flexbox */
+    gap: 12px;                  /* مسافة بين العناصر */
+    flex-direction: row;        /* صف (افتراضي) */
+    justify-content: space-between; /* توزيع على المحور الرئيسي */
+    align-items: center;        /* توسيط عمودي */
+    padding: 12px 20px;
+    background: #0b1120;
+}
+
+.nav a {
+    color: #7dd3fc;
+    text-decoration: none;
+    padding: 6px 10px;
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Flexbox details -->
+                <section class="lecture-section" id="flexbox-details" aria-labelledby="flexbox-details-title">
+                    <h2 class="section-title" id="flexbox-details-title">
+                        <i class="fas fa-sliders"></i> Flexbox: التوزيع والمحاذاة والالتفاف
+                    </h2>
+                    <p>
+                        بعد تفعيل Flexbox، أهم خصائص الحاوية هي:
+                        <code>justify-content</code> (توزيع على المحور الرئيسي)،
+                        <code>align-items</code> (محاذاة على المحور المتقاطع)،
+                        <code>gap</code> (مسافة بين العناصر)، و<code>flex-wrap</code>
+                        (هل تنتقل العناصر إلى سطر جديد عند ضيق المساحة؟).
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>القيمة</th>
+                                    <th>تأثيرها على المحور الرئيسي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>flex-start</code></td>
+                                    <td>تجميع العناصر في البداية (بداية المحور)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>flex-end</code></td>
+                                    <td>تجميع العناصر في النهاية</td>
+                                </tr>
+                                <tr>
+                                    <td><code>center</code></td>
+                                    <td>توسيط العناصر</td>
+                                </tr>
+                                <tr>
+                                    <td><code>space-between</code></td>
+                                    <td>أول عنصر في البداية، آخر في النهاية، والباقي موزع</td>
+                                </tr>
+                                <tr>
+                                    <td><code>space-around</code></td>
+                                    <td>مسافة حول كل عنصر (نصف المسافة في الأطراف)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>space-evenly</code></td>
+                                    <td>مسافات متساوية تمامًا بين العناصر والأطراف</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-align-center"></i> align-items (المحور المتقاطع)</h3>
+                            <ul>
+                                <li><code>stretch</code> (افتراضي)</li>
+                                <li><code>flex-start</code> / <code>flex-end</code></li>
+                                <li><code>center</code> — شائع جدًا</li>
+                                <li><code>baseline</code> لمحاذاة خط الأساس</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-arrows-left-right-to-line"></i> flex-wrap</h3>
+                            <ul>
+                                <li><code>nowrap</code> (افتراضي — لا التفاف)</li>
+                                <li><code>wrap</code> — التفاف عند الحاجة</li>
+                                <li><code>wrap-reverse</code> — التفاف معكوس</li>
+                                <li>ضروري لقوائم البطاقات المرنة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-up-right-from-square"></i> خصائص العنصر</h3>
+                            <ul>
+                                <li><code>flex: 1</code> — تمدد متساوٍ</li>
+                                <li><code>flex: 2</code> — ضعف التمدد</li>
+                                <li><code>flex-grow</code> / <code>shrink</code></li>
+                                <li><code>flex-basis</code> — الحجم الأولي</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> flexbox-card-row.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.cards .card {
+    flex: 1 1 280px;      /* grow:1, shrink:1, basis:280px */
+    background: #1b2540;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+/* توسيط دقيق لعنصر في وسطه */
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>حيلة التوسيط الشهيرة:</strong> <code>display:flex</code>
+                            مع <code>justify-content:center</code> و<code>align-items:center</code>
+                            هي أسهل طريقة لتوسيط عنصر أفقيًا وعموديًا. لا حاجة إلى هوامش سالبة أو
+                            <code>position: absolute</code>.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>تحذير شائع:</strong> <code>flex: 1</code> يجعل العنصر
+                            <strong>ينمو</strong> لملء المساحة. إذا أضفت <code>flex: 1</code>
+                            لثلاث بطاقات، ستتساوى عروضها. لكن إذا لم تعطِ عنصرًا أي <code>flex</code>،
+                            سيبقى بحجم محتواه فقط — أحيانًا هذا هو ما تريده، وأحيانًا لا. انتبه.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Grid intro -->
+                <section class="lecture-section" id="grid-intro" aria-labelledby="grid-intro-title">
+                    <h2 class="section-title" id="grid-intro-title">
+                        <i class="fas fa-table-cells-large"></i> مقدمة إلى Grid
+                    </h2>
+                    <p>
+                        <strong>Grid</strong> هو نموذج تخطيط <strong>ثنائي الأبعاد</strong>:
+                        يتعامل مع الصفوف والأعمدة في آن واحد. إنه الأداة المثالية لبناء
+                        شبكة بطاقات، صفحة كاملة بأقسامها، أو معرض صور.
+                    </p>
+
+                    <p>
+                        على الحاوية نضع <code>display: grid</code>، ثم نحدد أعمدة الشبكة عبر
+                        <code>grid-template-columns</code>، وصفوفها إن أردنا عبر
+                        <code>grid-template-rows</code>. المسافة بين الخلايا عبر <code>gap</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> grid-basic.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>/* ثلاث أعمدة متساوية */
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+/* شبكة متجاوبة تلقائيًا */
+.grid-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+/* شبكة بنمط محدد: 200px ثم الباقي */
+.grid-mixed {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    gap: 16px;
+}</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-repeat"></i> repeat()</h3>
+                            <ul>
+                                <li><code>repeat(3, 1fr)</code> = 3 أعمدة متساوية</li>
+                                <li><code>repeat(auto-fit, minmax(260px, 1fr))</code></li>
+                                <li>يقلل التكرار اليدوي</li>
+                                <li>الأساس لشبكة متجاوبة ذكية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-scale-balanced"></i> fr</h3>
+                            <ul>
+                                <li>جزء من المساحة المتاحة</li>
+                                <li><code>1fr 1fr 1fr</code> = ثلث لكل عمود</li>
+                                <li><code>2fr 1fr</code> = 2/3 و1/3</li>
+                                <li>أكثر مرونة من النسب المئوية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-arrows-left-right"></i> auto-fit vs auto-fill</h3>
+                            <ul>
+                                <li><code>auto-fit</code> — يمدد البطاقات لملء الصف</li>
+                                <li><code>auto-fill</code> — يترك فراغًا لو المتبقي قليل</li>
+                                <li>غالبًا <code>auto-fit</code> للبطاقات</li>
+                                <li>الاثنان يحتاجان <code>minmax</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>أشهر نمط شبكة متجاوبة:</strong>
+                            <br><code>grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));</code>
+                            <br>هذا السطر وحده يعطيك شبكة تتكيف تلقائيًا: عمود واحد على الهاتف،
+                            عمودان على اللوحي، ثلاثة أو أكثر على الحاسوب. بدون Media Query.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Flex vs Grid -->
+                <section class="lecture-section" id="flex-vs-grid" aria-labelledby="flex-vs-grid-title">
+                    <h2 class="section-title" id="flex-vs-grid-title">
+                        <i class="fas fa-code-compare"></i> الفرق بين Flexbox وGrid
+                    </h2>
+                    <p>
+                        السؤال الأكثر تكرارًا: أيّهما أستخدم؟ الجواب: <strong>كل واحد
+                        لما بُني له</strong>. Flexbox يعمل على <strong>محور واحد</strong>،
+                        Grid يعمل على <strong>محورين</strong>. والاثنان يتكاملان.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>المحور</th>
+                                    <th>Flexbox</th>
+                                    <th>Grid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>الأبعاد</td>
+                                    <td>أحادي (صف أو عمود)</td>
+                                    <td>ثنائي (صفوف وأعمدة)</td>
+                                </tr>
+                                <tr>
+                                    <td>متى نستخدمه</td>
+                                    <td>شريط تنقل، صف أزرار، توسيط</td>
+                                    <td>شبكة بطاقات، تخطيط صفحة، معرض صور</td>
+                                </tr>
+                                <tr>
+                                    <td>الاعتماد على المحتوى</td>
+                                    <td>غالبًا يعتمد على محتوى العناصر</td>
+                                    <td>غالبًا تحدد الشبكة قبل المحتوى</td>
+                                </tr>
+                                <tr>
+                                    <td>التحكم الافتراضي</td>
+                                    <td>متصفح يوزع العناصر</td>
+                                    <td>أنت تحدد الأعمدة والصفوف</td>
+                                </tr>
+                                <tr>
+                                    <td>في التخطيط العام</td>
+                                    <td>عنصر داخلي</td>
+                                    <td>تخطيط الصفحة الأساسي</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نمط عملي شائع:</strong> استخدم <strong>Grid</strong> لتخطيط
+                            الصفحة الرئيسي (ترويسة / شريط جانبي / محتوى / تذييل)، واستخدم
+                            <strong>Flexbox</strong> داخل المكونات (شريط تنقل، صف أزرار،
+                            بطاقة فيها صورة ونص بجانب بعضهما).
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Media queries -->
+                <section class="lecture-section" id="media-queries" aria-labelledby="media-title">
+                    <h2 class="section-title" id="media-title">
+                        <i class="fas fa-display"></i> Media Queries والتصميم من الهاتف أولاً
+                    </h2>
+                    <p>
+                        <strong>Media Queries</strong> هي الجملة الشرطية في CSS: "إذا كانت الشاشة
+                        أعرض من كذا، طبّق هذه القواعد". تكتبها هكذا:
+                        <code>@media (min-width: 768px) { ... }</code>.
+                    </p>
+
+                    <p>
+                        في أسلوب <strong>Mobile-first</strong>، تكتب الأنماط الأساسية للهاتف أولاً
+                        (بدون Media Query)، ثم تُضيف تحسينات للشاشات الأكبر باستخدام
+                        <code>min-width</code>. هذا الترتيب يمنع التعارضات ويضمن أن الهاتف
+                        دائمًا يحصل على النسخة الأساسية.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> responsive-layout.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>/* ==== الأساس: هاتف أولاً ==== */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;   /* عمود واحد */
+    gap: 16px;
+    padding: 16px;
+}
+
+/* ==== لوحي: 768px فأكثر ==== */
+@media (min-width: 768px) {
+    .layout {
+        grid-template-columns: 1fr 1fr;  /* عمودان */
+        padding: 24px;
+        gap: 20px;
+    }
+}
+
+/* ==== حاسوب: 1024px فأكثر ==== */
+@media (min-width: 1024px) {
+    .layout {
+        grid-template-columns: 240px 1fr; /* شريط جانبي + محتوى */
+        padding: 32px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-mobile-screen"></i> نقاط التوقف الشائعة</h3>
+                            <ul>
+                                <li>480px — هاتف كبير</li>
+                                <li>640px — لوحي صغير</li>
+                                <li>768px — لوحي</li>
+                                <li>1024px — حاسوب محمول</li>
+                                <li>1280px — سطح مكتب</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-arrows-up-down"></i> min-width أم max-width</h3>
+                            <ul>
+                                <li><code>min-width</code> — Mobile-first (مفضّل)</li>
+                                <li><code>max-width</code> — Desktop-first (قديم)</li>
+                                <li>لا تخلط بين الاثنين</li>
+                                <li>اختر نمطًا والتزم به</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-circle-notch"></i> أنواع الوسائط</h3>
+                            <ul>
+                                <li><code>screen</code> — الشاشات</li>
+                                <li><code>print</code> — الطباعة</li>
+                                <li><code>prefers-reduced-motion</code></li>
+                                <li><code>prefers-color-scheme</code> — داكن/فاتح</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>لا تكتب Media Query لكل بكسل.</strong> النقاط يجب أن تُختار
+                            عندما "ينكسر" التصميم فعلًا، لا لمجرد تقليد أرقام مشهورة. ابدأ بعمود
+                            واحد، وسّعه، لاحظ متى يصبح غير مريح، ثم أضف نقطة التوقف عنده.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DevTools -->
+                <section class="lecture-section" id="devtools" aria-labelledby="devtools-title">
+                    <h2 class="section-title" id="devtools-title">
+                        <i class="fas fa-tablet-screen-button"></i> اختبار التخطيطات في أدوات المطور
+                    </h2>
+                    <p>
+                        أدوات المطور توفر وضع <strong>محاكاة الأجهزة</strong> الذي يسمح باختبار
+                        أي صفحة على أحجام شاشات متعددة. هذا لا يغني عن الاختبار على جهاز حقيقي،
+                        لكنه يسرّع التطوير كثيرًا.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-mobile-screen-button"></i> Device Mode</h3>
+                            <ul>
+                                <li>افتح أدوات المطور بـF12</li>
+                                <li>اضغط أيقونة الهاتف (Ctrl+Shift+M)</li>
+                                <li>اختر جهازًا من القائمة</li>
+                                <li>غيّر الاتجاه عمودي/أفقي</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-arrows-left-right"></i> تغيير الحجم اليدوي</h3>
+                            <ul>
+                                <li>اسحب حدود النافذة</li>
+                                <li>لاحظ عرض الحاوية بالأعلى</li>
+                                <li>راقب متى تنهار التخطيطات</li>
+                                <li>أضف نقطة توقف عندها</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-crosshairs"></i> فحص Flex وGrid</h3>
+                            <ul>
+                                <li>شعار Flex/Grid بجانب العنصر</li>
+                                <li>يفعّل تراكب المحاور</li>
+                                <li>يساعد على فهم التوزيع</li>
+                                <li>جرّبه في تبويب Elements</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> الفرق عن الجهاز الحقيقي</h3>
+                            <ul>
+                                <li>لا يعرض لوحة مفاتيح فعلية</li>
+                                <li>لا يحاكي سرعة الشبكة افتراضيًا</li>
+                                <li>لا يظهر سلوك اللمس الحقيقي</li>
+                                <li>اختبر دائمًا على جهاز واحد فعلي</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        المطلوب في هذه المحاضرة بناء صفحة تحتوي <strong>عمودين</strong> على
+                        الشاشات الكبيرة، ويتحولان إلى <strong>عمود واحد</strong> على الهاتف.
+                        سنستخدم Grid للتخطيط الأساسي، وFlexbox داخل العناصر.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 5</h3>
+                        <ol>
+                            <li>أنشئ ملف <code>layout.html</code> داخل مجلد <code>web-course</code>.</li>
+                            <li>اكتب مستند HTML5 كاملًا مع هيكل دلالي: <code>header</code>، <code>main</code>، <code>footer</code>.</li>
+                            <li>
+                                داخل <code>main</code> أنشئ عنصرًا بحاوية:
+                                <code>&lt;div class="layout"&gt;</code>، وبداخله عنصران:
+                                <ul>
+                                    <li><code>&lt;article class="content"&gt;</code> — محتوى رئيسي.</li>
+                                    <li><code>&lt;aside class="sidebar"&gt;</code> — بطاقة جانبية.</li>
+                                </ul>
+                            </li>
+                            <li>أضف صفًا من الأزرار في <code>header</code> وتحكّم به باستخدام Flexbox (توسيط، مسافة).</li>
+                            <li>
+                                في <code>style.css</code> أنشئ قاعدة أساسية (Mobile-first):
+                                <ul>
+                                    <li><code>.layout { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 16px; }</code></li>
+                                </ul>
+                            </li>
+                            <li>
+                                أضف Media Query للشاشات الكبيرة:
+                                <ul>
+                                    <li><code>@media (min-width: 768px) { .layout { grid-template-columns: 2fr 1fr; padding: 24px; } }</code></li>
+                                </ul>
+                            </li>
+                            <li>
+                                أنشئ شبكة بطاقات داخل <code>article</code>:
+                                <ul>
+                                    <li><code>.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }</code></li>
+                                    <li>ضع بداخلها 4–6 بطاقات صغيرة.</li>
+                                </ul>
+                            </li>
+                            <li>استخدم <code>rem</code> للنصوص والمسافات، و<code>px</code> للحدود.</li>
+                            <li>افتح الصفحة في وضع الأجهزة بأدوات المطور، وجرّب العرض على 360px و768px و1280px.</li>
+                            <li>تأكد أن الأزرار في الترويسة تبقى في صف واحد على الحاسوب، وتلتف على الهاتف.</li>
+                            <li>التقط صورة للصفحة على الهاتف وصورة على الحاسوب، وأرفقهما مع <code>layout.html</code> و<code>style.css</code>.</li>
+                        </ol>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> بدون Media Queries مكتوبة يدويًا للبطاقات،
+                            تتكيف شبكة البطاقات تلقائيًا. وفي وضع الهاتف، <code>.layout</code>
+                            عمود واحد بلا تمرير أفقي. لا يوجد <code>overflow-x: scroll</code>
+                            على <code>body</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-fixed-width"></i> استخدام عرض ثابت</h3>
+                            <p>
+                                <code>width: 1200px</code> سيسبب تمريرًا أفقيًا على الهاتف.
+                                استخدم <code>max-width</code> بدلًا من <code>width</code>
+                                للعناصر الأساسية.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-arrows-up-down"></i> خلط min-width مع max-width</h3>
+                            <p>
+                                إذا بدأت بـ<code>min-width</code>، التزم به. خلط الاثنين
+                                يُنتج تعارضات غامضة تتطلب <code>!important</code> لحلها.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-image-slash"></i> نسيان max-width على الصور</h3>
+                            <p>
+                                صورة كبيرة داخل عمود ضيق ستدفع الصفحة للتمرير. أضف دائمًا:
+                                <code>img { max-width: 100%; height: auto; }</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-magnifying-glass"></i> نقاط توقف كثيرة</h3>
+                            <p>
+                                ثلاث نقاط توقف كافية لمعظم المشاريع. كل نقطة إضافية تعني
+                                مزيدًا من الصيانة. اختر بناءً على "متى ينكسر التصميم؟".
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-hand-pointer"></i> أهداف لمس صغيرة</h3>
+                            <p>
+                                أزرار بحجم 24px صعبة على الإبهام. استخدم <code>min-height: 44px</code>
+                                و<code>padding</code> مريح. هذا مهم للوصولية أيضًا.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-mouse-pointer"></i> الاعتماد على hover فقط</h3>
+                            <p>
+                                <code>:hover</code> لا يعمل على اللمس. لا تجعل وظيفة حرجة
+                                تعتمد فقط على المرور بالفأرة. أضف بديلًا عبر <code>:focus</code>
+                                و<code>:active</code>.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>التصميم المتجاوب: تخطيط واحد يتكيف مع كل أحجام الشاشات.</li>
+                        <li>وحدات القياس: <code>px</code> مطلق، <code>rem</code> و<code>%</code> و<code>vh</code> و<code>fr</code> نسبية.</li>
+                        <li>Flexbox أحادي البعد: صف أو عمود، مع <code>justify-content</code> و<code>align-items</code>.</li>
+                        <li>Grid ثنائي الأبعاد: شبكة صفوف وأعمدة، مع <code>fr</code> و<code>repeat()</code> و<code>minmax()</code>.</li>
+                        <li>النمط الذكي: <code>repeat(auto-fit, minmax(260px, 1fr))</code> لشبكة تلقائية التجاوب.</li>
+                        <li>Media Queries تكتب بأسلوب Mobile-first عبر <code>min-width</code>.</li>
+                        <li>نقاط التوقف تُختار عند انكسار التصميم، لا بتقليد أرقام جاهزة.</li>
+                        <li>أدوات المطور توفر وضع أجهزة لاختبار التخطيطات بسرعة.</li>
+                        <li>الوصولية: أهداف لمس 44px+، لا اعتماد على hover فقط، تمرير أفقي غير مقصود ممنوع.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما الفرق بين <code>px</code> و<code>rem</code>؟</summary>
+                        <p>
+                            <code>px</code> وحدة مطلقة لا تتغير بحسب السياق. <code>rem</code>
+                            نسبية تُحسب من حجم خط جذر المستند (<code>html</code>)، فتحترم
+                            إعدادات المستخدم وتكبر معها.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) متى نستخدم Flexbox ومتى نستخدم Grid؟</summary>
+                        <p>
+                            Flexbox للتخطيطات أحادية البعد (صف أو عمود) مثل شريط التنقل.
+                            Grid للتخطيطات ثنائية الأبعاد (صفوف وأعمدة معًا) مثل شبكة البطاقات
+                            أو تخطيط الصفحة.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) ماذا تفعل <code>repeat(auto-fit, minmax(260px, 1fr))</code>؟</summary>
+                        <p>
+                            تبني شبكة تلقائية: عدد الأعمدة يتحدد تلقائيًا حسب عرض الحاوية،
+                            كل عمود لا يقل عن 260px ويمتد لملء المساحة المتبقية (1fr).
+                            النتيجة: تجاوب تلقائي بدون كتابة Media Queries للبطاقات.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) لماذا نفضّل Mobile-first؟</summary>
+                        <p>
+                            لأن الهاتف أبسط تخطيط، والبدء به ثم التوسع أبسط من تقليص تخطيط
+                            كبير. كما أنه يضمن أنك لا تتجاهل تحسينات الهاتف، ويمنع تعارضات
+                            تنتج عن خلط <code>min-width</code> و<code>max-width</code>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) لماذا نحتاج <code>img { max-width: 100%; height: auto; }</code>؟</summary>
+                        <p>
+                            لأن الصور الكبيرة قد تتجاوز عرض الحاوية على الهاتف، فتُسبب تمريرًا
+                            أفقيًا غير مقصود. <code>max-width: 100%</code> يُقلّصها تلقائيًا
+                            داخل الحاوية مع الحفاظ على النسب.
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="lecture4.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> المحاضرة السابقة
+                    </a>
+                    <a href="lecture6.html">
+                        المحاضرة التالية: مقدمة إلى JavaScript <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 5 · التخطيط والتصميم المتجاوب | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1072 @@
+SYBS 2309 — تصميم وبرمجة الويب
+script13.txt — تفريغ الشرح الصوتي للمحاضرة 13
+عنوان المحاضرة: القوالب والنماذج في Flask
+المحاضر: م. محمود خليل
+المدة التقريبية: 3 ساعات أكاديمية (مختبر معمّق)
+
+============================================================
+[00:00 – 03:00] الترحيب وربط المحاضرة السابقة
+============================================================
+
+أهلاً بكم في المحاضرة الثالثة عشرة من مساق تصميم وبرمجة الويب.
+في المحاضرة الثانية عشرة دخلنا عالم Flask:
+تعلّمنا إعداد البيئة الافتراضية، وتثبيت Flask،
+وأول تطبيق، والمسارات، والمعاملات الديناميكية،
+وطرق HTTP، ووضع التصحيح.
+
+لكن تطبيقنا كان يرجع نصوصاً فقط:
+return "مرحباً"
+return "عن المساق"
+return f"المعرّف: {sid}"
+
+اليوم ننتقل إلى شيء مختلف كلياً: تطبيق ويب حقيقي.
+
+خلينا نكون واضحين منذ البداية:
+تطبيق ويب حقيقي ليس مجرد دالة ترجع نصاً.
+هو:
+- صفحات HTML منظمة.
+- قوالب موحّدة.
+- بيانات تُمرَّر من Python إلى الصفحة.
+- نماذج تستقبل بيانات من المستخدم.
+- تحقق في الخادم.
+- رسائل واضحة للمستخدم.
+
+هذا بالضبط موضوع محاضرتنا اليوم.
+
+خطة المحاضرة:
+- Jinja2: تعابير وكتل.
+- تمرير البيانات من Python إلى القالب.
+- وراثة القوالب (extends وblock).
+- static وurl_for.
+- GET وPOST في النماذج.
+- استقبال بيانات النموذج في Python.
+- رسائل Flash.
+- التحقق في الخادم.
+- تطبيق عملي: نموذج تواصل كامل.
+- أخطاء شائعة وملخص.
+
+هذه المحاضرة هي الجسر بين المرحلة الأولى (الواجهة الأمامية)
+والمرحلة الثانية (الواجهة الخلفية). سنستخدم فيها كل ما تعلمناه:
+HTML، CSS، وحتى منطق JavaScript من جهة،
+وFlask وPython من جهة أخرى.
+
+خذوا وقتكم فيها، لأنها أساس المشروع النهائي.
+
+============================================================
+[03:00 – 18:00] Jinja2: تعابير وكتل
+============================================================
+
+دعونا نبدأ بالسؤال الأول: ما هو Jinja2؟
+
+تخيلوا أن لدينا ملف HTML فيه مكان لعنوان متغير،
+ومكان لقائمة متغيرة، ومكان لاسم المستخدم.
+هذا الملف لا يمكن أن يُفتح مباشرة في المتصفح،
+لأن فيه أماكن فارغة.
+
+Jinja2 هو المُحرّك الذي يملأ هذه الأماكن قبل إرسال
+HTML للمتصفح. هو محرّك قوالب يأتي مع Flask، ونحن نستعمله
+عبر render_template.
+
+مثال بسيط. تخيلوا ملف templates/hello.html:
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <p>مرحباً {{ name }}، عمرك {{ age }} سنة.</p>
+</body>
+</html>
+
+لاحظوا {{ title }} و{{ name }} و{{ age }}.
+هذه ليست HTML. هذه صياغة Jinja.
+
+عند استدعاء:
+
+from flask import Flask, render_template
+app = Flask(__name__)
+
+@app.route("/hello")
+def hello():
+    return render_template(
+        "hello.html",
+        title="صفحة ترحيب",
+        name="سارة",
+        age=20
+    )
+
+Jinja2 يفتح hello.html، يستبدل {{ title }} بـ"صفحة ترحيب"،
+{{ name }} بـ"سارة"، {{ age }} بـ20، ويُرسل الناتج
+للمتصفح.
+
+الآن، عندنا صياغتان أساسيتان في Jinja:
+
+الأولى: {{ }} — تعابير expressions.
+تستخدم لطباعة قيمة. سواء كانت متغيراً، أو تعبيراً حسابياً،
+أو استدعاء دالة.
+
+مثال:
+{{ name }}
+{{ 10 + 5 }}
+{{ user.name }}
+{{ items[0] }}
+
+الثانية: {% %} — كتل statements.
+تستخدم للتحكم في التدفق، ولا تُطبع قيمتها.
+مثل:
+{% if age >= 18 %} ... {% endif %}
+{% for skill in skills %} ... {% endfor %}
+{% extends "base.html" %}
+{% block content %} ... {% endblock %}
+
+وهناك ثالثة صغيرة: {# #} للتعليقات.
+هذه لا تظهر في HTML النهائي، ولا تُرسل للمتصفح.
+مفيدة لتوثيق القوالب.
+
+{# هذا تعليق داخلي لا يراه المستخدم #}
+
+الآن، دعونا نتعمق قليلاً في if وfor في Jinja:
+
+{% if age >= 18 %}
+    <p>أنت بالغ.</p>
+{% else %}
+    <p>أنت قاصر.</p>
+{% endif %}
+
+{% for skill in skills %}
+    <li>{{ skill }}</li>
+{% else %}
+    <li>لا توجد مهارات.</li>
+{% endfor %}
+
+لاحظوا similarities:
+- if ينتهي بـendif.
+- for ينتهي بـendfor.
+- كل كتلة تحكم لها نهاية.
+- for لها else، تُنفّذ لو القائمة فارغة.
+
+ميزة مهمة جداً في Jinja:
+الهروب التلقائي (auto-escape).
+إذا مررنا:
+
+name = "<script>alert(1)</script>"
+
+Jinja لن يظهر السكربت كسكربت، بل كنص حرفي:
+&lt;script&gt;alert(1)&lt;/script&gt;
+
+هذا يمنع ثغرة XSS تلقائياً. سلوك افتراضي جيد.
+
+لكن هناك استثناء خطير: المرشح |safe.
+إذا استخدمتم:
+
+{{ comment | safe }}
+
+فسيتم تفعيل HTML ولن يُهرَّب. هذا يفتح XSS إذا كان
+comment من المستخدم. القاعدة: لا تستخدموا |safe إلا
+مع HTML تكتبونه أنتم أو مصفّى بحذر.
+
+هناك أيضاً مرشحات مفيدة أخرى:
+{{ price | round(2) }}       ← تقريب
+{{ text | upper }}           ← أحرف كبيرة
+{{ items | length }}         ← عدد العناصر
+{{ name | default('زائر') }} ← قيمة افتراضية
+{{ created | date('%Y') }}   ← تاريخ (مع إعدادات)
+
+فكروا في Jinja كهذه: صياغة خاصة داخل HTML تحل مكانها
+بقيم وأنماط قبل الإرسال. أنتم لا تكتبون كل صفحة من الصفر
+في كل مرة.
+
+============================================================
+[18:00 – 30:00] تمرير البيانات من Python إلى القالب
+============================================================
+
+الآن السؤال: كيف نمرّر البيانات من Python إلى القالب؟
+
+بسيط. دالة render_template تقبل اسم القالب أولاً،
+ثم سلسلة من المعاملات المسماة.
+
+render_template(
+    "courses.html",
+    title="قائمة المقررات",
+    courses=courses_list,
+    total=len(courses_list)
+)
+
+كل معامل يُصبح متغيراً متاحاً داخل القالب:
+- title
+- courses
+- total
+
+في القالب تكتبون {{ title }} و{{ courses }} و{{ total }}.
+
+مثال حقيقي. تخيلوا أن لدينا قائمة مقررات:
+
+courses_list = [
+    {"code": "SYBS 2309", "title": "تصميم وبرمجة الويب", "active": True},
+    {"code": "SYBS 1010", "title": "مقدمة إلى الأمن", "active": False},
+    {"code": "SYBS 2020", "title": "شبكات الحاسوب", "active": True},
+]
+
+في القالب:
+
+{% for c in courses %}
+    <tr>
+        <td>{{ c.code }}</td>
+        <td>{{ c.title }}</td>
+        <td>
+            {% if c.active %}
+                نشط
+            {% else %}
+                متوقف
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+
+جميل، أليس كذلك؟
+
+لاحظوا كيف أننا نمر على قاموس بـc.code وc.title.
+Jinja يقبل الطريقة النقطية أو c["code"]. كلاهما يعمل.
+
+الآن، أنواع البيانات التي يمكن تمريرها؟
+- نصوص
+- أرقام
+- قوائم
+- قواميس
+- كائنات
+- حتى دوال
+
+Jinja يصل إليها كلها. لكن الحذر من undefined.
+
+لو مررتم متغيراً ولم تستخدموه في القالب، لا مشكلة.
+لو استخدمتم متغيراً لم تمرروه، فلن يُحدث خطأ. Jinja
+يعطي undefined (فارغ) بصمت. لكن النتيجة قد تكون
+صفحة ناقصة معناها غامض. لهذا في التطوير، اطبعوا
+ما تمررونه، أو استخدموا |default.
+
+وهناك نقطة يدخل فيها المبتدئون:
+render_template("x.html", name, email)   ← خطأ
+render_template("x.html", name=name, email=email)  ← صحيح
+
+يجب استخدام المعاملات المسماة. Python ستفسّر الموقف
+الصحيح بحسب ترتيبها، لكن Jinja يعتمد على الأسماء.
+
+============================================================
+[30:00 – 45:00] وراثة القوالب
+============================================================
+
+تخيلوا معي: لدينا 10 صفحات. كل واحدة تحتاج:
+- نفس <head>.
+- نفس <header> مع شعار.
+- نفس <nav> مع الروابط.
+- نفس <footer>.
+- نفس روابط CSS وJS.
+
+لو كررنا كل هذا في كل ملف، ثم أردنا إضافة رابط جديد
+في التنقل، سنضطر لتعديل 10 ملفات. كارثة صيانة.
+هذا هو المكان الذي يظهر فيه مفهوم وراثة القوالب.
+
+الفكرة:
+- نكتب ملف base.html واحد يحتوي الترويسة والتذييل
+  والبنية العامة.
+- نضع فيه أماكن قابلة للاستبدال تسمى blocks.
+- كل قالب جديد يرث من base.html ويملأ هذه الأماكن فقط.
+
+القالب الأب base.html:
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}SYBS 2309{% endblock %}</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>SYBS 2309</h1>
+        <nav>
+            <a href="{{ url_for('home') }}">الرئيسية</a>
+            <a href="{{ url_for('about') }}">عن المساق</a>
+            <a href="{{ url_for('contact') }}">تواصل</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2025 Cyber Khalil</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
+القالب الابن home.html:
+
+{% extends "base.html" %}
+
+{% block title %}الرئيسية — SYBS 2309{% endblock %}
+
+{% block content %}
+    <h2>مرحباً بكم</h2>
+    <p>هذه الصفحة الرئيسية للتطبيق.</p>
+{% endblock %}
+
+لاحظوا:
+- السطر الأول: {% extends "base.html" %}.
+- ثم block title لتخصيص عنوان الصفحة.
+- ثم block content لملء المحتوى.
+
+النتيجة: صفحة كاملة، فيها الترويسة والتذييل، لكن المطور
+كتب 10 أسطر فقط.
+
+الآن، قواعد مهمة:
+
+أولاً: السطر الأول.
+{% extends %} يجب أن يكون أول شيء في الملف.
+لا شيء قبله، لا مسافة، لا تعليق، لا <!DOCTYPE>.
+هذا خطأ شائع جداً. النتيجة: TemplateSyntaxError
+أو صفحة غير متوقعة.
+
+ثانياً: يمكنكم تعريف أكثر من block.
+مثلاً:
+- block title — للعنوان.
+- block content — للمحتوى الأساسي.
+- block styles — لأنماط CSS إضافية.
+- block scripts — لسكربتات خاصة بالصفحة.
+
+ثالثاً: القيم الافتراضية في الأب.
+{% block title %}SYBS 2309{% endblock %}
+يعني: "لو لم يملأ الابن هذا الـblock، استخدم SYBS 2309".
+
+رابعاً: super().
+لو أردت محتوى الأب + إضافة الابن:
+{% block scripts %}
+    {{ super() }}
+    <script src="..."></script>
+{% endblock %}
+
+خامساً: include.
+هناك أيضاً {% include "partial.html" %} لإدراج قالب
+داخل آخر. مفيد للعناصر المتكررة الصغيرة، مثل شريط
+الإعلانات.
+
+بين extends وinclude:
+- extends: وراثة كاملة. القالب الابن يملأ الأب.
+- include: نسخ لصق. يُدرج محتوى القالب في هذه النقطة.
+
+الوراثة أقوى وأشمل. include مفيد لحالات محددة.
+
+============================================================
+[45:00 – 55:00] static وurl_for
+============================================================
+
+الآن، أين نضع CSS وJS والصور؟
+
+الجواب: في مجلد static/.
+
+flask-lab13/
+├── app.py
+├── templates/
+└── static/
+    ├── css/
+    │   └── style.css
+    ├── js/
+    │   └── main.js
+    └── images/
+        └── logo.png
+
+كيف نربطها في القالب؟
+
+هنا يأتي url_for.
+
+لا تكتبوا:
+<link rel="stylesheet" href="/static/css/style.css">
+
+هذا قد ينكسر لاحقاً إذا نشر التطبيق على subpath
+(مثل https://example.com/web/demo/)، أو غيّر اسم
+المجلد. بدلاً من ذلك:
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+
+url_for تبني المسار الصحيح تلقائياً، مهما كانت البيئة.
+
+كذلك لـJS:
+
+<script src="{{ url_for('static', filename='js/main.js') }}"
+        defer></script>
+
+للصور:
+
+<img src="{{ url_for('static', filename='images/logo.png') }}"
+     alt="الشعار">
+
+الآن، ما الفرق بين url_for('static', ...) وurl_for('home')؟
+
+- url_for('static', filename=...) — للملفات الثابتة.
+  المعامل الأول 'static' اسم مُعرّف خاص في Flask.
+- url_for('home') — لمسار عرّفناه بـ@app.route.
+  المعامل الأول اسم الدالة (وليس المسار).
+
+مثال:
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+للربط من القالب:
+
+<a href="{{ url_for('about') }}">عن المساق</a>
+
+لو غيّرنا @app.route("/about") إلى @app.route("/info")،
+سيبقى url_for('about') يعمل، وسيولّد "/info" تلقائياً.
+هذه ميزة كبيرة عند التطور.
+
+أما معاملات المسار:
+
+@app.route("/student/<int:sid>")
+def student(sid):
+    ...
+
+<a href="{{ url_for('student', sid=42) }}">الطالب 42</a>
+
+هذا يولّد /student/42.
+
+القاعدة: لا تكتب أي مسار يدوياً.
+- للصفحات: url_for('function_name')
+- للملفات: url_for('static', filename='...')
+
+============================================================
+[55:00 – 70:00] GET وPOST
+============================================================
+
+الآن ننتقل إلى النماذج.
+
+في HTML، عندنا:
+
+<form action="/contact" method="post">
+    ...
+</form>
+
+action: المسار الذي سيستقبل البيانات.
+method: GET أو POST.
+
+الفرق جوهري:
+
+GET:
+- البيانات في URL.
+- ?name=سارة&email=x@y.com
+- تظهر في شريط المتصفح.
+- تظهر في سجلات الخادم.
+- مناسبة للبحث والفلاتر.
+
+POST:
+- البيانات في جسم الطلب.
+- لا تظهر في URL.
+- مناسبة للتسجيل والدخول والبيانات الحساسة.
+- يجب استخدامها مع HTTPS.
+
+مثال على GET:
+
+<form action="/search" method="get">
+    <input type="search" name="q">
+</form>
+
+في الخادم:
+
+@app.route("/search")
+def search():
+    q = request.args.get("q", "")
+    return f"نتائج البحث عن: {q}"
+
+request.args يقرأ من الـURL.
+
+مثال على POST:
+
+<form action="/contact" method="post">
+    <input type="text" name="name">
+    <input type="email" name="email">
+    <button type="submit">إرسال</button>
+</form>
+
+في الخادم:
+
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    if request.method == "POST":
+        name = request.form.get("name", "")
+        email = request.form.get("email", "")
+        return f"تم استلام: {name} — {email}"
+    return render_template("contact.html")
+
+request.form يقرأ من جسم الطلب.
+
+الآن، نقطة حرجة:
+methods=["POST"] في @app.route.
+
+لو نسيناها، سيرفض Flask الطلب بخطأ 405 Method Not Allowed.
+
+مثال خطأ:
+@app.route("/contact")
+def contact():
+    ...
+
+ثم إرسال POST من النموذج → 405.
+
+الصواب:
+@app.route("/contact", methods=["GET", "POST"])
+
+هذا يعني: يقبل GET (لعرض النموذج) وPOST (لاستقبال البيانات).
+
+الآن، نمط احترافي مهم يسمى Post/Redirect/Get (PRG).
+
+سيناريو:
+- المستخدم يملأ النموذج ويضغط "إرسال".
+- POST يرسل البيانات.
+- الخادم يعالج، ثم يعيد التوجيه (302) إلى صفحة نتيجة.
+
+لماذا؟
+لأنه لو رجع HTML مباشرة بعد POST، فقد يضغط المستخدم
+"تحديث"، فيُعاد إرسال POST، وقد يُسجّل مرتين أو أكثر.
+
+مع PRG:
+- بعد POST نستدعي redirect(url_for('...'))،
+  فيصبح الطلب التالي GET.
+- تحديث الصفحة لا يُعيد POST.
+- سليم.
+
+مثال:
+
+from flask import Flask, render_template, request, redirect, url_for
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        name = request.form.get("name", "")
+        # ... معالجة
+        return redirect(url_for("success"))
+    return render_template("register.html")
+
+@app.route("/success")
+def success():
+    return "تم التسجيل بنجاح"
+
+هذا هو PRG.
+
+============================================================
+[70:00 – 85:00] استقبال بيانات النموذج في Python
+============================================================
+
+الآن، كيف نقرأ الحقول بأمان؟
+
+في Flask، عندنا كائن request.
+- request.form     → بيانات POST
+- request.args     → بيانات GET
+- request.files    → ملفات
+- request.method   → "POST" / "GET" / إلخ
+- request.headers  → الترويسات
+
+قراءة قيمة:
+request.form["name"]     ← KeyError إذا لم يوجد
+request.form.get("name")  ← None إذا لم يوجد
+request.form.get("name", "") ← قيمة افتراضية
+
+القاعدة: استخدم .get() دائماً.
+لأن النموذج قد لا يحتوي الحقل، أو قد يُرسل ملغياً.
+"KeyError" في خادم ويب يظهر كنقطة فشل.
+
+مثال على قراءة آمنة:
+
+@app.route("/subscribe", methods=["GET", "POST"])
+def subscribe():
+    if request.method == "POST":
+        email = request.form.get("email", "").strip()
+        name = request.form.get("name", "").strip()
+
+        errors = []
+        if not email:
+            errors.append("البريد مطلوب.")
+        if "@" not in email:
+            errors.append("البريد غير صالح.")
+
+        if errors:
+            return render_template(
+                "subscribe.html",
+                errors=errors,
+                email=email,
+                name=name
+            )
+
+        return render_template("thanks.html", name=name)
+
+    return render_template("subscribe.html",
+                           errors=[], email="", name="")
+
+لاحظوا:
+- strip() لإزالة المسافات.
+- قائمة errors تُجمع.
+- عند الفشل، أعِد القيم للمستخدم (email، name) في النموذج.
+- عند النجاح، صفحة شكر.
+
+هناك أيضاً getlist للـcheckboxes:
+topics = request.form.getlist("topics")
+هذا يقرأ كل القيم المحددة. checkbox واحد يمكن أن
+يُرسل عدة قيم بنفس name.
+
+مثال:
+<input type="checkbox" name="topics" value="html">
+<input type="checkbox" name="topics" value="css">
+<input type="checkbox" name="topics" value="js">
+
+في الخادم:
+topics = request.form.getlist("topics")
+# ['html', 'js'] مثلاً
+
+هذا هو الفرق بين get وgetlist.
+
+الآن، نقطة احترافية: أعد عرض القيم عند الفشل.
+
+لو أخطأ المستخدم في حقل واحد، لا تجعله يعيد كتابة
+الكل. أعِد القيم الصحيحة:
+
+<input type="text" name="name" value="{{ name }}">
+
+بهذا يبقى المستخدم في سياقه.
+
+============================================================
+[85:00 – 100:00] رسائل Flash
+============================================================
+
+الآن، عند حدوث خطأ أو نجاح، كيف نخبر المستخدم؟
+
+هناك عدة طرق:
+1. تمرير errors في render_template (استخدمناها).
+2. flash + redirect (احترافي أكثر).
+3. JavaScript alert (بدائي).
+
+اليوم سنتعلم flash — الطريقة المعيارية في Flask.
+
+flash هي دالة تخزّن رسالة في الجلسة (session)،
+لتظهر في الصفحة التالية مرة واحدة.
+
+مثال:
+
+from flask import flash, redirect, url_for
+
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+
+        if not name:
+            flash("الاسم مطلوب.", "error")
+            return redirect(url_for("contact"))
+
+        flash(f"شكراً {name}، تم استلام رسالتك.", "success")
+        return redirect(url_for("contact"))
+
+    return render_template("contact.html")
+
+ما الذي يحدث هنا؟
+1. فشل: flash("الاسم مطلوب.", "error").
+2. redirect إلى نفس الصفحة.
+3. الصفحة الجديدة تقرأ الرسائل وتعرضها.
+4. الرسالة تُحذف تلقائياً بعد عرضها.
+
+الآن، قراءة الرسائل في القالب:
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class="flash-list">
+        {% for category, message in messages %}
+            <li class="flash flash-{{ category }}" role="alert">
+                {{ message }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+كلمة with تُعرّف متغيراً داخل كتلة. messages هنا
+تُصبح قائمة من tuples (category, message).
+
+with_categories=true يعني: أعطني الفئة أيضاً.
+
+لو استخدمتم flash("رسالة") بدون فئة، لا تحتاجون
+with_categories=true. لكن مع الفئات، يمكنكم التنسيق
+حسب النوع: success، error، info، warning.
+
+الآن، تحذير مهم:
+flash يحتاج app.secret_key.
+
+لماذا؟
+لأن flask يخزن الرسائل في ملف تعريف ارتباط (cookie)
+موقّع بـsecret_key. بدون Secret Key، لا يوجد توقيع،
+ولا جلسة، ولا flash.
+
+بدون secret_key ستحصل على:
+
+RuntimeError: The session is unavailable because
+no secret key was set. Set the secret_key on the
+application to something unique and secret.
+
+الحل:
+
+import os
+app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-me")
+
+في التطوير: قيمة ثابتة للعمل.
+في الإنتاج: من متغير بيئة، عشوائي طويل، لا يُرفع إلى Git.
+
+الآن، لماذا flash + redirect أفضل من تمرير errors
+مباشرة؟
+
+لأن:
+1. نتبع PRG (تحديث الصفحة لا يُعيد POST).
+2. الرسالة عامة، تُعرض في أي مكان في القالب (base.html).
+3. لا نكرر تمرير errors في كل render_template.
+4. تجربة موحدة.
+
+هذا هو النمط الاحترافي.
+
+============================================================
+[100:00 – 115:00] التحقق في الخادم
+============================================================
+
+الآن نأتي إلى نقطة أمنية جوهرية: التحقق في الخادم.
+
+في المحاضرة الثامنة تعلمنا التحقق من النماذج في
+الواجهة الأمامية بـJavaScript. ذلك مهم لتجربة المستخدم،
+لكنه ليس أماناً.
+
+لماذا؟
+- يمكن تعطيل JavaScript.
+- أدوات المطور تعدّل الحقول.
+- يمكن إرسال طلب مباشر بـcurl أو Postman.
+- سكربت آلي يمكنه إرسال آلاف الطلبات.
+
+النتيجة: التحقق في الواجهة تحسين، لكن التحقق في
+الخادم هو خط الدفاع.
+
+الآن، كيف نتحقق بشكل جيد؟
+
+أولاً: التحقق من الوجود.
+الحقل موجود وقيمته غير فارغة.
+
+name = request.form.get("name", "").strip()
+if not name:
+    errors["name"] = "الاسم مطلوب."
+
+ثانياً: التحقق من الطول.
+min وmax.
+
+if len(name) < 3:
+    errors["name"] = "الاسم قصير جداً."
+if len(name) > 30:
+    errors["name"] = "الاسم طويل جداً."
+
+ثالثاً: التحقق من الصيغة.
+مثلاً للبريد:
+
+import re
+EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
+
+if not EMAIL_RE.match(email):
+    errors["email"] = "صيغة البريد غير صحيحة."
+
+رابعاً: التحقق الأمني.
+- منع حقن SQL. لكن هذا يتم عبر Parameterized Queries
+  (المعاملات)، وليس تنظيف النصوص.详见 في المحاضرة القادمة.
+- تنقية HTML المرفوع. لا تستخدم Jinja preview كـ HTML.
+- التحقق من الملفات: النوع، الحجم، المحتوى.
+- منع CSRF: Flask-WTForms فيها ذلك. لاحقاً.
+
+خامساً: التحقق المنطقي.
+- البريد غير مستخدم.
+- المستخدم له صلاحية.
+- الطلب ينتمي للمستخدم.
+
+الآن، أفضل ممارسة: دالة تحقق منفصلة.
+
+def validate_register(username, email, password):
+    """تُرجع قاموساً من الأخطاء. فارغ = صحيح."""
+    errors = {}
+
+    if not username:
+        errors["username"] = "الاسم مطلوب."
+    elif len(username) < 3:
+        errors["username"] = "الاسم قصير جداً."
+    elif len(username) > 30:
+        errors["username"] = "الاسم طويل جداً."
+
+    if not email:
+        errors["email"] = "البريد مطلوب."
+    elif not EMAIL_RE.match(email):
+        errors["email"] = "البريد غير صالح."
+
+    if len(password) < 8:
+        errors["password"] = "كلمة المرور قصيرة."
+
+    return errors
+
+ثم في المسار:
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    errors = {}
+    values = {"username": "", "email": ""}
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password", "")
+
+        values["username"] = username
+        values["email"] = email
+
+        errors = validate_register(username, email, password)
+
+        if not errors:
+            # هنا: حفظ في قاعدة البيانات
+            return render_template("register_ok.html",
+                                   username=username)
+
+    return render_template("register.html",
+                           errors=errors, **values)
+
+لاحظوا:
+- دالة منفصلة للتحقق.
+- قيم نعيدها للقالب.
+- **values يوزّع القاموس كمعاملات.
+
+هذا النمط:
+- نظيف.
+- قابل للاختبار.
+- يُعاد استخدامه.
+
+في القالب:
+
+{% if errors.username %}
+    <small class="error" role="alert">{{ errors.username }}</small>
+{% endif %}
+
+وهذه النقطة مهمة: لا ترسل رسالة واحدة عامة.
+أرسل رسالة لكل حقل. ليعرف المستخدم بالضبط أين
+يُصلح.
+
+============================================================
+[115:00 – 135:00] التطبيق العملي
+============================================================
+
+الآن التطبيق. سنبني تطبيق Flask كامل.
+
+الهدف:
+- نموذج تواصل.
+- يستقبل اسم وبريد.
+- يتحقق منهما في الخادم.
+- يعرض صفحة نتيجة أو رسالة خطأ.
+
+الخطوات:
+
+1. أنشئ مجلد flask-lab13/ وانتقل إليه.
+
+2. أنشئ بيئة افتراضية:
+   python -m venv venv
+   venv\Scripts\activate  (Windows)
+   source venv/bin/activate  (Mac/Linux)
+
+3. ثبّت Flask:
+   pip install flask
+
+4. البنية:
+   flask-lab13/
+   ├── app.py
+   ├── templates/
+   │   ├── base.html
+   │   ├── home.html
+   │   ├── contact.html
+   │   └── result.html
+   └── static/
+       └── css/
+           └── style.css
+
+5. app.py:
+
+   import os
+   from flask import (Flask, render_template, request,
+                      redirect, url_for, flash)
+
+   app = Flask(__name__)
+   app.secret_key = os.environ.get("SECRET_KEY",
+                                   "dev-secret-change-me")
+
+   @app.route("/")
+   def home():
+       return render_template("home.html")
+
+   @app.route("/contact", methods=["GET", "POST"])
+   def contact():
+       if request.method == "POST":
+           name = request.form.get("name", "").strip()
+           email = request.form.get("email", "").strip()
+
+           if not name or not email:
+               flash("جميع الحقول مطلوبة.", "error")
+               return redirect(url_for("contact"))
+
+           if "@" not in email:
+               flash("صيغة البريد غير صحيحة.", "error")
+               return redirect(url_for("contact"))
+
+           return render_template("result.html",
+                                   name=name, email=email)
+
+       return render_template("contact.html")
+
+   if __name__ == "__main__":
+       app.run(debug=True)
+
+6. base.html: الترويسة + navigation + flash messages + footer.
+   كل الروابط عبر url_for.
+
+7. home.html: extends من base، block content فيه ترحيب.
+
+8. contact.html: extends من base، block content فيه
+   نموذج.
+
+   <form action="{{ url_for('contact') }}" method="post" novalidate>
+       <p>
+           <label for="name">الاسم</label>
+           <input type="text" id="name" name="name" required>
+       </p>
+       <p>
+           <label for="email">البريد</label>
+           <input type="email" id="email" name="email" required>
+       </p>
+       <button type="submit">إرسال</button>
+   </form>
+
+9. result.html: extends من base، block content يعرض
+   name وemail من المتغيرات.
+
+10. style.css: تنسيق بسيط، ألوان متناسقة، فواصل،
+    تنسيق رسائل flash.
+
+11. شغّل واختبر:
+    - / → صفحة رئيسية.
+    - /contact → النموذج.
+    - إرسال فارغ → رسالة "جميع الحقول مطلوبة".
+    - بريد بلا @ → رسالة "صيغة البريد غير صحيحة".
+    - بيانات صحيحة → صفحة نتيجة.
+
+12. أرفق:
+    - app.py
+    - templates/ (كل الملفات)
+    - static/
+    - صور لكل حالة.
+
+معيار الإنجاز:
+- كل الصفحات ترث من base.
+- لا يوجد HTML مكرر.
+- Form يعمل ويستقبل.
+- Flash يظهر ويختفي بعد العرض.
+- البيانات الناجحة تُعرض في result.
+- البيانات الخاطئة تُعيد المستخدم بـflash واضح.
+
+هذا التطبيق سيكون أساساً لتطبيق "الملاحظات" في
+المحاضرة القادمة. ركزوا عليه.
+
+============================================================
+[135:00 – 145:00] أخطاء شائعة
+============================================================
+
+دعونا نمرّ على الأخطاء:
+
+أولاً: نسيان {% extends %} أولاً.
+   السطر الأول في الابن يجب أن يكون extends.
+   أي مسافة قبله تسبب خطأ.
+
+ثانياً: عدم تمرير نفس اسم المتغير.
+   في render_template("x.html", name="سارة")، يجب
+   أن تكتب {{ name }} لا {{ username }}.
+   Jinja يقرأ الاسم، لا القيمة.
+
+ثالثاً: نسيان secret_key.
+   flash لن يعمل، وستحصل على RuntimeError.
+
+رابعاً: نسيان methods=["POST"].
+   Flask يرفض الطلب بـ405.
+
+خامساً: مسارات يدوية في القالب.
+   /static/css/style.css قد ينكسر.
+   استخدم url_for.
+
+سادساً: استخدام |safe بشكل عشوائي.
+   Jinja يهرّب تلقائياً. لا تعطّل الهروب
+   إلا لـ HTML تكتبه أنت.
+
+سابعاً: نسيان name="..." في حقل.
+   الحقل لن يُرسل. تحقق من name وid معاً.
+
+ثامناً: البحث في مجلد خاطئ.
+   templates/ هو مجلد Flask الافتراضي.
+   لو كتبت الملف في الجذر، TemplateNotFound.
+
+تاسعاً: عدم التحقق في الخادم.
+   اتكلت على تحقق الواجهة فقط. خطأ أمني.
+
+عاشراً: عرض رسالة عامة واحدة.
+   "خطأ في البيانات" لا يفيد.
+   رسالة لكل حقل.
+
+قاعدة سريعة:
+- لا مسافة قبل extends.
+- لا |safe على مدخلات المستخدم.
+- لا methods ناقصة لـPOST.
+- لا secret_key مفقود.
+- لا تحقق في الواجهة فقط.
+
+============================================================
+[145:00 – 150:00] الملخص والواجب
+============================================================
+
+نلخص المحاضرة:
+
+- Jinja2 محرك قوالب يأتي مع Flask.
+- {{ }} لطباعة قيم.
+- {% %} للتحكم (if، for، block، extends).
+- {# #} للتعليقات.
+- render_template(name, **data) يمرّر البيانات.
+- الوراثة: extends + block تمنع تكرار الترويسة.
+- url_for يولّد مسارات صحيحة.
+- static/ للملفات الثابتة، تُربط عبر url_for.
+- GET للبحث، POST للبيانات الحساسة.
+- request.form لـPOST، request.args لـGET.
+- .get() آمن، [] قد يرفع KeyError.
+- Flash يحتاج secret_key، ويُعرض في القالب.
+- التحقق في الخادم هو خط الدفاع الأساسي.
+- PRG نمط احترافي لتجنب إعادة POST.
+
+الواجب:
+- تسليم flask-lab13 كاملاً.
+- app.py + templates/ + static/.
+- صور لكل حالة: نجاح، فشل، حقل مطلوب.
+- dataset خاطئ يجب أن يُعرض برسالة واضحة.
+
+في المحاضرة القادمة: دمج الواجهة الأمامية والخلفية.
+- ربط CSS وJS من الواجهة السابقة بـFlask.
+- استخدام base.html مع أنماط متقدمة.
+- الأخطاء الشائعة عند الدمج.
+- مقدمة في التعامل مع البيانات المحفوظة.
+
+هذه المحاضرة تفتح الطريق للمشروع النهائي.
+
+شكراً لكم، وأراكم في المحاضرة الرابعة عشرة.

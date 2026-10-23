@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 3 | HTML المتقدم — الجداول والنماذج — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة الثالثة من مساق SYBS 2309: HTML المتقدم — بناء الجداول الدلالية، النماذج، عناصر الإدخال، التحقق المدمج في HTML5، الوصولية، وربط النماذج بالخادم لاحقاً باستخدام Flask.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 3</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 3: HTML المتقدم — الجداول والنماذج</h1>
+            <p class="lecture-lead">
+                ننتقل في هذه المحاضرة من النصوص والروابط إلى عنصرين أساسيين في أي تطبيق ويب:
+                <strong>الجداول</strong> لعرض البيانات المنظمة، و<strong>النماذج</strong> لاستقبال
+                مدخلات المستخدم. سنتعلم بناء جدول دلالي قابل للوصول باستخدام
+                <code>&lt;caption&gt;</code> و<code>&lt;thead&gt;</code> و<code>&lt;tbody&gt;</code>،
+                ثم نبني نموذجاً كاملاً باستخدام <code>&lt;form&gt;</code> و<code>&lt;label&gt;</code>
+                و<code>&lt;fieldset&gt;</code>، مع التحقق المدمج في <strong>HTML5</strong>،
+                وأساسيات <strong>الوصولية</strong>.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 3</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 1 · الواجهة الأمامية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script3.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script3.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#tables">الجداول: البيانات الجدولية لا التخطيط</a></li>
+                        <li><a href="#table-accessibility">جداول قابلة للوصول</a></li>
+                        <li><a href="#forms">أساسيات النماذج وGET مقابل POST</a></li>
+                        <li><a href="#inputs">أنواع عناصر الإدخال</a></li>
+                        <li><a href="#validation">التحقق المدمج في HTML5</a></li>
+                        <li><a href="#accessibility">الوصولية والدلالة في النماذج</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> الجدول ليس أداة تخطيط، والنموذج ليس مجرد صناديق إدخال.
+                    المطلوب أن تفهم <strong>متى</strong> تستخدم الجدول، و<strong>كيف</strong> تجعل
+                    النموذج مفهوماً للمستخدم وقارئ الشاشة والخادم.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على بناء جدول HTML دلالي وقابل للوصول،
+                        وبناء نموذج تسجيل أو تواصل يحتوي حقولاً متنوعة، مع تسميات صحيحة،
+                        وتجميع منطقي، وسمات تحقق HTML5 مناسبة.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>التمييز بين الجدول الدلالي وجدول التخطيط</li>
+                                <li>معرفة وظيفة <code>caption</code> و<code>thead</code> و<code>tbody</code></li>
+                                <li>فهم الفرق بين GET وPOST</li>
+                                <li>معرفة دور <code>name</code> في إرسال بيانات النموذج</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>إنشاء جدول ببيانات ورؤوس أعمدة وصفوف</li>
+                                <li>استخدام <code>th scope="col"</code> و<code>scope="row"</code></li>
+                                <li>بناء نموذج بحقول نصية وبريد وكلمة مرور</li>
+                                <li>إضافة تحقق مدمج: <code>required</code> و<code>pattern</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>كتابة نماذج صديقة لقارئات الشاشة</li>
+                                <li>تقليل أخطاء إدخال المستخدم</li>
+                                <li>الاستعداد لربط النماذج بـ Flask لاحقاً</li>
+                                <li>إدراك أن تحقق العميل لا يكفي للأمان</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tables -->
+                <section class="lecture-section" id="tables" aria-labelledby="tables-title">
+                    <h2 class="section-title" id="tables-title">
+                        <i class="fas fa-table"></i> الجداول: البيانات الجدولية لا التخطيط
+                    </h2>
+                    <p>
+                        الجدول في HTML مخصص لعرض <strong>بيانات ذات علاقة صفية وعمودية</strong>:
+                        نتائج طلاب، مقارنة أسعار، جدول أسابيع، إحصاءات. لا يُستخدم لترتيب عناصر
+                        الصفحة أو بناء أعمدة التخطيط؛ فالتخطيط مسؤولية <strong>CSS</strong>.
+                    </p>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>قاعدة مهمة:</strong> إذا كنت تستخدم الجدول لوضع صورة بجانب نص
+                            أو لبناء شريط تنقل، فأنت تستخدمه بشكل خاطئ. استخدم
+                            <code>Flexbox</code> أو <code>Grid</code> لاحقاً في CSS.
+                        </div>
+                    </div>
+
+                    <p>
+                        البنية الأساسية للجدول الدلالي تتكون من:
+                        <code>&lt;table&gt;</code> كحاوية، و<code>&lt;caption&gt;</code> كعنوان للجدول،
+                        ثم <code>&lt;thead&gt;</code> لرؤوس الأعمدة، و<code>&lt;tbody&gt;</code> للبيانات،
+                        و<code>&lt;tfoot&gt;</code> للملخص أو المجموع.
+                        الصفوف بـ <code>&lt;tr&gt;</code>، والخلايا بـ <code>&lt;td&gt;</code>،
+                        ورؤوس الخلايا بـ <code>&lt;th&gt;</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> table.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;table&gt;
+    &lt;caption&gt;نتائج الطلاب في التقييم النصفي&lt;/caption&gt;
+
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th scope="col"&gt;الطالب&lt;/th&gt;
+            &lt;th scope="col"&gt;الدرجة&lt;/th&gt;
+            &lt;th scope="col"&gt;الحالة&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;th scope="row"&gt;سارة&lt;/th&gt;
+            &lt;td&gt;18&lt;/td&gt;
+            &lt;td&gt;ناجح&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th scope="row"&gt;أحمد&lt;/th&gt;
+            &lt;td&gt;14&lt;/td&gt;
+            &lt;td&gt;ناجح&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+
+    &lt;tfoot&gt;
+        &lt;tr&gt;
+            &lt;td colspan="2"&gt;المتوسط&lt;/td&gt;
+            &lt;td&gt;16&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tfoot&gt;
+&lt;/table&gt;</code></pre>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>الوسم</th>
+                                    <th>الوظيفة</th>
+                                    <th>ملاحظة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>&lt;caption&gt;</code></td>
+                                    <td>عنوان الجدول</td>
+                                    <td>يُقرأ بواسطة قارئ الشاشة، ويُكتب داخل <code>table</code> مباشرة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>&lt;thead&gt;</code></td>
+                                    <td>رؤوس الأعمدة</td>
+                                    <td>يساعد المتصفح وقارئ الشاشة على فهم البنية</td>
+                                </tr>
+                                <tr>
+                                    <td><code>&lt;tbody&gt;</code></td>
+                                    <td>بيانات الجدول</td>
+                                    <td>يمكن أن يتكرر أكثر من مرة في الجداول الكبيرة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>&lt;tfoot&gt;</code></td>
+                                    <td>التذييل أو الملخص</td>
+                                    <td>مثل المتوسط أو المجموع</td>
+                                </tr>
+                                <tr>
+                                    <td><code>scope</code></td>
+                                    <td>يحدد ارتباط الخلية بالصف أو العمود</td>
+                                    <td><code>col</code> للرأس العمودي، <code>row</code> للرأس الصفي</td>
+                                </tr>
+                                <tr>
+                                    <td><code>colspan</code> / <code>rowspan</code></td>
+                                    <td>دمج الأعمدة أو الصفوف</td>
+                                    <td>استخدمهما بحذر لأن الجداول المعقدة تصعب قراءتها</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>ملاحظة:</strong> لا تكتب <code>border="1"</code> داخل HTML.
+                            استخدم CSS لتنسيق حدود الجدول. HTML تحمل البنية والمعنى، وCSS تحمل الشكل.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Table accessibility -->
+                <section class="lecture-section" id="table-accessibility" aria-labelledby="table-a11y-title">
+                    <h2 class="section-title" id="table-a11y-title">
+                        <i class="fas fa-universal-access"></i> جداول قابلة للوصول
+                    </h2>
+                    <p>
+                        الجدول الجيد ليس فقط جدولاً يظهر بشكل جميل؛ هو جدول يفهمه قارئ الشاشة
+                        ويستطيع المستخدم غير المبصر التنقل فيه. العناصر الأساسية لذلك هي:
+                        <strong>caption</strong>، و<strong>th</strong> مع <strong>scope</strong>،
+                        وتجنب التعقيد غير الضروري.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-heading"></i> caption</h3>
+                            <ul>
+                                <li>عنوان وصفي للجدول</li>
+                                <li>يُقرأ قبل محتوى الجدول</li>
+                                <li>لا تستبدله بعنوان <code>h2</code> خارجي فقط</li>
+                                <li>يساعد على فهم سياق البيانات</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-crosshairs"></i> scope</h3>
+                            <ul>
+                                <li><code>scope="col"</code> لرأس العمود</li>
+                                <li><code>scope="row"</code> لرأس الصف</li>
+                                <li>يساعد في ربط الخلية برأسها</li>
+                                <li>ضروري في الجداول متعددة المستويات</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-mobile-screen"></i> الجداول والهاتف</h3>
+                            <ul>
+                                <li>الجداول العريضة تُمرر أفقياً</li>
+                                <li>استخدم غلافاً بـ <code>overflow-x</code></li>
+                                <li>لا تصغّر الخط بشكل مبالغ فيه</li>
+                                <li>فكر في عرض بيانات أقل على الهاتف</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الجدول الجيد:</strong> له <code>caption</code>، ورؤوس أعمدة
+                            بـ <code>th</code> و<code>scope</code>، ولا يحتوي خلايا فارغة بلا داعٍ،
+                            ولا يُستخدم لتخطيط الصفحة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Forms -->
+                <section class="lecture-section" id="forms" aria-labelledby="forms-title">
+                    <h2 class="section-title" id="forms-title">
+                        <i class="fas fa-pen-to-square"></i> أساسيات النماذج وGET مقابل POST
+                    </h2>
+                    <p>
+                        النموذج هو وسيلة المستخدم لإرسال بيانات إلى الخادم: تسجيل، دخول، بحث،
+                        تواصل، رفع ملف، إعدادات. الحاوية هي <code>&lt;form&gt;</code>، ولها سمتان
+                        أساسيتان: <code>action</code> لتحديد المسار الذي ستُرسل إليه البيانات،
+                        و<code>method</code> لتحديد طريقة الإرسال، وغالباً <code>GET</code> أو
+                        <code>POST</code>.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-route"></i> action</h3>
+                            <ul>
+                                <li>مسار المعالجة على الخادم</li>
+                                <li>مثال: <code>/register</code></li>
+                                <li>قد يكون مساراً نسبياً أو مطلقاً</li>
+                                <li>لاحقاً سيرتبط بمسار Flask</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-right-left"></i> method</h3>
+                            <ul>
+                                <li><code>GET</code> للبحث والفلاتر</li>
+                                <li><code>POST</code> للبيانات الحساسة</li>
+                                <li>الافتراضي غالباً <code>GET</code></li>
+                                <li>لا ترسل كلمات مرور بـ GET</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-tag"></i> name</h3>
+                            <ul>
+                                <li>بدونه لا تُرسل قيمة الحقل</li>
+                                <li>يستخدمه الخادم للتعرف على الحقل</li>
+                                <li>مثال: <code>name="email"</code></li>
+                                <li>ليس بديلاً عن <code>id</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>المحور</th>
+                                    <th>GET</th>
+                                    <th>POST</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>مكان البيانات</td>
+                                    <td>داخل عنوان URL</td>
+                                    <td>داخل جسم الطلب</td>
+                                </tr>
+                                <tr>
+                                    <td>الاستخدام المناسب</td>
+                                    <td>بحث، تصفية، صفحات عامة</td>
+                                    <td>تسجيل، دخول، إرسال نماذج حساسة</td>
+                                </tr>
+                                <tr>
+                                    <td>الظهور في السجل</td>
+                                    <td>قد تظهر القيم في عنوان الصفحة</td>
+                                    <td>لا تظهر عادة في العنوان</td>
+                                </tr>
+                                <tr>
+                                    <td>الأمان</td>
+                                    <td>غير مناسب لكلمات المرور</td>
+                                    <td>أفضل للبيانات الحساسة مع HTTPS</td>
+                                </tr>
+                                <tr>
+                                    <td>التحقق</td>
+                                    <td>مطلوب في الخادم</td>
+                                    <td>مطلوب في الخادم أيضاً</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>مثال نموذج تسجيل بسيط:</p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> form.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;form action="/register" method="post"&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;بيانات الحساب&lt;/legend&gt;
+
+        &lt;p&gt;
+            &lt;label for="username"&gt;اسم المستخدم&lt;/label&gt;
+            &lt;input type="text" id="username" name="username"
+                   required minlength="3" autocomplete="username"&gt;
+        &lt;/p&gt;
+
+        &lt;p&gt;
+            &lt;label for="email"&gt;البريد الإلكتروني&lt;/label&gt;
+            &lt;input type="email" id="email" name="email"
+                   required autocomplete="email"&gt;
+        &lt;/p&gt;
+
+        &lt;p&gt;
+            &lt;label for="password"&gt;كلمة المرور&lt;/label&gt;
+            &lt;input type="password" id="password" name="password"
+                   required minlength="8" autocomplete="new-password"&gt;
+        &lt;/p&gt;
+
+        &lt;button type="submit"&gt;إنشاء الحساب&lt;/button&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>تنبيه أمني:</strong> التحقق في HTML5 مفيد لتجربة المستخدم،
+                            لكنه ليس حماية أمنية. يمكن تجاوزه بسهولة. التحقق الحقيقي يجب أن يكون
+                            في <strong>الخادم</strong> أيضاً، وسنطبقه لاحقاً مع Flask.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Inputs -->
+                <section class="lecture-section" id="inputs" aria-labelledby="inputs-title">
+                    <h2 class="section-title" id="inputs-title">
+                        <i class="fas fa-keyboard"></i> أنواع عناصر الإدخال
+                    </h2>
+                    <p>
+                        HTML5 وفّرت أنواعاً كثيرة لحقل <code>&lt;input&gt;</code>، ولكل نوع سلوك
+                        افتراضي ولوحة مفاتيح مناسبة على الهاتف. اختيار النوع الصحيح يحسّن
+                        تجربة المستخدم والتحقق الأولي.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>النوع</th>
+                                    <th>الاستخدام</th>
+                                    <th>ملاحظة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>text</code></td>
+                                    <td>نص عام</td>
+                                    <td>الأكثر شيوعاً</td>
+                                </tr>
+                                <tr>
+                                    <td><code>email</code></td>
+                                    <td>بريد إلكتروني</td>
+                                    <td>يتحقق من الصيغة الأساسية</td>
+                                </tr>
+                                <tr>
+                                    <td><code>password</code></td>
+                                    <td>كلمة مرور</td>
+                                    <td>يخفي المحتوى بصرياً فقط</td>
+                                </tr>
+                                <tr>
+                                    <td><code>number</code></td>
+                                    <td>أرقام</td>
+                                    <td>يدعم <code>min</code> و<code>max</code> و<code>step</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>date</code></td>
+                                    <td>تاريخ</td>
+                                    <td>يعرض منتقي تاريخ في المتصفحات الحديثة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>tel</code></td>
+                                    <td>رقم هاتف</td>
+                                    <td>لا يتحقق تلقائياً من الصيغة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>url</code></td>
+                                    <td>رابط</td>
+                                    <td>يتحقق من صيغة عنوان URL</td>
+                                </tr>
+                                <tr>
+                                    <td><code>checkbox</code></td>
+                                    <td>اختيار متعدد</td>
+                                    <td>يمكن اختيار أكثر من قيمة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>radio</code></td>
+                                    <td>اختيار واحد</td>
+                                    <td>يشترك في نفس <code>name</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>file</code></td>
+                                    <td>رفع ملف</td>
+                                    <td>يدعم <code>accept</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>range</code></td>
+                                    <td>شريط تمرير رقمي</td>
+                                    <td>يدعم <code>min</code> و<code>max</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>search</code></td>
+                                    <td>بحث</td>
+                                    <td>قد يعرض زر مسح</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>
+                        إلى جانب <code>input</code>، هناك عناصر مهمة:
+                        <code>&lt;select&gt;</code> للقوائم المنسدلة، و<code>&lt;textarea&gt;</code>
+                        للنصوص الطويلة، و<code>&lt;button&gt;</code> للأزرار. تذكر أن كل عنصر إدخال
+                        يجب أن يكون له <code>label</code> مرتبط به.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> controls.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;fieldset&gt;
+    &lt;legend&gt;تفاصيل إضافية&lt;/legend&gt;
+
+    &lt;p&gt;
+        &lt;label for="track"&gt;المسار المفضل&lt;/label&gt;
+        &lt;select id="track" name="track" required&gt;
+            &lt;option value=""&gt;اختر مساراً&lt;/option&gt;
+            &lt;option value="frontend"&gt;واجهة أمامية&lt;/option&gt;
+            &lt;option value="backend"&gt;واجهة خلفية&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/p&gt;
+
+    &lt;p&gt;
+        &lt;label for="notes"&gt;ملاحظات&lt;/label&gt;
+        &lt;textarea id="notes" name="notes" rows="4" maxlength="300"&gt;&lt;/textarea&gt;
+    &lt;/p&gt;
+
+    &lt;fieldset&gt;
+        &lt;legend&gt;نوع الحساب&lt;/legend&gt;
+        &lt;label&gt;
+            &lt;input type="radio" name="role" value="student" checked&gt;
+            طالب
+        &lt;/label&gt;
+        &lt;label&gt;
+            &lt;input type="radio" name="role" value="teacher"&gt;
+            محاضر
+        &lt;/label&gt;
+    &lt;/fieldset&gt;
+
+    &lt;p&gt;
+        &lt;label&gt;
+            &lt;input type="checkbox" name="agree" value="yes" required&gt;
+            أوافق على شروط الاستخدام
+        &lt;/label&gt;
+    &lt;/p&gt;
+&lt;/fieldset&gt;</code></pre>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>ملاحظة:</strong> في أزرار الراديو يجب أن تشترك كل الخيارات
+                            في نفس قيمة <code>name</code>، وإلا سيصبح كل زر مجموعة مستقلة ويمكن
+                            اختيار أكثر من واحد.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Validation -->
+                <section class="lecture-section" id="validation" aria-labelledby="validation-title">
+                    <h2 class="section-title" id="validation-title">
+                        <i class="fas fa-check-double"></i> التحقق المدمج في HTML5
+                    </h2>
+                    <p>
+                        HTML5 توفر سمات تحقق جاهزة يمكن للمتصفح تنفيذها قبل إرسال النموذج.
+                        هي ممتازة لتقليل الأخطاء وتحسين التجربة، لكن يجب ألا تكون خط الدفاع
+                        الوحيد.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>السمة</th>
+                                    <th>الوظيفة</th>
+                                    <th>مثال</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>required</code></td>
+                                    <td>الحقل إلزامي</td>
+                                    <td><code>required</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>minlength</code></td>
+                                    <td>أقل عدد حروف</td>
+                                    <td><code>minlength="3"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>maxlength</code></td>
+                                    <td>أكبر عدد حروف</td>
+                                    <td><code>maxlength="300"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>min</code> / <code>max</code></td>
+                                    <td>حد أدنى وأعلى للأرقام والتواريخ</td>
+                                    <td><code>min="16" max="80"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>step</code></td>
+                                    <td>خطوة الزيادة</td>
+                                    <td><code>step="1"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>pattern</code></td>
+                                    <td>تعبير نمطي للتحقق</td>
+                                    <td><code>pattern="[0-9]{10}"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>type="email"</code></td>
+                                    <td>تحقق أولي من صيغة البريد</td>
+                                    <td><code>type="email"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>accept</code></td>
+                                    <td>تحديد أنواع الملفات</td>
+                                    <td><code>accept=".pdf,.docx"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>autocomplete</code></td>
+                                    <td>مساعدة المتصفح في تعبئة الحقول</td>
+                                    <td><code>autocomplete="email"</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> validation.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;input type="text" id="phone" name="phone"
+       pattern="[0-9]{10}" title="أدخل 10 أرقام" required&gt;
+
+&lt;input type="number" id="age" name="age"
+       min="16" max="80" step="1" required&gt;
+
+&lt;input type="date" id="birth" name="birth" required&gt;
+
+&lt;input type="file" id="cv" name="cv"
+       accept=".pdf,.doc,.docx"&gt;</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-shield-halved"></i>
+                        <div>
+                            <strong>قاعدة أمنية:</strong> تحقق المتصفح يمكن تعطيله أو تجاوزه.
+                            لذلك يجب أن يتحقق الخادم من كل قيمة مرة أخرى: الطول، النوع، الصيغة،
+                            والصلاحية. هذا مبدأ أساسي سنطبقه في Flask.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Accessibility -->
+                <section class="lecture-section" id="accessibility" aria-labelledby="a11y-title">
+                    <h2 class="section-title" id="a11y-title">
+                        <i class="fas fa-universal-access"></i> الوصولية والدلالة في النماذج
+                    </h2>
+                    <p>
+                        النموذج الجيد يفهمه الجميع: من يستخدم الفأرة، ومن يستخدم لوحة المفاتيح،
+                        ومن يعتمد على قارئ الشاشة. الأساس بسيط: كل حقل له تسمية واضحة،
+                        وكل مجموعة حقول لها عنوان، ورسائل الخطأ مفهومة.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-tag"></i> label</h3>
+                            <ul>
+                                <li>اربطها بالحقل عبر <code>for</code> و<code>id</code></li>
+                                <li>أو ضع الحقل داخلها</li>
+                                <li>النقر على التسمية ينشّط الحقل</li>
+                                <li>قارئ الشاشة يعلن التسمية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-layer-group"></i> fieldset وlegend</h3>
+                            <ul>
+                                <li>تجميع حقول مترابطة</li>
+                                <li><code>legend</code> عنوان المجموعة</li>
+                                <li>مفيد جداً للراديو والتشيك بوكس</li>
+                                <li>يحسّن الفهم البنيوي</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-keyboard"></i> لوحة المفاتيح</h3>
+                            <ul>
+                                <li>كل عنصر تفاعلي يجب أن يُوصل إليه بـ Tab</li>
+                                <li>لا تخفِ مؤشر التركيز <code>outline</code></li>
+                                <li>رتب الحقول منطقياً</li>
+                                <li>اختبر النموذج بدون فأرة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-circle-exclamation"></i> رسائل الخطأ</h3>
+                            <ul>
+                                <li>وضّح ما الخطأ وكيف يُصلح</li>
+                                <li>لا تعتمد على اللون وحده</li>
+                                <li>اربط الرسالة بالحقل إن أمكن</li>
+                                <li>استخدم نصاً واضحاً</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>خطأ شائع:</strong> استخدام <code>placeholder</code> كبديل عن
+                            <code>label</code>. الـ placeholder يختفي عند الكتابة، ولا يُقرأ دائماً
+                            بشكل موثوق، ولا يصلح كتسمية دائمة. اكتب <code>label</code> دائماً.
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> accessible-label.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;p&gt;
+    &lt;label for="email"&gt;البريد الإلكتروني&lt;/label&gt;
+    &lt;input type="email" id="email" name="email"
+           required aria-describedby="email-help"&gt;
+    &lt;small id="email-help"&gt;سنستخدم البريد للتواصل فقط.&lt;/small&gt;
+&lt;/p&gt;</code></pre>
+                    </div>
+
+                    <p>
+                        ولا تنسَ الدلالة العامة للصفحة: ضع النموذج داخل <code>&lt;main&gt;</code>،
+                        واستخدم <code>&lt;header&gt;</code> و<code>&lt;nav&gt;</code>
+                        و<code>&lt;footer&gt;</code> كما تعلمت في المحاضرة السابقة.
+                    </p>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        المطلوب بناء صفحة نموذج تسجيل أو تواصل كاملة، دلالية، وقابلة للوصول.
+                        استخدم <code>action="#"</code> و<code>method="post"</code> الآن،
+                        لأننا لا نملك خادماً بعد. لاحقاً سنستبدل <code>#</code> بمسار Flask.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 3</h3>
+                        <ol>
+                            <li>أنشئ ملف <code>form.html</code> داخل مجلد <code>web-course</code>.</li>
+                            <li>اكتب مستند HTML5 كاملاً: <code>doctype</code> و<code>head</code> و<code>body</code>.</li>
+                            <li>أضف هيكلاً دلالياً: <code>header</code> و<code>nav</code> و<code>main</code> و<code>footer</code>.</li>
+                            <li>داخل <code>main</code> أنشئ <code>&lt;form action="#" method="post"&gt;</code>.</li>
+                            <li>قسّم النموذج إلى مجموعات <code>fieldset</code> مع <code>legend</code>:
+                                <ul>
+                                    <li>بيانات الحساب.</li>
+                                    <li>تفاصيل إضافية.</li>
+                                    <li>تأكيد الإرسال.</li>
+                                </ul>
+                            </li>
+                            <li>أضف الحقول التالية مع <code>label</code> مناسب لكل حقل:
+                                <ul>
+                                    <li>الاسم الكامل: <code>text</code>، <code>required</code>، <code>minlength="3"</code>.</li>
+                                    <li>البريد الإلكتروني: <code>email</code>، <code>required</code>.</li>
+                                    <li>كلمة المرور: <code>password</code>، <code>required</code>، <code>minlength="8"</code>.</li>
+                                    <li>رقم الهاتف: <code>tel</code> مع <code>pattern="[0-9]{10}"</code>.</li>
+                                    <li>المسار المفضل: <code>select</code> بخيارات.</li>
+                                    <li>ملاحظات: <code>textarea</code> مع <code>maxlength="300"</code>.</li>
+                                    <li>نوع الحساب: أزرار <code>radio</code> بنفس <code>name</code>.</li>
+                                    <li>الموافقة على الشروط: <code>checkbox</code> مع <code>required</code>.</li>
+                                </ul>
+                            </li>
+                            <li>أضف <code>autocomplete</code> مناسباً لحقول الاسم والبريد وكلمة المرور.</li>
+                            <li>أضف زر إرسال: <code>&lt;button type="submit"&gt;</code>.</li>
+                            <li>افتح الصفحة في المتصفح وجرّب إرسال النموذج فارغاً، ثم بأخطاء مقصودة.</li>
+                            <li>افحص النموذج من تبويب Elements وتأكد من ارتباط كل <code>label</code> بالحقل الصحيح.</li>
+                        </ol>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> كل حقل له <code>label</code>،
+                            ولا يوجد <code>placeholder</code> يعمل بدلاً من التسمية،
+                            وكل مجموعة حقول داخل <code>fieldset</code> لها <code>legend</code>،
+                            والتحقق المدمج يعمل، والنموذج مفهوم بلوحة المفاتيح.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-tag-slash"></i> حقل بلا label</h3>
+                            <p>
+                                المستخدم لا يعرف ماذا يكتب، وقارئ الشاشة لا يعلن التسمية.
+                                اربط <code>label</code> بـ<code>for</code> و<code>id</code> دائماً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-i-cursor"></i> placeholder بدل label</h3>
+                            <p>
+                                الـ placeholder يختفي عند الكتابة، ولا يصلح كتسمية دائمة.
+                                استخدم <code>label</code>، والـ placeholder لإرشاد قصير فقط.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-tag"></i> نسيان name</h3>
+                            <p>
+                                الحقل بدون <code>name</code> لا تُرسل قيمته إلى الخادم.
+                                <code>id</code> للربط والتنسيق، و<code>name</code> للإرسال.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-lock"></i> إرسال كلمة المرور بـ GET</h3>
+                            <p>
+                                بيانات GET قد تظهر في عنوان الصفحة والسجل. استخدم
+                                <code>method="post"</code> مع HTTPS للبيانات الحساسة.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-table-cells-large"></i> جدول للتخطيط</h3>
+                            <p>
+                                الجدول للبيانات فقط. استخدم CSS لاحقاً لبناء الأعمدة
+                                والتخطيطات. جدول التخطيط يكسر الوصولية والتجاوب.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-shield-slash"></i> الاعتماد على تحقق المتصفح فقط</h3>
+                            <p>
+                                تحقق HTML5 قابل للتجاوز. يجب تكرار التحقق في الخادم،
+                                وإلا فأنت تعرض تطبيقك للبيانات غير الصالحة أو الخبيثة.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>الجداول للبيانات الجدولية فقط، وليست أداة تخطيط.</li>
+                        <li>الجدول الدلالي يستخدم <code>caption</code> و<code>thead</code> و<code>tbody</code> و<code>tfoot</code>.</li>
+                        <li>رؤوس الخلايا تُكتب بـ <code>th</code> مع <code>scope</code> مناسب.</li>
+                        <li>النماذج تُرسل البيانات عبر <code>action</code> و<code>method</code>.</li>
+                        <li><code>GET</code> للبحث والفلاتر، و<code>POST</code> للبيانات الحساسة.</li>
+                        <li>كل حقل يحتاج <code>label</code>، و<code>name</code>، و<code>id</code> عند الربط.</li>
+                        <li><code>fieldset</code> و<code>legend</code> يجمعان الحقول المترابطة.</li>
+                        <li>HTML5 توفر تحققاً مدمجاً، لكن التحقق الحقيقي في الخادم.</li>
+                        <li>الوصولية تعني تسميات واضحة، ترتيباً منطقياً، ودعماً للوحة المفاتيح.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) متى نستخدم الجدول في HTML؟</summary>
+                        <p>
+                            عندما نعرض بيانات ذات علاقة صفية وعمودية، مثل النتائج أو المقارنات.
+                            لا نستخدمه لتخطيط الصفحة.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) ما وظيفة <code>caption</code> و<code>scope</code>؟</summary>
+                        <p>
+                            <code>caption</code> يعطي الجدول عنواناً وصفياً يُقرأ بواسطة قارئ الشاشة.
+                            <code>scope</code> يحدد هل رأس الخلية تابع لعمود أو صف.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) ما الفرق بين GET وPOST في النماذج؟</summary>
+                        <p>
+                            GET يضع القيم في عنوان URL ويناسب البحث والفلاتر. POST يرسل القيم في جسم
+                            الطلب ويناسب البيانات الحساسة مثل التسجيل وكلمات المرور.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) لماذا نحتاج <code>name</code> في الحقل؟</summary>
+                        <p>
+                            لأن الخادم يعتمد على <code>name</code> لتحديد اسم الحقل وقيمته.
+                            الحقل بدون <code>name</code> لا تُرسل قيمته عند إرسال النموذج.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) هل تحقق HTML5 يكفي للأمان؟</summary>
+                        <p>
+                            لا. يمكن تجاوزه أو تعطيله. يجب أن يتحقق الخادم من كل البيانات مرة أخرى،
+                            خاصة في التطبيقات الحقيقية.
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="lecture2.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> المحاضرة السابقة
+                    </a>
+                    <a href="lecture4.html">
+                        المحاضرة التالية: أساسيات CSS <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 3 · HTML المتقدم — الجداول والنماذج | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

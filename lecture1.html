@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 1 | مقدمة إلى الويب وأدوات العمل — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة الأولى من مساق SYBS 2309 تصميم وبرمجة الويب: مقدمة إلى الويب، نموذج العميل–الخادم، الواجهة الأمامية والخلفية، أدوات العمل، إنشاء أول ملف HTML، وفحص DOM باستخدام أدوات المطور.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
+    <link rel="stylesheet" href="lecture.css">
+
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 1</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 1: مقدمة إلى الويب وأدوات العمل</h1>
+            <p class="lecture-lead">
+                نبدأ من السؤال الأساسي: كيف يعمل الويب؟ سنتعرّف على الفرق بين الإنترنت والويب، ونموذج
+                <strong>العميل–الخادم</strong>، ومسؤوليات <strong>الواجهة الأمامية</strong> و<strong>الواجهة الخلفية</strong>،
+                ثم نجهّز بيئة العمل في <strong>VS Code</strong> وننشئ أول مستند <strong>HTML5</strong>،
+                ونفحصه باستخدام <strong>أدوات المطور</strong> وشجرة <strong>DOM</strong>.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 1</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 1 · الواجهة الأمامية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+    <a class="tool-btn" href="script1.txt" download>
+        <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+    </a>
+    <a class="tool-btn" href="script1.txt" target="_blank" rel="noopener">
+        <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+    </a>
+</div>
+
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#internet-vs-web">الإنترنت مقابل الويب</a></li>
+                        <li><a href="#client-server">نموذج العميل–الخادم</a></li>
+                        <li><a href="#frontend-backend">الواجهة الأمامية والخلفية</a></li>
+                        <li><a href="#request-lifecycle">دورة حياة طلب الويب وHTTP</a></li>
+                        <li><a href="#tools">أدوات العمل وإعداد المشروع</a></li>
+                        <li><a href="#first-html">أول ملف HTML</a></li>
+                        <li><a href="#devtools-dom">أدوات المطور وDOM</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> لا تحتاج إلى حفظ كل الأوامر الآن. المطلوب فهم الصورة الكبيرة،
+                    ثم تنفيذ التطبيق العملي خطوة بخطوة.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة، يجب أن تكون قادراً على وصف الصورة العامة لكيفية عمل الويب،
+                        وتمييز الأدوار بين المتصفح والخادم، وتجهيز مجلد مشروعك الأول، وإنشاء صفحة HTML بسيطة
+                        وفتحها في المتصفح وفحصها بأدوات المطور.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>وصف نموذج العميل–الخادم لشبكة الويب</li>
+                                <li>التمييز بين الإنترنت والويب</li>
+                                <li>شرح دور HTTP في تبادل الطلبات والاستجابات</li>
+                                <li>تمييز مسؤوليات الواجهة الأمامية والخلفية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>إعداد VS Code ومجلد مشروع أساسي</li>
+                                <li>إنشاء أول ملف <code>index.html</code></li>
+                                <li>تشغيل الصفحة في المتصفح أو عبر Live Server</li>
+                                <li>فحص شجرة DOM من تبويب Elements</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>بناء عادة تنظيم الملفات منذ البداية</li>
+                                <li>قراءة رسائل المتصفح وفهمها</li>
+                                <li>الاستعداد لبقية أسابيع الواجهة الأمامية</li>
+                                <li>الاعتماد على التوثيق الرسمي مثل MDN</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Internet vs Web -->
+                <section class="lecture-section" id="internet-vs-web" aria-labelledby="internet-title">
+                    <h2 class="section-title" id="internet-title">
+                        <i class="fas fa-globe"></i> الإنترنت مقابل الويب
+                    </h2>
+                    <p>
+                        كثيراً ما نستخدم الكلمتين بالتبادل، لكنهما ليستا الشيء نفسه. <strong>الإنترنت</strong>
+                        هو البنية التحتية: شبكة عالمية ضخمة من الشبكات والأجهزة والكابلات وبروتوكولات الاتصال.
+                        أما <strong>الويب</strong> فهو خدمة تعمل فوق الإنترنت، تعتمد على بروتوكول
+                        <strong>HTTP/HTTPS</strong> ولغة <strong>HTML</strong> والروابط التشعبية.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-network-wired"></i> الإنترنت</h3>
+                            <ul>
+                                <li>شبكة من الشبكات تربط الأجهزة عالمياً</li>
+                                <li>تعتمد على بروتوكولات مثل TCP/IP</li>
+                                <li>يشمل خدمات كثيرة: البريد، النقل، الويب</li>
+                                <li>ليس خدمة واحدة فقط</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-window-restore"></i> الويب</h3>
+                            <ul>
+                                <li>خدمة تعمل فوق الإنترنت</li>
+                                <li>تعتمد على HTTP/HTTPS وHTML</li>
+                                <li>المتصفح هو بوابة المستخدم إليها</li>
+                                <li>الصفحات والمواقع والتطبيقات الويب</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>معلومة مهمة:</strong> عندما تكتب عنواناً في المتصفح، فأنت غالباً تطلب مورداً
+                            عبر الويب. لكن الإنترنت نفسه كان موجوداً قبل الويب، وما زال يخدم تطبيقات أخرى
+                            مثل البريد الإلكتروني ونقل الملفات.
+                        </div>
+                    </div>
+                    <p>
+                        من الجهات المهمة التي تحافظ على معايير الويب: <strong>W3C</strong> و<strong>WHATWG</strong>،
+                        ومن أفضل المراجع اليومية للمطورين: <strong>MDN Web Docs</strong>. سنستخدم MDN كمرجع
+                        رسمي طوال المساق.
+                    </p>
+                </section>
+
+                <!-- Client Server -->
+                <section class="lecture-section" id="client-server" aria-labelledby="client-server-title">
+                    <h2 class="section-title" id="client-server-title">
+                        <i class="fas fa-arrows-left-right"></i> نموذج العميل–الخادم
+                    </h2>
+                    <p>
+                        الويب يقوم على علاقة أساسية: <strong>العميل</strong> يطلب، و<strong>الخادم</strong>
+                        يستجيب. العميل هنا غالباً هو المتصفح، والخادم هو جهاز أو خدمة تعمل باستمرار وتستمع
+                        للطلبات. هذا النموذج هو حجر الأساس لفهم أي تطبيق ويب لاحقاً.
+                    </p>
+
+                    <div class="flow-diagram" role="img" aria-label="مخطط يوضح أن المتصفح يرسل طلب HTTP إلى الخادم ثم يستقبل استجابة HTTP">
+                        <div class="flow-box">
+                            <i class="fas fa-laptop"></i>
+                            <h3>العميل (Client)</h3>
+                            <p>المتصفح يرسل الطلب، يعرض الصفحة، وينفّذ JavaScript.</p>
+                        </div>
+                        <div class="flow-connector" aria-hidden="true">
+                            <span>طلب HTTP</span>
+                            <i class="fas fa-arrow-left"></i>
+                            <span class="response-arrow">استجابة HTTP</span>
+                            <i class="fas fa-arrow-right response-arrow"></i>
+                        </div>
+                        <div class="flow-box server-box">
+                            <i class="fas fa-server"></i>
+                            <h3>الخادم (Server)</h3>
+                            <p>يستقبل الطلب، ينفّذ المنطق، ويرجع HTML أو JSON أو ملفات.</p>
+                        </div>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-desktop"></i> مسؤوليات العميل</h3>
+                            <ul>
+                                <li>إرسال طلبات HTTP إلى الخادم</li>
+                                <li>عرض HTML وCSS</li>
+                                <li>تنفيذ JavaScript داخل المتصفح</li>
+                                <li>إدارة الجلسات والتخزين المحلي</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-database"></i> مسؤوليات الخادم</h3>
+                            <ul>
+                                <li>الاستماع للطلبات على منفذ محدد</li>
+                                <li>معالجة المسارات والمنطق البرمجي</li>
+                                <li>الاتصال بقواعد البيانات</li>
+                                <li>إرجاع الاستجابة بالصيغة المناسبة</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>
+                        عندما تفتح موقعاً، المتصفح لا يرى “الخادم” مباشرة. هو يرى عنواناً مثل
+                        <code>https://example.com/courses/web</code>، ثم يترجم هذا العنوان إلى طلب HTTP.
+                        عنوان URL يتكون عادة من: البروتوكول، اسم النطاق، المنفذ، المسار، وربما معاملات الاستعلام
+                        أو جزء <code>#fragment</code>.
+                    </p>
+                </section>
+
+                <!-- Frontend Backend -->
+                <section class="lecture-section" id="frontend-backend" aria-labelledby="frontend-title">
+                    <h2 class="section-title" id="frontend-title">
+                        <i class="fas fa-layer-group"></i> الواجهة الأمامية والخلفية
+                    </h2>
+                    <p>
+                        تطبيق الويب الحديث ينقسم عادة إلى جزأين متكاملين. <strong>الواجهة الأمامية</strong>
+                        هي ما يراه المستخدم ويتفاعل معه داخل المتصفح. <strong>الواجهة الخلفية</strong> هي
+                        المنطق الذي يعمل على الخادم: المسارات، التحقق، المصادقة، قواعد البيانات، والأمان.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>المحور</th>
+                                    <th>الواجهة الأمامية</th>
+                                    <th>الواجهة الخلفية</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>مكان التنفيذ</td>
+                                    <td>متصفح المستخدم</td>
+                                    <td>الخادم</td>
+                                </tr>
+                                <tr>
+                                    <td>التقنيات</td>
+                                    <td>HTML · CSS · JavaScript</td>
+                                    <td>Python · Flask · قواعد بيانات</td>
+                                </tr>
+                                <tr>
+                                    <td>المسؤولية الأساسية</td>
+                                    <td>العرض، التنسيق، التفاعل، التحقق الأولي</td>
+                                    <td>المنطق، التخزين، الأمان، الاستجابات</td>
+                                </tr>
+                                <tr>
+                                    <td>ما يراه المستخدم</td>
+                                    <td>الصفحة والأزرار والنماذج</td>
+                                    <td>لا يراه مباشرة؛ يرى نتيجته</td>
+                                </tr>
+                                <tr>
+                                    <td>أمثلة</td>
+                                    <td>قائمة تنقل، نموذج تسجيل، تأثيرات</td>
+                                    <td>تسجيل مستخدم، حفظ ملاحظة، جلب بيانات</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-link"></i>
+                        <div>
+                            <strong>الربط بينهما:</strong> في هذا المساق سنبدأ ببناء الواجهة الأمامية، ثم ننتقل
+                            لاحقاً إلى Python وFlask لبناء الواجهة الخلفية، ونجمع بينهما في مشروع متكامل.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Request lifecycle -->
+                <section class="lecture-section" id="request-lifecycle" aria-labelledby="lifecycle-title">
+                    <h2 class="section-title" id="lifecycle-title">
+                        <i class="fas fa-route"></i> دورة حياة طلب الويب وHTTP
+                    </h2>
+                    <p>
+                        لفهم ما يحدث عند فتح صفحة، تتبّع الرحلة التالية. هذه الرحلة تتكرر مع كل مورد:
+                        صفحة HTML، ملف CSS، صورة، أو طلب بيانات.
+                    </p>
+                    <ol class="steps-list">
+                        <li>المستخدم يكتب عنوان URL في المتصفح.</li>
+                        <li>المتصفح يستخدم DNS لتحويل اسم النطاق إلى عنوان IP للخادم.</li>
+                        <li>يتم إنشاء اتصال شبكي مع الخادم، وغالباً يكون مشفراً عبر HTTPS.</li>
+                        <li>المتصفح يرسل طلب HTTP، مثل <code>GET /index.html HTTP/1.1</code>.</li>
+                        <li>الخادم يستقبل الطلب، يحدد المسار المناسب، وينفّذ المنطق المطلوب.</li>
+                        <li>الخادم يرسل استجابة HTTP تتضمن رمز الحالة والترويسات والمحتوى.</li>
+                        <li>المتصفح يقرأ HTML، يبني DOM، يطبق CSS، ينفّذ JavaScript، ثم يعرض الصفحة.</li>
+                    </ol>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-right-to-bracket"></i> طلب HTTP</h3>
+                            <ul>
+                                <li><strong>GET:</strong> جلب مورد</li>
+                                <li><strong>POST:</strong> إرسال بيانات</li>
+                                <li>يحتوي على مسار وترويسات وربما جسم</li>
+                                <li>المتصفح يرسله نيابة عن المستخدم</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-reply"></i> استجابة HTTP</h3>
+                            <ul>
+                                <li>رمز الحالة: 200، 404، 500 …</li>
+                                <li>ترويسات مثل Content-Type</li>
+                                <li>جسم الاستجابة: HTML أو JSON أو ملف</li>
+                                <li>المتصفح يقرر كيف يعرضها</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>
+                        من رموز الحالة المهمة: <code>200 OK</code> للنجاح، <code>301/302</code> لإعادة التوجيه،
+                        <code>404 Not Found</code> لعدم وجود المورد، <code>500 Internal Server Error</code>
+                        لخطأ في الخادم. معرفة هذه الرموز ستساعدك كثيراً في التصحيح لاحقاً.
+                    </p>
+                </section>
+
+                <!-- Tools -->
+                <section class="lecture-section" id="tools" aria-labelledby="tools-title">
+                    <h2 class="section-title" id="tools-title">
+                        <i class="fas fa-toolbox"></i> أدوات العمل وإعداد المشروع
+                    </h2>
+                    <p>
+                        سنستخدم <strong>VS Code</strong> كمحرر أساسي، و<strong>متصفحاً حديثاً</strong> مثل
+                        Chrome أو Edge أو Firefox، مع <strong>أدوات المطور</strong> المدمجة. وجود بيئة منظمة
+                        منذ الأسبوع الأول يوفر عليك وقتاً كبيراً لاحقاً.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-code"></i> VS Code</h3>
+                            <ul>
+                                <li>محرر مجاني وخفيف</li>
+                                <li>دعم ممتاز لـ HTML وCSS وJavaScript</li>
+                                <li>إضافات مثل Live Server وPrettier</li>
+                                <li>طرفية مدمجة لتشغيل الأوامر</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-window-maximize"></i> المتصفح</h3>
+                            <ul>
+                                <li>عرض الصفحة وتشغيل JavaScript</li>
+                                <li>أدوات المطور: Elements وConsole وNetwork</li>
+                                <li>وضع محاكاة الأجهزة المتجاوبة</li>
+                                <li>قراءة الأخطاء ورسائل الشبكة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-folder-tree"></i> تنظيم المشروع</h3>
+                            <ul>
+                                <li>أسماء ملفات بحروف صغيرة</li>
+                                <li>استخدام الشرطة <code>-</code> بدل المسافات</li>
+                                <li>مجلد <code>assets</code> للصور والملفات</li>
+                                <li>ملف <code>README.md</code> للتوثيق</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>هيكل مقترح لمجلد المساق:</p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-folder-open"></i> web-course/</span>
+                            <span class="code-lang">TREE</span>
+                        </div>
+                        <pre><code>web-course/
+├── index.html
+├── lecture1.html
+├── style.css
+├── main.js
+├── assets/
+│   ├── images/
+│   └── fonts/
+└── README.md</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>تنبيه:</strong> تجنّب المسافات والأحرف العربية في أسماء ملفات المشروع
+                            في هذه المرحلة. استخدم أسماء إنجليزية قصيرة وواضحة، مثل <code>my-profile.html</code>
+                            بدلاً من <code>صفحتي الجديدة.html</code>، لتقليل مشاكل المسارات.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- First HTML -->
+                <section class="lecture-section" id="first-html" aria-labelledby="first-html-title">
+                    <h2 class="section-title" id="first-html-title">
+                        <i class="fas fa-file-code"></i> أول ملف HTML
+                    </h2>
+                    <p>
+                        الآن ننتقل إلى التطبيق. أنشئ مجلد <code>web-course</code>، افتحه في VS Code،
+                        ثم أنشئ ملفاً باسم <code>index.html</code>. اكتب الكود التالي، واحفظ الملف بترميز
+                        <strong>UTF-8</strong>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> index.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ar" dir="rtl"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;صفحتي الأولى&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;مرحباً، أنا طالب في مساق الويب&lt;/h1&gt;
+    &lt;p&gt;هذه أول صفحة HTML أنشئها داخل المساق.&lt;/p&gt;
+
+    &lt;h2&gt;مهاراتي الحالية&lt;/h2&gt;
+    &lt;ul&gt;
+        &lt;li&gt;استخدام VS Code&lt;/li&gt;
+        &lt;li&gt;كتابة HTML أساسي&lt;/li&gt;
+        &lt;li&gt;فحص الصفحة بأدوات المطور&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;
+        &lt;a href="https://developer.mozilla.org/ar/" target="_blank" rel="noopener noreferrer"&gt;
+            زيارة توثيق MDN
+        &lt;/a&gt;
+    &lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-code-branch"></i> بنية المستند</h3>
+                            <ul>
+                                <li><code>&lt;!DOCTYPE html&gt;</code> يحدد HTML5</li>
+                                <li><code>&lt;html&gt;</code> جذر المستند</li>
+                                <li><code>&lt;head&gt;</code> بيانات وصفية</li>
+                                <li><code>&lt;body&gt;</code> المحتوى المرئي</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-language"></i> اللغة والاتجاه</h3>
+                            <ul>
+                                <li><code>lang="ar"</code> لغة المحتوى</li>
+                                <li><code>dir="rtl"</code> اتجاه من اليمين لليسار</li>
+                                <li><code>charset="UTF-8"</code> لدعم العربية</li>
+                                <li><code>viewport</code> لتحسين العرض على الهاتف</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>
+                        بعد الحفظ، افتح الملف في المتصفح. يمكنك النقر المزدوج عليه، أو استخدام إضافة
+                        <strong>Live Server</strong> في VS Code. لاحظ أن فتح الملف مباشرة يعطي عنواناً يبدأ بـ
+                        <code>file://</code>، بينما Live Server يعطيك عنواناً يبدأ بـ <code>http://</code>،
+                        وهو أقرب لبيئة الويب الحقيقية.
+                    </p>
+                </section>
+
+                <!-- DevTools DOM -->
+                <section class="lecture-section" id="devtools-dom" aria-labelledby="devtools-title">
+                    <h2 class="section-title" id="devtools-title">
+                        <i class="fas fa-magnifying-glass-chart"></i> أدوات المطور وDOM
+                    </h2>
+                    <p>
+                        أدوات المطور هي معملك الحقيقي في المتصفح. افتحها بالضغط على <strong>F12</strong> أو
+                        <strong>Ctrl + Shift + I</strong>. سنستخدم الآن تبويب <strong>Elements</strong>
+                        لفحص شجرة <strong>DOM</strong>، وتبويب <strong>Console</strong> لتجربة أوامر سريعة.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-sitemap"></i> Elements</h3>
+                            <ul>
+                                <li>يعرض شجرة DOM الحالية</li>
+                                <li>يمكنك تحديد أي عنصر وفحص خصائصه</li>
+                                <li>تعديل مؤقت للتجربة فقط</li>
+                                <li>لا يحفظ التغييرات في الملف الأصلي</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-terminal"></i> Console</h3>
+                            <ul>
+                                <li>تشغيل JavaScript مباشرة</li>
+                                <li>قراءة الأخطاء والتحذيرات</li>
+                                <li>تجربة <code>document.querySelector</code></li>
+                                <li>طباعة قيم للفحص السريع</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-network-wired"></i> Network</h3>
+                            <ul>
+                                <li>عرض الطلبات التي أرسلها المتصفح</li>
+                                <li>حالة كل طلب: 200، 404، 500</li>
+                                <li>حجم الملفات وزمن التحميل</li>
+                                <li>مفيد لتصحيح CSS والصور</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>
+                        جرّب في تبويب Console كتابة الأمر التالي لتغيير نص العنوان مؤقتاً:
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-terminal"></i> Console</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>document.querySelector('h1').textContent = 'تم التغيير من Console';</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>مهم:</strong> التغيير من تبويب Elements أو Console هو تغيير مؤقت في
+                            نسخة المتصفح فقط. إذا أعدت تحميل الصفحة، سيعود المحتوى كما هو مكتوب في ملف
+                            <code>index.html</code>. التعديل الدائم يكون دائماً في ملفات المشروع.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        نفّذ الخطوات التالية داخل مجلد <code>web-course</code>، ثم جهّز المخرجات للتسليم.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 1</h3>
+                        <ol>
+                            <li>أنشئ مجلد <code>web-course</code> وافتحه في VS Code.</li>
+                            <li>
+                                أنشئ ملف <code>index.html</code> يحتوي على:
+                                <ul>
+                                    <li>عنوان <code>h1</code> باسمك.</li>
+                                    <li>فقرة تعريفية قصيرة عنك.</li>
+                                    <li>قائمة <code>ul</code> بثلاث مهارات أو تقنيات تحبها.</li>
+                                    <li>رابط خارجي إلى <code>MDN</code> مع <code>target="_blank"</code> و<code>rel="noopener noreferrer"</code>.</li>
+                                </ul>
+                            </li>
+                            <li>افتح الصفحة في المتصفح، أو شغّلها عبر Live Server.</li>
+                            <li>افتح أدوات المطور، وافحص العنصر <code>h1</code> من تبويب Elements.</li>
+                            <li>من تبويب Console، غيّر نص <code>h1</code> مؤقتاً، ثم أعد تحميل الصفحة ولاحظ عودة النص الأصلي.</li>
+                            <li>من تبويب Network، أعد تحميل الصفحة وتحقق من حالة طلب <code>index.html</code>.</li>
+                            <li>التقط صورة للصفحة وصورة لتبويب Elements، وأرفقهما مع ملف <code>index.html</code>.</li>
+                        </ol>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> صفحة تعمل، نص عربي يظهر بشكل صحيح، رابط خارجي
+                            يعمل، وشجرة DOM ظاهرة في أدوات المطور.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-font"></i> نسيان charset</h3>
+                            <p>
+                                إذا ظهرت الحروف العربية كرموز غريبة، تأكد من وجود
+                                <code>&lt;meta charset="UTF-8"&gt;</code> داخل <code>head</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-mobile-screen"></i> نسيان viewport</h3>
+                            <p>
+                                بدون <code>viewport</code>، ستبدو الصفحة مصغّرة على الهاتف.
+                                استخدم وسم <code>meta name="viewport"</code> دائماً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-link-slash"></i> مسار ملف خاطئ</h3>
+                            <p>
+                                إذا لم يظهر ملف CSS أو صورة، تحقق من المسار النسبي، ومن اسم الملف
+                                وحالة الأحرف، ومن وجود الملف فعلاً في المجلد.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-floppy-disk"></i> تعديل غير محفوظ</h3>
+                            <p>
+                                في VS Code، إذا لم تحفظ الملف <kbd>Ctrl + S</kbd>، فلن ترى التغيير
+                                في المتصفح. تحقق من نقطة الحفظ بجانب اسم الملف.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>الإنترنت هو البنية التحتية، والويب خدمة تعمل فوقه عبر HTTP/HTTPS.</li>
+                        <li>نموذج العميل–الخادم: المتصفح يرسل طلباً، والخادم يرد باستجابة.</li>
+                        <li>الواجهة الأمامية تُنفّذ في المتصفح بـ HTML وCSS وJavaScript.</li>
+                        <li>الواجهة الخلفية تُنفّذ على الخادم، وستبنى لاحقاً بـ Python وFlask.</li>
+                        <li>دورة الطلب تشمل DNS، اتصال الشبكة، طلب HTTP، استجابة، ثم عرض الصفحة.</li>
+                        <li>جهّزنا VS Code ومجلد مشروع، وأنشأنا أول ملف HTML5.</li>
+                        <li>أدوات المطور تساعدنا في فحص DOM والشبكة وتجربة JavaScript.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما الفرق بين الإنترنت والويب؟</summary>
+                        <p>
+                            الإنترنت هو الشبكة العالمية للأجهزة والاتصالات، أما الويب فهو خدمة تعمل فوق
+                            الإنترنت وتستخدم HTTP/HTTPS وHTML لعرض الصفحات والمواقع.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) من هو العميل ومن هو الخادم في طلب ويب عادي؟</summary>
+                        <p>
+                            العميل هو المتصفح الذي يرسل الطلب، والخادم هو الجهاز أو الخدمة التي تستقبل الطلب
+                            وتعيد الاستجابة.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) ماذا يفعل المتصفح بعد استلام ملف HTML؟</summary>
+                        <p>
+                            يبني شجرة DOM، ويطبق CSS، وينفّذ JavaScript، ثم يرسم الصفحة للمستخدم.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) ما وظيفة تبويب Elements في أدوات المطور؟</summary>
+                        <p>
+                            يعرض شجرة DOM الحالية للصفحة، ويسمح بفحص العناصر وتجربة تعديلات مؤقتة لا تُحفظ
+                            في الملف الأصلي.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) لماذا نستخدم <code>charset="UTF-8"</code>؟</summary>
+                        <p>
+                            لدعم عرض الحروف العربية واللغات الأخرى بشكل صحيح، وتجنب ظهور النص كرموز
+                            غير مفهومة.
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="index.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> العودة إلى الصفحة الرئيسية
+                    </a>
+                    <a href="lecture2.html">
+                        المحاضرة التالية: أساسيات HTML <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>
+                المحاضرة 1 · مقدمة إلى الويب وأدوات العمل | المحاضر: <strong>م. محمود خليل</strong>
+            </p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

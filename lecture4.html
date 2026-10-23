@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 4 | أساسيات CSS — المحددات ونموذج الصندوق والطباعة — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة الرابعة من مساق SYBS 2309: أساسيات CSS — طرق ربط CSS بـ HTML، المحددات (العنصر، الصنف، المعرف، المتداخلة)، قواعد التخصيص والوراثة، الألوان والخطوط، ونموذج الصندوق (المحتوى، الحشو، الحد، الهامش).">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 4</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 4: أساسيات CSS — المحددات ونموذج الصندوق والطباعة</h1>
+            <p class="lecture-lead">
+                ننتقل في هذه المحاضرة من البنية إلى <strong>الشكل</strong>. سنتعلم كيف نربط
+                <strong>CSS</strong> بمستند HTML بثلاث طرق، ثم نفهم <strong>المحددات</strong>
+                (العنصر، الصنف، المعرف، والمتداخلة)، ونفهم قواعد <strong>التخصيص
+                (Specificity)</strong> و<strong>الوراثة</strong>. بعدها ندخل إلى
+                <strong>الخطوط والألوان والخلفيات</strong>، ونختم بأهم مفهوم في التنسيق:
+                <strong>نموذج الصندوق (Box Model)</strong> — المحتوى، الحشو، الحد، والهامش —
+                لأنه أساس كل تخطيط احترافي قادم.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 4</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 1 · الواجهة الأمامية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script4.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script4.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#what-is-css">ما هي CSS ولماذا نفصلها عن HTML</a></li>
+                        <li><a href="#linking">ثلاث طرق لربط CSS بـ HTML</a></li>
+                        <li><a href="#selectors">المحددات: العنصر، الصنف، المعرف، والمتداخلة</a></li>
+                        <li><a href="#specificity">التخصيص والوراثة</a></li>
+                        <li><a href="#colors-fonts">الألوان والخطوط والخلفيات</a></li>
+                        <li><a href="#box-model">نموذج الصندوق</a></li>
+                        <li><a href="#borders-shadows">الحدود والظلال والزوايا</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> لا تحفظ كل خصائص CSS. المطلوب فهم
+                    <strong>نموذج الصندوق</strong>، و<strong>كيف يعمل التخصيص</strong>،
+                    ثم الرجوع إلى MDN لكل خاصية على حدة.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على تنسيق صفحات HTML التي بنيتها
+                        بنفسك: ألوان، خطوط، حدود، مسافات، وخلفيات — دون العبث ببنية HTML
+                        نفسها. ستفهم لماذا تُوضع CSS في ملف خارجي، وكيف تُختار العناصر بدقة،
+                        وكيف تُحسب أبعاد الصندوق على الشاشة.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>التمييز بين طرق ربط CSS الثلاث</li>
+                                <li>فهم المحددات الأساسية والفرق بينها</li>
+                                <li>شرح قواعد التخصيص والوراثة</li>
+                                <li>تفسير نموذج الصندوق بالكامل</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>إنشاء ملف <code>style.css</code> وربطه بـ HTML</li>
+                                <li>استخدام محددات الصنف والمعرف والمتداخلة</li>
+                                <li>تطبيق ألوان وخطوط وخلفيات على عناصر</li>
+                                <li>ضبط الحشو والهامش والحدود لتحسين القراءة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>كتابة CSS نظيف قابل للصيانة</li>
+                                <li>تجنب <code>!important</code> العشوائي</li>
+                                <li>الاستعداد لمحاضرة Flexbox وGrid</li>
+                                <li>فهم كيفية عمل أدوات المطور مع CSS</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- What is CSS -->
+                <section class="lecture-section" id="what-is-css" aria-labelledby="css-title">
+                    <h2 class="section-title" id="css-title">
+                        <i class="fas fa-paintbrush"></i> ما هي CSS ولماذا نفصلها عن HTML
+                    </h2>
+                    <p>
+                        <strong>CSS</strong> اختصار <strong>Cascading Style Sheets</strong> —
+                        أوراق الأنماط المتتالية. هي اللغة التي تحدد <strong>شكل</strong>
+                        مستند HTML: الألوان، الخطوط، المسافات، الحدود، التخطيط، والاستجابة
+                        لأحجام الشاشات. الفصل بين HTML وCSS هو مبدأ أساسي في تطوير الويب
+                        الحديث يُسمى <strong>Separations of Concerns</strong>:
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-code"></i> HTML</h3>
+                            <ul>
+                                <li>البنية والمعنى (Structure)</li>
+                                <li>عناوين، فقرات، روابط، نماذج</li>
+                                <li>لا تعرف شيئاً عن الألوان</li>
+                                <li>يمكن قراءتها بدون CSS</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-palette"></i> CSS</h3>
+                            <ul>
+                                <li>العرض والشكل (Presentation)</li>
+                                <li>ألوان وخطوط ومسافات وتخطيطات</li>
+                                <li>يمكن تغييرها دون لمس HTML</li>
+                                <li>تُخزَّن أحياناً في ملف واحد للموقع كله</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>مبدأ عملي:</strong> إذا احتجت أن تغيّر لون كل عناوين
+                            <code>h2</code> في مشروعك من أزرق إلى أخضر، فأنت تفتح ملف
+                            <code>style.css</code> وتغيّر سطراً واحداً — لا تفتح 20 صفحة HTML.
+                            هذه هي فائدة الفصل.
+                        </div>
+                    </div>
+                    <p>
+                        نستخدم في هذا المساق <strong>CSS3</strong> التي تشمل كل الميزات
+                        الحديثة، ونعتمد بشكل أساسي على <strong>الملف الخارجي</strong> لأنها
+                        أفضل ممارسة على الإطلاق.
+                    </p>
+                </section>
+
+                <!-- Linking -->
+                <section class="lecture-section" id="linking" aria-labelledby="linking-title">
+                    <h2 class="section-title" id="linking-title">
+                        <i class="fas fa-link"></i> ثلاث طرق لربط CSS بـ HTML
+                    </h2>
+                    <p>
+                        يمكن إضافة CSS إلى صفحتك بثلاث طرق. كل واحدة لها حالات استخدام،
+                        لكن الأفضل في <strong>95%</strong> من الحالات هو الملف الخارجي.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-file"></i> Internal (داخلي)</h3>
+                            <ul>
+                                <li>داخل وسم <code>&lt;style&gt;</code> في <code>&lt;head&gt;</code></li>
+                                <li>لكل صفحة أنماطها الخاصة</li>
+                                <li>لا يُعاد استخدامه</li>
+                                <li>مقبول لصفحات معزولة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-file-lines"></i> External (خارجي) ✔</h3>
+                            <ul>
+                                <li>ملف <code>.css</code> منفصل</li>
+                                <li>يُربط عبر <code>&lt;link&gt;</code></li>
+                                <li>قابل لإعادة الاستخدام والتخزين المؤقت</li>
+                                <li>الأفضل دائماً</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-tag"></i> Inline (ضمني)</h3>
+                            <ul>
+                                <li>داخل السمة <code>style</code> على العنصر</li>
+                                <li>أعلى تخصيص</li>
+                                <li>لا يمكن إعادة استخدامه</li>
+                                <li>يُستعمل للتجربة فقط، لا في المشاريع</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> الطرق الثلاث معاً</span>
+                            <span class="code-lang">HTML / CSS</span>
+                        </div>
+                        <pre><code>&lt;!-- 1) خارجي: الأفضل — في &lt;head&gt; --&gt;
+&lt;link rel="stylesheet" href="style.css"&gt;
+
+&lt;!-- 2) داخلي: داخل &lt;head&gt; --&gt;
+&lt;style&gt;
+    h1 { color: #7dd3fc; font-size: 2rem; }
+&lt;/style&gt;
+
+&lt;!-- 3) ضمني: على العنصر نفسه — يُستخدم للتجربة فقط --&gt;
+&lt;h2 style="color: #fbbf24;"&gt;عنوان بلون مؤقت&lt;/h2&gt;</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>قاعدة هذا المساق:</strong> كل أنماطنا تُوضع في
+                            <code>style.css</code> أو <code>lecture.css</code>. نستخدم
+                            <code>&lt;style&gt;</code> نادراً جداً، ولا نستخدم
+                            <code>style=""</code> إلا للتوضيح داخل محاضرة.
+                        </div>
+                    </div>
+
+                    <p>
+                        ترتيب الأولوية عند تعارض القواعد: <strong>Inline</strong> ثم
+                        <strong>Internal</strong> ثم <strong>External</strong> — لكن
+                        هذه ليست القاعدة الكاملة، لأن هناك <strong>التخصيص (Specificity)</strong>
+                        التي سنشرحها بعد قليل.
+                    </p>
+                </section>
+
+                <!-- Selectors -->
+                <section class="lecture-section" id="selectors" aria-labelledby="selectors-title">
+                    <h2 class="section-title" id="selectors-title">
+                        <i class="fas fa-crosshairs"></i> المحددات: العنصر، الصنف، المعرف، والمتداخلة
+                    </h2>
+                    <p>
+                        المحدد (Selector) هو ما يخبر المتصفح <strong>أي عناصر</strong> يجب
+                        أن تُطبَّق عليها القاعدة. كل قاعدة CSS تتكون من محدِّد، ثم كتلة
+                        خصائص بين قوسين <code>{ }</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> selectors.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>/* 1) محدد العنصر: كل &lt;p&gt; في الصفحة */
+p {
+    color: #d5deea;
+    line-height: 1.8;
+}
+
+/* 2) محدد الصنف: عناصر تحمل class="card" */
+.card {
+    background: #1b2540;
+    padding: 16px;
+}
+
+/* 3) محدد المعرف: عنصر واحد له id="hero" */
+#hero {
+    padding: 40px 24px;
+}
+
+/* 4) محددات مجمّعة: h1 و h2 و h3 */
+h1, h2, h3 {
+    font-weight: 800;
+}
+
+/* 5) محدد متداخل: .card &gt; p */
+.card p {
+    color: #a8b5c8;
+}
+
+/* 6) محدّد السمة: كل رابط يبدأ بـ https */
+a[href^="https"] {
+    color: #34d399;
+}
+
+/* 7) محدد الحالة: عند المرور عليه */
+a:hover {
+    text-decoration: underline;
+}</code></pre>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>المحدد</th>
+                                    <th>الشكل</th>
+                                    <th>متى نستخدمه</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>العنصر</td>
+                                    <td><code>p { }</code></td>
+                                    <td>تنسيق عام لكل عنوان أو فقرة</td>
+                                </tr>
+                                <tr>
+                                    <td>الصنف (class)</td>
+                                    <td><code>.card { }</code></td>
+                                    <td>الأكثر شيوعاً — أنماط قابلة لإعادة الاستخدام</td>
+                                </tr>
+                                <tr>
+                                    <td>المعرف (id)</td>
+                                    <td><code>#hero { }</code></td>
+                                    <td>عنصر فريد في الصفحة (مرة واحدة)</td>
+                                </tr>
+                                <tr>
+                                    <td>مجمّع</td>
+                                    <td><code>h1, h2, h3 { }</code></td>
+                                    <td>تطبيق نفس القاعدة على عناصر متعددة</td>
+                                </tr>
+                                <tr>
+                                    <td>متداخل (descendant)</td>
+                                    <td><code>.card p { }</code></td>
+                                    <td>تنسيق فقرات داخل عنصر معين فقط</td>
+                                </tr>
+                                <tr>
+                                    <td>حالة (pseudo-class)</td>
+                                    <td><code>a:hover { }</code></td>
+                                    <td>عند تفاعل المستخدم مع العنصر</td>
+                                </tr>
+                                <tr>
+                                    <td>سمة (attribute)</td>
+                                    <td><code>[type="email"]</code></td>
+                                    <td>تنسيق حسب قيمة سمة معينة</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>اسم الصنف الجيد:</strong> قصير، وصفي، وبحروف صغيرة:
+                            <code>card</code>، <code>hero</code>، <code>btn-primary</code>.
+                            لا تستخدم <code>red-box</code> أو <code>blue-text</code>، لأنك
+                            لو غيّرت اللون لاحقاً سيصبح الاسم كاذباً.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Specificity -->
+                <section class="lecture-section" id="specificity" aria-labelledby="specificity-title">
+                    <h2 class="section-title" id="specificity-title">
+                        <i class="fas fa-scale-balanced"></i> التخصيص والوراثة
+                    </h2>
+                    <p>
+                        عندما تتعارض قاعدتان على نفس العنصر، لا يفوز دائماً ما كُتب لاحقاً.
+                        CSS تعتمد نظام <strong>أوزان</strong> يسمى <strong>Specificity</strong>
+                        (التخصيص)، وأعلى وزن يفوز.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>المحدد</th>
+                                    <th>الوزن</th>
+                                    <th>ملاحظة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>style=""</code></td>
+                                    <td>(1,0,0,0)</td>
+                                    <td>فوز غالباً — يُستهان به لأنه غير قابل للصيانة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>#id</code></td>
+                                    <td>(0,1,0,0)</td>
+                                    <td>وزن عالٍ — استخدمه بحذر</td>
+                                </tr>
+                                <tr>
+                                    <td><code>.class</code></td>
+                                    <td>(0,0,1,0)</td>
+                                    <td>الخيار اليومي</td>
+                                </tr>
+                                <tr>
+                                    <td><code>p</code></td>
+                                    <td>(0,0,0,1)</td>
+                                    <td>الوزن الأقل</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>
+                        عند تعادل التخصيص، يفوز آخر قاعدة في الملف أو آخر ملف مرتبط.
+                        ولهذا الترتيب في HTML مهم: لو ربطت <code>style.css</code>
+                        ثم <code>lecture.css</code>، قواعد <code>lecture.css</code> تُطبَّق
+                        لاحقاً عند التعادل.
+                    </p>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>تحذير:</strong> <code>!important</code> يتجاوز النظام كله.
+                            استخدمه فقط حين لا يكون هناك بديل حقيقي (مثلاً داخل مكتبة خارجية
+                            لا يمكنك تعديلها). الإكثار منه علامة على فوضى في التخطيط.
+                        </div>
+                    </div>
+
+                    <p>
+                        أما <strong>الوراثة (Inheritance)</strong> فهي أن ترث العناصر
+                        خصائص معينة من آبائها تلقائياً: <code>color</code>،
+                        <code>font-family</code>، <code>font-size</code>،
+                        <code>line-height</code>. أما <code>margin</code> و<code>padding</code>
+                        و<code>border</code> فلا تُورَّث. هذا الفرق يفسر لماذا نص لون النص
+                        مرة واحدة في <code>body</code> فيُطبَّق على كل الصفحة — بينما لا
+                        يُطبَّق الهامش تلقائياً.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> inheritance.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>body {
+    color: #eef4fb;          /* تُورَّث */
+    font-family: 'Tajawal', sans-serif;
+    line-height: 1.8;
+    margin: 0;               /* لا تُورَّث */
+}
+
+.card {
+    color: #a8b5c8;          /* يستبدل لون الأب داخل .card */
+}
+
+/* داخل .card يستخدم النص لون .card، وخارجها يستخدم لون body */</code></pre>
+                    </div>
+                </section>
+
+                <!-- Colors & Fonts -->
+                <section class="lecture-section" id="colors-fonts" aria-labelledby="colors-title">
+                    <h2 class="section-title" id="colors-title">
+                        <i class="fas fa-font"></i> الألوان والخطوط والخلفيات
+                    </h2>
+                    <p>
+                        الألوان في CSS تُكتب بعدة صيغ. أهمها:
+                        <strong>الأسماء</strong> مثل <code>red</code>،
+                        <strong>HEX</strong> مثل <code>#3b82f6</code>،
+                        <strong>RGB</strong> مثل <code>rgb(59, 130, 246)</code>،
+                        و<strong>RGBA</strong> لإضافة الشفافية. نستخدم <strong>HEX</strong>
+                        و<strong>rgba</strong> أكثر لأننا نعمل على خلفية داكنة ونحتاج شفافية
+                        للطبقات.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> colors-fonts.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>body {
+    font-family: 'Tajawal', 'Segoe UI', sans-serif;
+    font-size: 17px;
+    line-height: 1.8;
+    color: #eef4fb;
+    background-color: #0b1120;
+}
+
+h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1.3;
+    color: #7dd3fc;
+}
+
+p {
+    color: #a8b5c8;
+    font-size: 1rem;
+}
+
+.card {
+    background: rgba(30, 41, 70, 0.9);
+    border: 1px solid #334366;
+    border-radius: 12px;
+}
+
+/* خلفية متدرجة */
+.hero {
+    background: linear-gradient(135deg, #1e2946, #0b1120);
+}
+
+/* خلفية بصورة */
+.banner {
+    background-image: url('assets/images/bg.jpg');
+    background-size: cover;
+    background-position: center;
+}</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-font"></i> الخطوط</h3>
+                            <ul>
+                                <li><code>font-family</code> لتحديد عائلة الخط</li>
+                                <li><code>font-size</code> بحجم مناسب</li>
+                                <li><code>font-weight</code> للسمك (400، 700، 800)</li>
+                                <li><code>line-height</code> للارتفاع بين الأسطر</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-fill-drip"></i> الخلفيات</h3>
+                            <ul>
+                                <li><code>background-color</code> لون صلب</li>
+                                <li><code>background-image</code> صورة أو تدرج</li>
+                                <li><code>background-size</code> لضبط التكبير</li>
+                                <li><code>background-position</code> للموضع</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-text-height"></i> وحدات القياس</h3>
+                            <ul>
+                                <li><code>px</code> ثابت وبسيط</li>
+                                <li><code>rem</code> نسبة لجذر المستند (مفضّل)</li>
+                                <li><code>em</code> نسبة لحجم العنصر الأب</li>
+                                <li><code>%</code> نسبة من الأب</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نصيحة قواعد القراءة:</strong> نص بحجم لا يقل عن
+                            <code>1rem</code> و<code>line-height</code> بين
+                            <code>1.6</code> و<code>1.8</code>، وتباين لوني جيد بين النص
+                            والخلفية. هذه أهم ثلاث ضبطات تجعل الصفحة مريحة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Box Model -->
+                <section class="lecture-section" id="box-model" aria-labelledby="box-title">
+                    <h2 class="section-title" id="box-title">
+                        <i class="fas fa-cube"></i> نموذج الصندوق
+                    </h2>
+                    <p>
+                        في CSS، كل عنصر هو <strong>صندوق مستطيل</strong> يتكون من طبقات.
+                        فهم هذه الطبقات هو المفتاح لفهم كل المسافات والأحجام في أي صفحة:
+                    </p>
+
+                    <ol class="steps-list">
+                        <li><strong>المحتوى (Content):</strong> النص أو الصورة داخل العنصر.</li>
+                        <li><strong>الحشو (Padding):</strong> مسافة داخلية حول المحتوى.</li>
+                        <li><strong>الحد (Border):</strong> خط يحيط بالعنصر.</li>
+                        <li><strong>الهامش (Margin):</strong> مسافة خارجية تفصل العنصر عن غيره.</li>
+                    </ol>
+
+                    <div class="flow-diagram" role="img" aria-label="مخطط يوضح طبقات نموذج الصندوق من الخارج إلى الداخل: الهامش ثم الحد ثم الحشو ثم المحتوى">
+                        <div class="flow-box">
+                            <i class="fas fa-border-all"></i>
+                            <h3>Margin</h3>
+                            <p>مسافة خارجية بين العنصر وجيرانه.</p>
+                        </div>
+                        <div class="flow-connector" aria-hidden="true">
+                            <span>إلى الداخل</span>
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <div class="flow-box server-box">
+                            <i class="fas fa-crop-simple"></i>
+                            <h3>Content</h3>
+                            <p>النص أو الصورة داخل العنصر.</p>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> box-model.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>.card {
+    /* المحتوى يحدده width/height */
+    width: 320px;
+    height: auto;
+
+    /* الحشو الداخلي */
+    padding: 16px 20px;
+
+    /* الحد الخارجي */
+    border: 1px solid #334366;
+
+    /* الهامش الخارجي */
+    margin: 12px 0 24px;
+
+    /* الأهم: يتضمن padding + border داخل العرض */
+    box-sizing: border-box;
+
+    /* اختصار لكل الحشو */
+    /* padding: 16px;  (كل الاتجاهات) */
+    /* padding: 16px 20px;  (عمودي / أفقي) */
+    /* padding: 10px 14px 10px 14px;  (أعلى يمين أسفل يسار) */
+}</code></pre>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>الخاصية</th>
+                                    <th>معنى القيم</th>
+                                    <th>مثال</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>padding: 10px</code></td>
+                                    <td>كل الاتجاهات</td>
+                                    <td>حشو موحد</td>
+                                </tr>
+                                <tr>
+                                    <td><code>padding: 10px 20px</code></td>
+                                    <td>عمودي أفقي</td>
+                                    <td>أعلى/أسفل 10، يمين/يسار 20</td>
+                                </tr>
+                                <tr>
+                                    <td><code>padding: 10px 20px 5px</code></td>
+                                    <td>أعلى، أفقي، أسفل</td>
+                                    <td>شائع للبطاقات</td>
+                                </tr>
+                                <tr>
+                                    <td><code>padding: 10px 20px 5px 0</code></td>
+                                    <td>أعلى، يمين، أسفل، يسار</td>
+                                    <td>تحكم كامل</td>
+                                </tr>
+                                <tr>
+                                    <td><code>margin: auto</code></td>
+                                    <td>توسيط أفقي (مع عرض محدد)</td>
+                                    <td>لتوسيط عنصر بلوك</td>
+                                </tr>
+                                <tr>
+                                    <td><code>box-sizing</code></td>
+                                    <td><code>content-box</code> أو <code>border-box</code></td>
+                                    <td>اضبطها دائماً على <code>border-box</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>أشهر مشكلة للمبتدئين:</strong> عنصر بعرض
+                            <code>width: 300px</code> و<code>padding: 20px</code> و
+                            <code>border: 2px</code> — بدون <code>box-sizing: border-box</code>
+                            سيكون عرضه الفعلي <strong>344px</strong> لا 300px. القاعدة:
+                            في بداية كل ملف CSS، أضف:
+                            <br><code>*, *::before, *::after { box-sizing: border-box; }</code>
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>الانهيار الهامشي (Margin Collapse):</strong> هوامش العناصر
+                            العمودية قد لا تُجمع بل تتداخل، فيأخذ المتصفح الأكبر. هذه سلوك
+                            افتراضي، وليس خطأ. لهذا نستخدم <code>padding</code> أحياناً
+                            للتحكم الدقيق.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Borders & Shadows -->
+                <section class="lecture-section" id="borders-shadows" aria-labelledby="borders-title">
+                    <h2 class="section-title" id="borders-title">
+                        <i class="fas fa-square"></i> الحدود والظلال والزوايا
+                    </h2>
+                    <p>
+                        الحدود والظلال تعطي الصفحة عمقاً بصرياً. مع ذلك، يجب استخدامها
+                        بحذر — الإكثار من الظلال يشتت الانتباه. نستخدمها لتوضيح
+                        <strong>الحدود بين العناصر</strong> أو <strong>تأكيد حالة التركيز</strong>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> borders.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>/* حد بسيط */
+.card {
+    border: 1px solid #334366;
+}
+
+/* حد جانبي مميز */
+.alert {
+    border-right: 4px solid #f59e0b;
+}
+
+/* زوايا دائرية */
+.pill {
+    border-radius: 999px;   /* شكل كبسولة */
+}
+
+.card {
+    border-radius: 12px;
+}
+
+/* ظل خفيف */
+.card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ظل قوي عند المرور */
+.card:hover {
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-border-top-left"></i> border</h3>
+                            <ul>
+                                <li><code>border-width</code>: السُمك</li>
+                                <li><code>border-style</code>: solid / dashed / dotted</li>
+                                <li><code>border-color</code>: اللون</li>
+                                <li>الاختصار: <code>1px solid #ccc</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-circle-half-stroke"></i> border-radius</h3>
+                            <ul>
+                                <li>قيمة واحدة: زوايا متساوية</li>
+                                <li>قيمتان: أفقي / عمودي</li>
+                                <li>أربع قيم: زاوية لكل ركن</li>
+                                <li>استخدمها بذكاء لا بعشوائية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-clone"></i> box-shadow</h3>
+                            <ul>
+                                <li>الإزاحة الأفقية والعمودية</li>
+                                <li>التمويه والانتشار</li>
+                                <li>اللون بشفافية</li>
+                                <li>ظلال خفيفة = عمق، كثيفة = فوضى</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-universal-access"></i>
+                        <div>
+                            <strong>الوصولية:</strong> لا تعتمد على اللون وحده للتمييز.
+                            إذا كان الزر الأحمر يعني "خطر"، أضف أيقونة أو نصاً. ومؤشر
+                            التركيز <code>outline</code> يجب ألا يُخفى أبداً.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        في هذه المحاضرة، سنعيد استخدام صفحة <code>profile.html</code>
+                        التي بنيتها في المحاضرة 2، ونضيف لها تنسيقاً كاملاً من ملف
+                        <code>style.css</code> منفصل. النتيجة صفحة أكثر احترافية
+                        وقابلية للقراءة.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 4</h3>
+                        <ol>
+                            <li>افتح مجلد <code>web-course</code>، وأنشئ ملف <code>style.css</code> بجانب <code>profile.html</code>.</li>
+                            <li>أضف داخل <code>&lt;head&gt;</code>:
+                                <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>.</li>
+                            <li>في أول ملف <code>style.css</code> ضع:
+                                <br><code>*, *::before, *::after { box-sizing: border-box; }</code>
+                            </li>
+                            <li>على <code>body</code> طبّق:
+                                <ul>
+                                    <li><code>font-family: 'Tajawal', sans-serif;</code></li>
+                                    <li><code>font-size: 17px;</code> و<code>line-height: 1.8;</code></li>
+                                    <li><code>color: #eef4fb;</code> و<code>background: #0b1120;</code></li>
+                                    <li><code>margin: 0;</code> و<code>padding: 24px;</code></li>
+                                </ul>
+                            </li>
+                            <li>على <code>h1</code> طبّق:
+                                <ul>
+                                    <li><code>font-size: 2.4rem;</code> و<code>color: #7dd3fc;</code></li>
+                                    <li><code>margin-bottom: 12px;</code></li>
+                                    <li><code>border-bottom: 2px solid #1e2946;</code></li>
+                                    <li><code>padding-bottom: 8px;</code></li>
+                                </ul>
+                            </li>
+                            <li>على <code>p</code> طبّق:
+                                <ul>
+                                    <li><code>color: #a8b5c8;</code> و<code>margin-bottom: 12px;</code></li>
+                                </ul>
+                            </li>
+                            <li>على <code>a</code> طبّق:
+                                <ul>
+                                    <li><code>color: #7dd3fc;</code> و<code>text-decoration: none;</code></li>
+                                    <li>وعلى <code>a:hover</code>: <code>text-decoration: underline;</code></li>
+                                </ul>
+                            </li>
+                            <li>على <code>img</code> طبّق:
+                                <ul>
+                                    <li><code>max-width: 100%;</code> و<code>border-radius: 12px;</code></li>
+                                </ul>
+                            </li>
+                            <li>على <code>ul</code> طبّق:
+                                <ul>
+                                    <li><code>padding-right: 24px;</code> و<code>margin: 12px 0;</code></li>
+                                </ul>
+                            </li>
+                            <li>أضف كلاس <code>card</code> على <code>section</code> في ملف HTML، ثم في CSS:
+                                <ul>
+                                    <li><code>.card { background: rgba(30, 41, 70, 0.9); padding: 16px 20px; border: 1px solid #334366; border-radius: 12px; margin-bottom: 16px; }</code></li>
+                                </ul>
+                            </li>
+                            <li>افحص النتيجة في أدوات المطور، جرّب تعديل <code>padding</code> وتغيير <code>box-sizing</code> لتلاحظ الفرق.</li>
+                        </ol>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> صفحة تعمل، النص مقروء، الألوان
+                            متناسقة مع نظام داكن، الروابط تعمل، و<code>box-sizing</code>
+                            مضبوط. وفي أدوات المطور، عند فحص <code>.card</code> يجب أن
+                            تظهر طبقات Model بألوانها (المحتوى الأزرق، الحشو الأخضر،
+                            الحد الأصفر، الهامش البرتقالي).
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-paint-roller"></i> نسيان box-sizing</h3>
+                            <p>
+                                بدون <code>box-sizing: border-box</code> ستتضاعف
+                                الأبعاد بسبب <code>padding</code> و<code>border</code>،
+                                وتنهار تخطيطاتك. ضعها في أول ملف CSS لكل مشروع.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-id-badge"></i> تكرار id على أكثر من عنصر</h3>
+                            <p>
+                                الـ <code>id</code> يجب أن يكون فريداً في الصفحة. عند
+                                التكرار، يتصرف المتصفح بشكل غير متوقع، وتنكسر أدوات
+                                التنقل. استخدم <code>class</code> إذا كنت تكرر النمط.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-bolt"></i> الإكثار من !important</h3>
+                            <p>
+                                يدل على مشكلة في تنظيم الملفات. راجع ترتيب الربط،
+                                والتخصيص، وبنية HTML قبل استخدامه. استخدامه مرة في
+                                السنة طبيعي، ومرة كل يوم علامة على خلل.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-ruler-combined"></i> الخلط بين px وrem</h3>
+                            <p>
+                                <code>rem</code> مرتبط بحجم الجذر ويحترم إعدادات
+                                المتصفح. استخدمه للنصوص، و<code>px</code> للحدود
+                                والظلال. لا تخلط بينهما في نفس الخاصية.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-fill"></i> تباين لوني ضعيف</h3>
+                            <p>
+                                نص رمادي فاتح على خلفية بيضاء يعجز كثير من المستخدمين
+                                عن قراءته. تحقق من نسبة التباين (4.5:1 على الأقل) عبر
+                                أدوات المطور.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-file"></i> نسيان حفظ ملف CSS</h3>
+                            <p>
+                                إذا لم ترَ تغييراً في المتصفح، تأكد من حفظ
+                                <code>style.css</code>، ومن أن مساره في
+                                <code>&lt;link&gt;</code> صحيح، ثم أعد تحميل الصفحة
+                                بـ<kbd>Ctrl + F5</kbd>.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>CSS تحمل الشكل، وHTML يحمل البنية — نفصلهما دائماً.</li>
+                        <li>الملف الخارجي <code>&lt;link rel="stylesheet"&gt;</code> هو الخيار الأفضل.</li>
+                        <li>المحددات: عنصر، صنف، معرف، متداخلة، مجمعة، وحالة.</li>
+                        <li>التخصيص (Specificity) يحل التعارضات، والوراثة تنقل خصائص محددة.</li>
+                        <li>الألوان: أسماء، HEX، RGB، RGBA — الخطوط عبر <code>font-family</code>.</li>
+                        <li>نموذج الصندوق: Content، Padding، Border، Margin.</li>
+                        <li><code>box-sizing: border-box</code> يضمن أن <code>width</code> تشمل الحشو والحد.</li>
+                        <li>الحدود والظلال تعطي عمقاً، لكن الإكثار منها يشتت.</li>
+                        <li>الوصولية: تباين لوني جيد، مؤشر تركيز مرئي، وحجم نص كافٍ.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما الفرق بين Internal وExternal CSS؟</summary>
+                        <p>
+                            Internal تُوضع داخل وسم <code>&lt;style&gt;</code> في نفس ملف HTML،
+                            أما External فتُوضع في ملف <code>.css</code> منفصل وتُربط عبر
+                            <code>&lt;link&gt;</code>. External أفضل لأنه يُعاد استخدامه
+                            ويُخزَّن مؤقتاً في المتصفح.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) لماذا نستخدم <code>box-sizing: border-box</code>؟</summary>
+                        <p>
+                            لأنه يجعل <code>width</code> و<code>height</code> تشمل
+                            المحتوى + الحشو + الحدود. بدونها يُضاف الحشو والحد فوق العرض
+                            فتنتج أبعاد أكبر مما تتوقع، وتنكسر التخطيطات بسهولة.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) ما معنى التخصيص (Specificity)؟</summary>
+                        <p>
+                            هو نظام أوزان يحدد أي قاعدة CSS تطبق عندما تتعارض قاعدتان على
+                            نفس العنصر. <code>id</code> أعلى وزن من <code>class</code>،
+                            و<code>class</code> أعلى من اسم العنصر.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) أي الخصائص تُورَّث تلقائياً وأي لا؟</summary>
+                        <p>
+                            تُورَّث عادة: <code>color</code>، <code>font-family</code>،
+                            <code>font-size</code>، <code>line-height</code>.
+                            لا تُورَّث: <code>margin</code>، <code>padding</code>،
+                            <code>border</code>، <code>background</code>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) ما هي الطبقات الأربع لنموذج الصندوق؟</summary>
+                        <p>
+                            من الداخل إلى الخارج: <strong>Content</strong> (المحتوى)
+                            ثم <strong>Padding</strong> (الحشو)
+                            ثم <strong>Border</strong> (الحد)
+                            ثم <strong>Margin</strong> (الهامش).
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="lecture3.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> المحاضرة السابقة
+                    </a>
+                    <a href="lecture5.html">
+                        المحاضرة التالية: التخطيط والتصميم المتجاوب <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 4 · أساسيات CSS — المحددات ونموذج الصندوق والطباعة | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

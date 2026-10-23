@@ -1,0 +1,1245 @@
+/* ============================================================
+ *  SYBS 2309 — Course Home Page Styles
+ *  Cyber Khalil Academy | Mahmoud Khalil
+ *  Enhanced: Larger fonts · Better mobile · Improved design
+ *  ============================================================ */
+
+/* ================= GLOBAL ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-dark: #0b1120;
+    --bg-card: rgba(18, 25, 45, 0.94);
+    --bg-inner: rgba(0, 0, 0, 0.30);
+    --border-light: #334366;
+    --border-soft: #223354;
+    --text-main: #eef4fb;
+    --text-muted: #a8b5c8;
+    --text-dim: #7c8aa0;
+    --accent: #7dd3fc;
+    --accent-light: #c7edff;
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --success: #10b981;
+    --success-dark: #059669;
+    --warn: #f59e0b;
+    --violet: #8b5cf6;
+}
+
+html {
+    font-size: 19px;                       /* كان 17px */
+    scroll-behavior: smooth;
+    scroll-padding-top: 2rem;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Tajawal', 'Inter', 'Segoe UI', system-ui, sans-serif;
+    direction: rtl;
+    text-align: right;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    font-size: 1rem;
+    line-height: 1.8;                      /* كان 1.75 */
+    min-height: 100vh;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+}
+
+.bg-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image:
+    radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.12), transparent 45%),
+    radial-gradient(circle at 85% 5%, rgba(139, 92, 246, 0.10), transparent 45%),
+    radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.07), transparent 55%),
+    linear-gradient(rgba(30, 50, 80, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 50, 80, 0.13) 1px, transparent 1px);
+    background-size: auto, auto, auto, 60px 60px, 60px 60px;
+    pointer-events: none;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;                     /* كان 1180px */
+    margin: 0 auto;
+    padding: 34px 24px 64px;
+}
+
+/* ================= HERO HEADER ================= */
+.course-header {
+    position: relative;
+    background: linear-gradient(135deg, rgba(30, 41, 70, 0.96), rgba(18, 25, 45, 0.96));
+    border: 1px solid var(--border-light);
+    border-radius: 1.4rem;
+    padding: 38px 40px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.5);
+}
+
+.course-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--success), var(--violet));
+}
+
+.course-header::after {
+    content: "";
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.18), transparent 65%);
+    pointer-events: none;
+}
+
+.course-badge {
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
+    align-items: center;
+    gap: 8px;
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--accent);
+    font-size: 0.9rem;                     /* كان 0.82rem */
+    font-weight: 700;
+    letter-spacing: 0;
+    padding: 8px 18px;
+    border-radius: 30px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    line-height: 1.5;
+}
+
+.course-header h1 {
+    font-size: clamp(1.8rem, 4.5vw, 2.9rem);
+    font-weight: 800;
+    text-align: center;
+    background: linear-gradient(135deg, #ffffff, var(--accent) 60%, #a5f3fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 12px;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-wrap: balance;
+}
+
+.course-sub {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.12rem;                    /* كان 1.05rem */
+    line-height: 1.85;
+    margin-bottom: 24px;
+    max-width: 920px;
+}
+
+.course-sub strong {
+    color: var(--accent-light);
+    font-weight: 700;
+}
+
+.instructor-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 30px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 0.9rem;
+    padding: 18px 24px;
+    border: 1px solid var(--border-soft);
+}
+
+.instructor-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.04rem;                    /* كان 0.98rem */
+    color: #d5deea;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.6;
+}
+
+.instructor-item i {
+    color: var(--accent);
+    width: 22px;
+    text-align: center;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+}
+
+/* ================= COURSE METRICS ================= */
+.course-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin-bottom: 32px;
+    background: var(--border-soft);       /* لون الفواصل بين البطاقات */
+    border: 1px solid var(--border-soft);
+    border-radius: 1.15rem;
+    overflow: hidden;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.38);
+}
+
+.metric {
+    --m-color: var(--accent);
+    --m-soft: rgba(59, 130, 246, 0.16);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 26px 16px 24px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(20, 28, 50, 0.97), rgba(13, 19, 35, 0.97));
+    transition: background 0.3s ease;
+}
+
+/* خط علوي ملوّن يتمدّد عند المرور */
+.metric::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--m-color), transparent);
+    transform: scaleX(0.35);
+    transform-origin: center;
+    transition: transform 0.35s ease;
+}
+
+.metric:hover {
+    background: linear-gradient(180deg, rgba(25, 35, 62, 0.98), rgba(14, 21, 38, 0.98));
+}
+
+.metric:hover::before { transform: scaleX(1); }
+
+.metric-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 1.02rem;
+    color: var(--m-color);
+    background: var(--m-soft);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.metric:hover .metric-icon {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px -8px var(--m-color);
+}
+
+.metric-value {
+    font-size: clamp(2rem, 3.4vw, 2.55rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(160deg, #ffffff 25%, var(--m-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+.metric-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--text-muted);
+    text-wrap: balance;
+    max-width: 200px;
+}
+
+.metric-label strong {
+    color: #e3ecf7;
+    font-weight: 700;
+}
+
+/* ألوان كل مؤشر */
+.metric.front   { --m-color: #60a5fa; --m-soft: rgba(59, 130, 246, 0.16); }
+.metric.back    { --m-color: #34d399; --m-soft: rgba(16, 185, 129, 0.16); }
+.metric.exam    { --m-color: #fbbf24; --m-soft: rgba(245, 158, 11, 0.16); }
+.metric.project { --m-color: #a78bfa; --m-soft: rgba(139, 92, 246, 0.16); }
+
+
+/* ================= METHOD NOTE ================= */
+.method-note {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(16, 185, 129, 0.06));
+    border: 1px solid var(--border-light);
+    border-right: 4px solid var(--primary);
+    border-radius: 1rem;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.method-note i {
+    color: var(--accent);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.method-note p {
+    font-size: 1.06rem;                    /* كان 1rem */
+    color: #d5deea;
+    line-height: 1.85;
+    margin: 0;
+}
+
+.method-note strong { color: var(--accent-light); }
+
+/* ================= PHASE LEGEND ================= */
+.phase-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 36px;
+    padding: 18px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    border-radius: 1rem;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.98rem;                    /* كان 0.9rem */
+    font-weight: 600;
+    color: #d5deea;
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: rgba(0, 0, 0, 0.3);
+    line-height: 1.5;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dot-blue { background: #3b82f6; box-shadow: 0 0 8px #3b82f6; }
+.dot-green { background: #10b981; box-shadow: 0 0 8px #10b981; }
+
+/* ================= PHASE SECTION ================= */
+.phase-section { margin-bottom: 46px; }
+
+.phase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 26px;
+    border-radius: 1rem 1rem 0 0;
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.16), rgba(59, 130, 246, 0.03));
+    border: 1px solid var(--border-light);
+    border-bottom: none;
+    position: relative;
+}
+
+.phase-header.practical {
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.16), rgba(16, 185, 129, 0.03));
+}
+
+.phase-header .phase-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--accent);
+}
+
+.phase-header.practical .phase-icon {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+.phase-title-group h2 {
+    font-size: 1.5rem;                     /* كان 1.35rem */
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+    line-height: 1.4;
+    text-wrap: balance;
+}
+
+.phase-title-group .phase-meta {
+    font-size: 0.98rem;                    /* كان 0.9rem */
+    color: var(--text-muted);
+    letter-spacing: 0;
+    line-height: 1.7;
+}
+
+.phase-title-group .phase-meta strong {
+    color: var(--accent-light);
+    font-weight: 700;
+}
+
+.phase-header.practical .phase-title-group .phase-meta strong { color: #a7f3d0; }
+
+.weeks-container {
+    border: 1px solid var(--border-light);
+    border-top: none;
+    border-radius: 0 0 1rem 1rem;
+    background: rgba(10, 16, 30, 0.5);
+    padding: 20px 22px 22px;
+}
+
+/* ================= WEEK CARD ================= */
+.week-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    border-radius: 1rem;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: 0.25s ease;
+    position: relative;
+}
+
+.week-card:last-child { margin-bottom: 0; }
+
+.week-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.38);
+    transform: translateY(-2px);
+}
+
+.week-card.practical:hover { border-color: var(--success); }
+
+.week-card.exam-card {
+    border-color: rgba(245, 158, 11, 0.5);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), var(--bg-card) 40%);
+}
+
+.week-card.exam-card:hover {
+    border-color: #f59e0b;
+    box-shadow: 0 10px 26px rgba(245, 158, 11, 0.18);
+}
+
+.week-card.project-card {
+    border-color: rgba(139, 92, 246, 0.5);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.07), var(--bg-card) 40%);
+}
+
+.week-card.project-card:hover {
+    border-color: var(--violet);
+    box-shadow: 0 10px 26px rgba(139, 92, 246, 0.18);
+}
+
+.week-header-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    background: rgba(0, 0, 0, 0.35);
+    border-bottom: 1px solid var(--border-soft);
+    flex-wrap: wrap;
+}
+
+.week-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(59, 130, 246, 0.18);
+    color: var(--accent);
+    font-size: 0.85rem;                    /* كان 0.8rem */
+    font-weight: 800;
+    letter-spacing: 0;
+    padding: 7px 14px;
+    border-radius: 30px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    flex-shrink: 0;
+    line-height: 1.4;
+}
+
+.week-badge.practical { background: rgba(16, 185, 129, 0.18); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
+.week-badge.exam-badge { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border-color: rgba(245, 158, 11, 0.35); }
+.week-badge.project-badge { background: rgba(139, 92, 246, 0.18); color: #a78bfa; border-color: rgba(139, 92, 246, 0.35); }
+
+.week-title-main {
+    flex: 1;
+    font-size: 1.26rem;                    /* كان 1.12rem */
+    font-weight: 700;
+    color: #f0f9ff;
+    min-width: 220px;
+    line-height: 1.55;
+    text-wrap: balance;
+}
+
+.week-type-tag {
+    font-size: 0.88rem;                    /* كان 0.8rem */
+    font-weight: 600;
+    padding: 6px 13px;
+    border-radius: 20px;
+    background: rgba(100, 116, 139, 0.2);
+    color: var(--text-muted);
+    border: 1px solid var(--border-soft);
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+.lecture-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    font-size: 0.95rem;                    /* كان 0.88rem */
+    font-weight: 700;
+    padding: 10px 20px;
+    min-height: 44px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.28);
+}
+
+.lecture-btn:hover {
+    background: linear-gradient(135deg, var(--primary-dark), #1e40af);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.42);
+}
+
+.lecture-btn:active { transform: translateY(0); }
+
+.lecture-btn.practical {
+    background: linear-gradient(135deg, var(--success), var(--success-dark));
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.28);
+}
+
+.lecture-btn.practical:hover {
+    background: linear-gradient(135deg, var(--success-dark), #047857);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.42);
+}
+
+.lecture-btn.project {
+    background: linear-gradient(135deg, var(--violet), #7c3aed);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.28);
+}
+
+.lecture-btn.project:hover {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.42);
+}
+
+.week-body { padding: 22px 26px 24px; }
+
+.week-meta { margin-bottom: 16px; }
+
+.week-meta span {
+    display: inline-block;
+    font-size: 0.98rem;                    /* كان 0.9rem */
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border-soft);
+    line-height: 1.55;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.info-box {
+    background: var(--bg-inner);
+    border: 1px solid var(--border-soft);
+    border-right: 3px solid var(--primary);
+    border-radius: 0.8rem;
+    padding: 18px 20px;
+}
+
+.week-card.practical .info-box { border-right-color: var(--success); }
+
+.info-box h4 {
+    font-size: 1.04rem;                    /* كان 0.92rem */
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0;
+    line-height: 1.5;
+}
+
+.week-card.practical .info-box h4 { color: #34d399; }
+
+.info-box h4 i { font-size: 1.1rem; }
+
+.info-box ul { list-style: none; padding: 0; margin: 0; }
+
+.info-box li {
+    position: relative;
+    padding-right: 18px;
+    padding-left: 0;
+    font-size: 1.04rem;                    /* كان 0.96rem */
+    color: #d5deea;
+    margin-bottom: 9px;
+    line-height: 1.75;
+}
+
+.info-box li::before {
+    content: "▪";
+    position: absolute;
+    right: 0;
+    left: auto;
+    top: -1px;
+    color: var(--accent);
+    font-size: 1.05rem;
+}
+
+.week-card.practical .info-box li::before { color: #34d399; }
+
+.info-box li:last-child { margin-bottom: 0; }
+
+.touch-lab {
+    background: rgba(59, 130, 246, 0.07);
+    border: 1px solid rgba(59, 130, 246, 0.28);
+    border-right: 3px solid var(--primary);
+    border-radius: 0.8rem;
+    padding: 16px 18px;
+    font-size: 1.04rem;                    /* كان 0.96rem */
+    color: #dbeafe;
+    line-height: 1.8;
+}
+
+.touch-lab i {
+    color: var(--accent);
+    margin-left: 7px;
+    margin-right: 0;
+}
+
+.touch-lab strong { color: var(--accent-light); font-weight: 700; }
+
+.practical-lab {
+    background: rgba(16, 185, 129, 0.07);
+    border: 1px solid rgba(16, 185, 129, 0.28);
+    border-right: 3px solid var(--success);
+    border-radius: 0.8rem;
+    padding: 16px 18px;
+    font-size: 1.04rem;                    /* كان 0.96rem */
+    color: #d1fae5;
+    line-height: 1.8;
+}
+
+.practical-lab i {
+    color: #34d399;
+    margin-left: 7px;
+    margin-right: 0;
+}
+
+.practical-lab strong { color: #a7f3d0; font-weight: 700; }
+
+code {
+    background: rgba(0, 0, 0, 0.4);
+    color: #fbbf24;
+    padding: 0.14rem 0.45rem;
+    border-radius: 0.28rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.92em;
+    word-break: break-word;
+    direction: ltr;
+    unicode-bidi: embed;
+}
+
+/* ================= ASSESSMENT ================= */
+.assessment-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 1.3rem;
+    padding: 32px 34px;
+    margin-bottom: 28px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+}
+
+.assessment-block h2 {
+    font-size: 1.65rem;                    /* كان 1.5rem */
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    line-height: 1.4;
+    text-wrap: balance;
+}
+
+.assessment-block h2 i { color: var(--accent); }
+
+.section-desc {
+    font-size: 1.05rem;                    /* كان 0.98rem */
+    color: var(--text-muted);
+    margin-bottom: 26px;
+    line-height: 1.75;
+}
+
+.assess-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.assess-card {
+    background: var(--bg-inner);
+    border: 1px solid var(--border-soft);
+    border-radius: 0.9rem;
+    padding: 22px 18px;
+    text-align: center;
+    transition: 0.25s ease;
+}
+
+.assess-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary);
+    box-shadow: 0 12px 26px rgba(59, 130, 246, 0.16);
+}
+
+.assess-card h3 {
+    font-size: 2.2rem;                     /* كان 2rem */
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.assess-card p {
+    font-size: 1.05rem;                    /* كان 0.98rem */
+    font-weight: 700;
+    color: #eef4fb;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.assess-card small {
+    font-size: 0.92rem;                    /* كان 0.84rem */
+    color: var(--text-muted);
+    line-height: 1.6;
+    display: block;
+}
+
+/* ================= TEXTBOOK ================= */
+.textbook-section {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(16, 185, 129, 0.06));
+    border: 1px solid var(--border-light);
+    border-radius: 1.3rem;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+}
+
+.textbook-section h3 {
+    font-size: 1.45rem;                    /* كان 1.3rem */
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    line-height: 1.4;
+    text-wrap: balance;
+}
+
+.textbook-section h3 i { color: var(--accent); font-size: 1.35rem; }
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+}
+
+.book-card {
+    background: var(--bg-inner);
+    border: 1px solid var(--border-soft);
+    border-radius: 0.85rem;
+    padding: 17px 19px;
+    transition: 0.2s ease;
+}
+
+.book-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+.book-card .book-role {
+    display: inline-block;
+    font-size: 0.86rem;                    /* كان 0.76rem */
+    font-weight: 700;
+    letter-spacing: 0;
+    padding: 4px 11px;
+    border-radius: 20px;
+    background: rgba(59, 130, 246, 0.18);
+    color: var(--accent);
+    margin-bottom: 10px;
+    line-height: 1.45;
+}
+
+.book-card .book-role.main { background: rgba(16, 185, 129, 0.18); color: #34d399; }
+.book-card .book-role.free { background: rgba(139, 92, 246, 0.18); color: #a78bfa; }
+.book-card .book-role.lab { background: rgba(245, 158, 11, 0.18); color: #fbbf24; }
+
+.book-card h4 {
+    font-size: 1.1rem;                     /* كان 1rem */
+    font-weight: 700;
+    color: #f0f9ff;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.book-card p {
+    font-size: 0.98rem;                    /* كان 0.9rem */
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+/* ================= FOOTER ================= */
+footer {
+    text-align: center;
+    padding: 30px 20px 12px;
+    border-top: 1px solid var(--border-soft);
+    color: var(--text-dim);
+    font-size: 0.98rem;                    /* كان 0.9rem */
+    margin-top: 44px;
+    line-height: 1.75;
+}
+
+footer p { margin-bottom: 8px; line-height: 1.75; }
+footer strong { color: var(--text-muted); }
+footer .copyright-year { margin-top: 12px; font-size: 0.92rem; color: #64748b; }
+
+/* ================= ACCESSIBILITY ================= */
+a:focus-visible,
+.lecture-btn:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* ============================================================
+ *  RESPONSIVE — Tablet
+ *  ============================================================ */
+@media (max-width: 780px) {
+    .course-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .metric { padding: 22px 16px 20px; }
+    .container { padding: 24px 16px 46px; }
+    .course-header { padding: 28px 24px; }
+    .assessment-block,
+    .textbook-section { padding: 26px 22px; }
+    .week-header-bar { padding: 16px 18px; gap: 10px; }
+    .lecture-btn { padding: 9px 16px; font-size: 0.9rem; }
+    .week-body { padding: 18px 20px 20px; }
+    .instructor-panel { padding: 16px 20px; gap: 12px 20px; }
+    .instructor-item { font-size: 1rem; }
+    .method-note { padding: 18px 20px; gap: 12px; }
+}
+
+/* ============================================================
+ *  RESPONSIVE — Phone
+ *  ============================================================ */
+@media (max-width: 560px) {
+    html { font-size: 19px; }              /* نفس الحجم الأساسي */
+
+    .container { padding: 16px 12px 34px; }
+
+    .course-header {
+        padding: 24px 18px;
+        border-radius: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .course-badge {
+        font-size: 0.85rem;
+        padding: 7px 14px;
+        line-height: 1.5;
+    }
+
+    .course-header h1 {
+        font-size: 1.75rem;                /* كان 1.55rem */
+        line-height: 1.35;
+    }
+
+    .course-sub {
+        font-size: 1.04rem;
+        line-height: 1.85;
+    }
+
+    .instructor-panel {
+        padding: 16px 16px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .instructor-item {
+        font-size: 1rem;
+        line-height: 1.65;
+    }
+    .course-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-radius: 1rem;
+        margin-bottom: 24px;
+    }
+
+    .metric { padding: 20px 10px 18px; gap: 8px; }
+
+    .metric-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 0.95rem;
+        border-radius: 10px;
+    }
+
+    .metric-value { font-size: 1.85rem; }
+
+    .metric-label { font-size: 0.88rem; line-height: 1.55; }
+
+
+    .method-note {
+        padding: 16px 16px;
+        flex-direction: column;
+        gap: 10px;
+        border-radius: 0.85rem;
+    }
+
+    .method-note i { font-size: 1.3rem; }
+    .method-note p { font-size: 1.02rem; line-height: 1.85; }
+
+    .phase-legend {
+        padding: 14px 14px;
+        gap: 8px;
+    }
+
+    .legend-item {
+        font-size: 0.9rem;
+        padding: 7px 12px;
+        line-height: 1.5;
+    }
+
+    .phase-header {
+        padding: 16px 16px;
+        gap: 12px;
+        flex-wrap: wrap;
+        border-radius: 0.9rem 0.9rem 0 0;
+    }
+
+    .phase-header .phase-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1.15rem;
+    }
+
+    .phase-title-group h2 {
+        font-size: 1.25rem;
+        line-height: 1.45;
+    }
+
+    .phase-title-group .phase-meta {
+        font-size: 0.92rem;
+        line-height: 1.65;
+    }
+
+    .weeks-container {
+        padding: 14px 12px 16px;
+        border-radius: 0 0 0.9rem 0.9rem;
+    }
+
+    .week-header-bar {
+        padding: 14px;
+        gap: 9px;
+        align-items: center;
+    }
+
+    .week-badge {
+        order: 1;
+        font-size: 0.82rem;
+        padding: 6px 12px;
+    }
+
+    .week-type-tag {
+        order: 2;
+        font-size: 0.82rem;
+        padding: 5px 10px;
+    }
+
+    .week-title-main {
+        order: 3;
+        flex: 1 0 100%;
+        min-width: 0;
+        font-size: 1.15rem;
+        line-height: 1.55;
+        margin-top: 2px;
+    }
+
+    .lecture-btn {
+        order: 4;
+        flex: 1 0 100%;
+        width: 100%;
+        padding: 13px 16px;
+        font-size: 1rem;
+        min-height: 50px;                  /* هدف لمس أكبر */
+        margin: 4px 0 0;
+        border-radius: 14px;
+    }
+
+    .week-body { padding: 18px 16px; }
+
+    .week-meta span {
+        font-size: 0.92rem;
+        line-height: 1.6;
+        padding: 6px 12px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .info-box {
+        padding: 16px 16px;
+        border-radius: 0.75rem;
+    }
+
+    .info-box h4 {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .info-box li {
+        font-size: 1rem;
+        line-height: 1.8;
+        padding-right: 18px;
+    }
+
+    .touch-lab,
+    .practical-lab {
+        padding: 15px 16px;
+        font-size: 1rem;
+        line-height: 1.85;
+        border-radius: 0.75rem;
+    }
+
+    .assessment-block {
+        padding: 22px 16px;
+        border-radius: 1rem;
+    }
+
+    .assessment-block h2 {
+        font-size: 1.3rem;
+        line-height: 1.45;
+    }
+
+    .section-desc {
+        font-size: 0.98rem;
+        line-height: 1.75;
+    }
+
+    .assess-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .assess-card {
+        padding: 18px 14px;
+    }
+
+    .assess-card h3 { font-size: 2rem; }
+    .assess-card p { font-size: 1.02rem; }
+    .assess-card small { font-size: 0.9rem; }
+
+    .textbook-section {
+        padding: 22px 16px;
+        border-radius: 1rem;
+    }
+
+    .textbook-section h3 {
+        font-size: 1.2rem;
+        line-height: 1.45;
+    }
+
+    .book-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .book-card {
+        padding: 16px 16px;
+    }
+
+    .book-card h4 { font-size: 1.04rem; }
+    .book-card p { font-size: 0.96rem; }
+
+    footer {
+        font-size: 0.92rem;
+        padding: 24px 12px 10px;
+        line-height: 1.8;
+    }
+
+    footer .copyright-year { font-size: 0.88rem; }
+}
+
+/* ============================================================
+ *  TOUCH FEEDBACK (mobile — subtle press state)
+ *  ============================================================ */
+@media (hover: none) {
+    .lecture-btn:active,
+    .metric:active,
+    .assess-card:active,
+    .book-card:active {
+        transform: scale(0.985);
+        opacity: 0.94;
+    }
+}
+
+/* ============================================================
+ *  PRINT
+ *  ============================================================ */
+@media print {
+    html { font-size: 12pt; }
+
+    body { background: #fff !important; color: #0b1120 !important; }
+    .bg-grid { display: none !important; }
+
+    .course-header,
+    .week-card,
+    .phase-header,
+    .weeks-container,
+    .assessment-block,
+    .textbook-section,
+    .metric,
+    .phase-legend,
+    .method-note {
+        background: #fff !important;
+        border-color: #ccc !important;
+        color: #0b1120 !important;
+        box-shadow: none !important;
+    }
+
+    .course-header h1,
+    .phase-title-group h2,
+    .week-title-main,
+    .assessment-block h2,
+    .textbook-section h3,
+    .assess-card h3,
+    .metric-value {
+        color: #0b1120 !important;
+        -webkit-text-fill-color: #0b1120 !important;
+        background: none !important;
+    }
+
+    .info-box,
+    .touch-lab,
+    .practical-lab,
+    .assess-card,
+    .book-card {
+        background: #f8fafc !important;
+        border-color: #ccc !important;
+    }
+
+    .info-box li,
+    .touch-lab,
+    .practical-lab,
+    .metric-label,
+    .assess-card small,
+    .book-card p {
+        color: #334155 !important;
+    }
+
+    .lecture-btn { display: none !important; }
+
+    .course-metrics {
+        background: #cccccc !important;
+        border-color: #cccccc !important;
+        box-shadow: none !important;
+    }
+
+    .metric {
+        background: #ffffff !important;
+    }
+
+    .metric::before { display: none !important; }
+
+    .metric-icon {
+        background: #f1f5f9 !important;
+        color: #0b1120 !important;
+    }
+
+}
+
+/* ============================================================
+ *  REDUCED MOTION
+ *  ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ============================================
+ *  Accessibility Fixes v3 — أضف في نهاية style.css
+ * ============================================ */
+
+/* 1) دعم استخدام h3 بدل span لعناوين الأسابيع (إعادة ضبط هامش المتصفح) */
+.week-title-main {
+    margin: 0;
+}
+
+/* 2) دعم skip-link في الصفحة الرئيسية */
+.skip-link {
+    position: absolute;
+    top: -60px;
+    right: 1rem;
+    z-index: 999;
+    background: var(--accent);
+    color: #06101f;
+    font-weight: 800;
+    padding: 0.65rem 1.1rem;
+    border-radius: 0.6rem;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 1rem;
+}
+
+/* 3) دعم main كونه نقطة الوصول من skip-link */
+main#main-content {
+    scroll-margin-top: 1.5rem;
+}

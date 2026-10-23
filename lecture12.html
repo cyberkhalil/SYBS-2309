@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 12 | مقدمة إلى Flask — المسارات والطلبات — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة الثانية عشرة من مساق SYBS 2309: مقدمة إلى Flask — دور إطار العمل، إعداد البيئة الافتراضية وتثبيت Flask، أول تطبيق، المسارات بـ@app.route، المعاملات الديناميكية في URL، طرق HTTP، إرجاع نص وHTML وقوالب، ووضع التصحيح وقراءة الأخطاء.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 12</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 12: مقدمة إلى Flask — المسارات والطلبات</h1>
+            <p class="lecture-lead">
+                نصل اليوم إلى اللحظة التي يبدأ فيها الجزء الخلفي بالعمل فعلاً. بعد أن أنهينا
+                <strong>أساسيات Python البرمجية</strong> في المحاضرة الحادية عشرة، ندخل إلى
+                <strong>Flask</strong> — إطار عمل خفيف يسمح لنا ببناء تطبيق ويب يعمل على خادم
+                محلي، ويستقبل الطلبات، ويرد عليها. سنتعلّم <strong>دور إطار العمل</strong>،
+                ونُنشئ <strong>بيئة افتراضية</strong> نظيفة، ونثبّت Flask، ونكتب
+                <strong>أول تطبيق</strong> في عشرة أسطر، ثم نتعمّق في
+                <strong>المسارات</strong> بـ<code>@app.route()</code>، و<strong>معاملات
+                URL</strong> الديناميكية، و<strong>طرق HTTP</strong>، وكيف نُرجع
+                <strong>نصاً</strong> أو <strong>HTML</strong> أو <strong>قوالب</strong>.
+                وننهي بـ<strong>وضع التصحيح</strong> وقراءة صفحات أخطاء Flask، تمهيداً
+                للقوالب والنماذج في المحاضرة القادمة.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 12</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-laptop-code"></i> مختبر معمّق</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 2 · الواجهة الخلفية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script12.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script12.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#framework">ما هو إطار العمل ولماذا Flask</a></li>
+                        <li><a href="#env-setup">إعداد البيئة الافتراضية وتثبيت Flask</a></li>
+                        <li><a href="#first-app">أول تطبيق Flask</a></li>
+                        <li><a href="#routes">المسارات و@app.route</a></li>
+                        <li><a href="#url-params">معاملات URL الديناميكية</a></li>
+                        <li><a href="#http-methods">طرق HTTP (GET وPOST)</a></li>
+                        <li><a href="#responses">الاستجابات: نص وHTML وقوالب</a></li>
+                        <li><a href="#debug">وضع التصحيح وقراءة الأخطاء</a></li>
+                        <li><a href="#structure">هيكل مشروع Flask</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> هذه المحاضرة هي أول لقاء مع Flask. لا تقلق إن بدت
+                    بعض المصطلحات جديدة — كل شيء يبدأ من "دالة ترجع نصاً"، ثم نبني عليها حتى
+                    تصل إلى تطبيق كامل. اكتب الكود بنفسك، ولا تنسخه.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على شرح دور إطار العمل في تبسيط
+                        تطوير الويب، وإعداد بيئة افتراضية نظيفة لمشروعك، وتثبيت Flask،
+                        وتشغيل تطبيق يعمل على خادم محلي، وتعريف عدة مسارات، واستقبال
+                        معاملات ديناميكية في URL، والتمييز بين GET وPOST، وإرجاع استجابات
+                        مختلفة، وقراءة صفحات أخطاء Flask دون ذعر.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>شرح دور إطار العمل وأين يقع بين Python والمستخدم</li>
+                                <li>معرفة الفرق بين Flask وDjango من حيث الحجم والاستخدام</li>
+                                <li>فهم معنى المسار (route) وطريقة HTTP</li>
+                                <li>إدراك أن <code>debug</code> للتطوير لا للإنتاج</li>
+                                <li>فهم أن Flask يربط دالة Python بمسار URL</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>إنشاء بيئة افتراضية عبر <code>venv</code></li>
+                                <li>تثبيت Flask بـ<code>pip install flask</code></li>
+                                <li>تشغيل <code>flask run</code> ورؤية التطبيق في المتصفح</li>
+                                <li>تعريف 3–4 مسارات بـ<code>@app.route()</code></li>
+                                <li>استخدام معامل URL ديناميكي وإرجاع رد مخصص</li>
+                                <li>إرجاع <code>render_template</code> لاحقاً (في المحاضرة 13)</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>بناء أساس واضح لتطبيقات الويب الحقيقية</li>
+                                <li>عادات تنظيم المجلدات من اليوم الأول</li>
+                                <li>قراءة أخطاء Flask بمنطق لا بخوف</li>
+                                <li>الاستعداد للمحاضرة القادمة (القوالب والنماذج)</li>
+                                <li>الاقتراب من المشروع النهائي خطوة</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Framework -->
+                <section class="lecture-section" id="framework" aria-labelledby="framework-title">
+                    <h2 class="section-title" id="framework-title">
+                        <i class="fas fa-layer-group"></i> ما هو إطار العمل ولماذا Flask
+                    </h2>
+                    <p>
+                        <strong>إطار العمل (Framework)</strong> هو مجموعة من الأدوات والقواعد
+                        الجاهزة التي تختصر عليك بناء الجزء المتكرر من التطبيق: استقبال الطلبات،
+                        توجيهها إلى الكود المناسب، تحليل البيانات، إعداد الاستجابة، والتعامل مع
+                        الأخطاء. بدونه، ستكتب هذه الحلقة بنفسك من الصفر في كل مشروع. معه، تبدأ
+                        من حيث يجب أن تبدأ: <strong>منطق تطبيقك</strong>.
+                    </p>
+
+                    <div class="flow-diagram" role="img" aria-label="مخطط يوضح دور Flask بين المتصفح وPython">
+                        <div class="flow-box">
+                            <i class="fas fa-laptop"></i>
+                            <h3>المتصفح</h3>
+                            <p>يرسل <code>GET /about</code> مثلاً إلى الخادم.</p>
+                        </div>
+                        <div class="flow-connector" aria-hidden="true">
+                            <span>طلب HTTP</span>
+                            <i class="fas fa-arrow-left"></i>
+                            <span class="response-arrow">استجابة</span>
+                            <i class="fas fa-arrow-right response-arrow"></i>
+                        </div>
+                        <div class="flow-box server-box">
+                            <i class="fas fa-flask"></i>
+                            <h3>Flask (على الخادم)</h3>
+                            <p>يستقبل الطلب، يوجّهه إلى <code>def about()</code> في Python، ثم يرسل ما ترجعه الدالة.</p>
+                        </div>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-cube"></i> Flask — إطار خفيف</h3>
+                            <ul>
+                                <li>صغير، مرن، وقليل "الرأي"</li>
+                                <li>تختار فيه ما تحتاجه فقط</li>
+                                <li>مناسب للتعلّم والمشاريع الصغيرة</li>
+                                <li>مثالي للمحاضرات والمختبرات</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-industry"></i> Django — إطار كامل</h3>
+                            <ul>
+                                <li>يوفّر كل شيء جاهزاً (ORM، admin، auth)</li>
+                                <li>يعطي بنية أكبر وأكثر تنظيماً</li>
+                                <li>مناسب للمشاريع الكبيرة</li>
+                                <li>منحنى تعلّم أعلى</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>
+                        اخترنا <strong>Flask</strong> لأن هدفنا في هذا المساق هو فهم
+                        <strong>المفاهيم</strong>: طلب، مسار، استجابة، قالب، نموذج، جلسة،
+                        تصحيح. لا لأن نغرق في بنية إطار ضخم. حين تفهم هذه المفاهيم في Flask،
+                        يمكنك لاحقاً الانتقال إلى Django أو FastAPI بسهولة، لأن المبادئ نفسها.
+                    </p>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>فكرة جذرية بسيطة:</strong> Flask ليس سحراً. هو مكتبة Python
+                            تنتظر على منفذ (غالباً 5000)، وتستقبل طلبات HTTP، وتبحث في جدول مساراتك
+                            لتعرف الدالة المناسبة، ثم تنفّذها وتُرجع ناتجها. إذا فهمت ذلك، فأنت
+                            تفهم 80% من Flask.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Env setup -->
+                <section class="lecture-section" id="env-setup" aria-labelledby="env-title">
+                    <h2 class="section-title" id="env-title">
+                        <i class="fas fa-box-archive"></i> إعداد البيئة الافتراضية وتثبيت Flask
+                    </h2>
+                    <p>
+                        قبل تثبيت أي مكتبة، نعزل مشروعنا في <strong>بيئة افتراضية (virtual
+                        environment)</strong>. البيئة الافتراضية مجلد مستقل يحوي نسخة Python
+                        ومكتبات المشروع فقط. فوائدها:
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-shield-halved"></i> عزل المكتبات</h3>
+                            <ul>
+                                <li>لا تتعارض إصدارات المشاريع</li>
+                                <li>تحديث Flask هنا لا يؤثر على مشروع آخر</li>
+                                <li>أمان من التلوث العالمي</li>
+                                <li>عملية معيارية في كل مشروع</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-recycle"></i> قابلية إعادة الإنتاج</h3>
+                            <ul>
+                                <li>ملف <code>requirements.txt</code> يوثّق النسخة</li>
+                                <li>أي جهاز آخر يمكنه إعادة نفس البيئة</li>
+                                <li>مهم للفريق والتصحيح</li>
+                                <li>نمط صناعي معياري</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>الخطوات على Windows:</p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-terminal"></i> إنشاء وتفعيل البيئة (Windows)</span>
+                            <span class="code-lang">SHELL</span>
+                        </div>
+                        <pre><code># 1) إنشاء مجلد المشروع
+mkdir flask-lab12
+cd flask-lab12
+
+# 2) إنشاء بيئة افتراضية
+python -m venv venv
+
+# 3) تفعيل البيئة
+venv\Scripts\activate
+
+# 4) تثبيت Flask
+pip install flask
+
+# 5) التحقق
+pip list
+# يجب أن ترى Flask وWerkzeug وJinja2 ...</code></pre>
+                    </div>
+
+                    <p>وعلى macOS / Linux:</p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-terminal"></i> إنشاء وتفعيل البيئة (macOS / Linux)</span>
+                            <span class="code-lang">SHELL</span>
+                        </div>
+                        <pre><code>mkdir flask-lab12
+cd flask-lab12
+
+python3 -m venv venv
+source venv/bin/activate
+pip install flask
+pip list</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>كيف أعرف أن البيئة مفعّلة؟</strong> في الطرفية سيظهر
+                            <code>(venv)</code> أول السطر. وفي VS Code، اختر مفسّر Python من
+                            <code>venv</code> (Ctrl+Shift+P ثم Python: Select Interpreter).
+                            بدون ذلك، قد تعمل الأوامر في بيئة Python العامة، وتظهر أخطاء
+                            غامضة "Flask غير مثبت" رغم تثبيته.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>لا ترفع مجلد <code>venv/</code> إلى Git.</strong>
+                            أضف <code>venv/</code> إلى <code>.gitignore</code>. البيئة تُعاد
+                            بإنشاء من <code>requirements.txt</code>، لا تُنسخ.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- First app -->
+                <section class="lecture-section" id="first-app" aria-labelledby="first-app-title">
+                    <h2 class="section-title" id="first-app-title">
+                        <i class="fas fa-rocket"></i> أول تطبيق Flask
+                    </h2>
+                    <p>
+                        الآن نكتب أول تطبيق. اسم الملف مهم: سنسميه <code>app.py</code> أو
+                        <code>main.py</code>. Flask يحتاج أن يعرف نقطة البداية. سنستخدم
+                        النمط القياسي مع <code>if __name__ == "__main__"</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — أول تطبيق</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># app.py — أول تطبيق Flask
+from flask import Flask
+
+# إنشاء كائن التطبيق
+app = Flask(__name__)
+
+
+# تعريف مسار "الجذر"
+@app.route("/")
+def home():
+    return "مرحباً بك في أول تطبيق Flask!"
+
+
+# تشغيل الخادم عند تنفيذ الملف مباشرة
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+                    </div>
+
+                    <p>
+                        شغّل الملف بأحد أمرين. الطريقة الأولى عبر Python مباشرة، والثانية عبر
+                        أمر Flask.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-terminal"></i> تشغيل التطبيق</span>
+                            <span class="code-lang">SHELL</span>
+                        </div>
+                        <pre><code># الطريقة الأولى
+python app.py
+
+# الطريقة الثانية (تستخدم متغير FLASK_APP)
+# Windows
+set FLASK_APP=app.py
+flask run
+# macOS / Linux
+export FLASK_APP=app.py
+flask run
+
+# سترى في الطرفية:
+#  * Running on http://127.0.0.1:5000</code></pre>
+                    </div>
+
+                    <p>
+                        افتح المتصفح على <code>http://127.0.0.1:5000</code>. سترى النص:
+                        "مرحباً بك في أول تطبيق Flask!". مبروك — هذا تطبيق ويب حقيقي، يعمل
+                        على خادم محلي، يستقبل طلباً ويرد عليه. كل ما أضفناه هو ملف Python
+                        من 10 أسطر.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-cube"></i> Flask(__name__)</h3>
+                            <ul>
+                                <li>ينشئ كائن التطبيق</li>
+                                <li><code>__name__</code> يحدد اسم الحزمة</li>
+                                <li>يعتمد عليه Flask للعثور على القوالب والملفات</li>
+                                <li>لا تغيّر هذا المعامل الآن</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tag"></i> @app.route("/")</h3>
+                            <ul>
+                                <li>مزخرف يربط المسار بدالة</li>
+                                <li>عند زيارة <code>/</code> تُنفَّذ <code>home</code></li>
+                                <li>ناتج الدالة هو نص الاستجابة</li>
+                                <li>سنتعلم غداً إرجاع HTML</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-play"></i> app.run(debug=True)</h3>
+                            <ul>
+                                <li>يشغّل الخادم المحلي</li>
+                                <li><code>debug=True</code> يعطي رسائل مفصلة</li>
+                                <li>يعيد التحميل تلقائياً عند التعديل</li>
+                                <li>ممنوع في الإنتاج</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>جرّب الآن:</strong> عدّل نص الرد من "مرحباً..." إلى أي شيء آخر،
+                            احفظ الملف. لاحظ أن Flask يكتشف التغيير ويعيد التشغيل تلقائياً
+                            (لأن <code>debug=True</code>). أعد تحميل الصفحة، وسترى النص الجديد.
+                            هذه أول دورة تطوير-تجربة كاملة لك.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Routes -->
+                <section class="lecture-section" id="routes" aria-labelledby="routes-title">
+                    <h2 class="section-title" id="routes-title">
+                        <i class="fas fa-route"></i> المسارات و@app.route
+                    </h2>
+                    <p>
+                        تطبيق Flask واحد يمكن أن يحتوي عشرات المسارات. كل مسار هو عنوان URL
+                        يُعادل دالة Python. عند وصول طلب، يبحث Flask عن أول مسار يطابقه،
+                        وينفّذ الدالة، ويُرجع ما ترجعه.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — مسارات متعددة</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def home():
+    return "الصفحة الرئيسية"
+
+
+@app.route("/about")
+def about():
+    return "عن المساق: SYBS 2309 — تصميم وبرمجة الويب"
+
+
+@app.route("/contact")
+def contact():
+    return "للتواصل: makhalil@ucas.edu.ps"
+
+
+@app.route("/courses/web")
+def web():
+    return "صفحة مقرر الويب"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+                    </div>
+
+                    <p>
+                        افتح الآن:
+                        <code>/</code> · <code>/about</code> · <code>/contact</code> ·
+                        <code>/courses/web</code>. كل عنوان يعرض نصاً مختلفاً من دالة
+                        مستقلة. هذا هو الأساس الذي سنبني عليه بقية التطبيق.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-slash"></i> مسار ثابت</h3>
+                            <ul>
+                                <li>نص ثابت، مثل <code>/about</code></li>
+                                <li>يجب أن يكون فريداً</li>
+                                <li>حساس لحالة الحروف في الغالب</li>
+                                <li>لا يحتوي معاملات متغيرة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-code-branch"></i> مسار متداخل</h3>
+                            <ul>
+                                <li><code>/courses/web</code> وأخواتها</li>
+                                <li>تنظيم منطقي للمحتوى</li>
+                                <li>يسهّل التوسع</li>
+                                <li>يُستخدم في أي تطبيق حقيقي</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-repeat"></i> أكثر من مسار لدالة</h3>
+                            <ul>
+                                <li>يمكن تكرار المزخرف مرة ثانية</li>
+                                <li>مفيد لتبادل صيغ عنوان</li>
+                                <li>مثال: <code>/home</code> و<code>/index</code></li>
+                                <li>الدالة نفسها، اسمان</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>خطأ شائع:</strong> نسيان <code>/</code> في بداية المسار.
+                            <code>@app.route("about")</code> يسبب <code>ValueError</code>.
+                            الصواب <code>@app.route("/about")</code>. والنقطة نفسها على
+                            المسار الجذر: <code>"/"</code> وليس <code>""</code>.
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>سؤال للفهم:</strong> ماذا يحدث إن طلبت مساراً غير موجود؟
+                            سيرجع Flask خطأ <code>404 Not Found</code> برسالة افتراضية. لاحقاً
+                            سنتعلم كيف نعرض صفحة خطأ مخصصة، لكن الآن اعلم أن 404 ليست مشكلة
+                            Flask بل نتيجة طبيعية لعدم وجود المسار.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- URL params -->
+                <section class="lecture-section" id="url-params" aria-labelledby="params-title">
+                    <h2 class="section-title" id="params-title">
+                        <i class="fas fa-diagram-project"></i> معاملات URL الديناميكية
+                    </h2>
+                    <p>
+                        كل صفحة بمسار ثابت لا تكفي لتطبيق حقيقي. نحتاج أحياناً أن نمرر أجزاءً
+                        من العنوان إلى الدالة. مثلاً <code>/courses/web</code> بدل
+                        <code>/courses/python</code> — كلها تشترك في الشكل
+                        <code>/courses/&lt;اسم&gt;</code>. Flask يدعم ذلك عبر
+                        <strong>معاملات URL</strong> بين <code>&lt; ></code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — معامل بسيط</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route("/hello/&lt;name&gt;")
+def hello(name):
+    return f"مرحباً {name}!"
+
+
+@app.route("/course/&lt;slug&gt;")
+def course(slug):
+    return f"صفحة المقرر: {slug}"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+                    </div>
+
+                    <p>
+                        جرّب في المتصفح:
+                        <code>/hello/sara</code> — سترى "مرحباً sara!".
+                        <code>/course/web</code> — سترى "صفحة المقرر: web".
+                        اسم المعامل في المسار <strong>يجب أن يطابق</strong> اسم المعامل في
+                        الدالة. لو اختلفا، سيحدث <code>TypeError</code>.
+                    </p>
+
+                    <p>
+                        Flask يسمح أيضاً بتحديد <strong>نوع</strong> المعامل. الافتراضي نص، لكن
+                        يمكن جعله عدداً صحيحاً أو عشرياً:
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — معامل بنوع محدد</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>@app.route("/student/&lt;int:student_id&gt;")
+def student(student_id):
+    return f"رقم الطالب: {student_id}"
+
+# أمثلة أخرى:
+# /article/&lt;int:article_id&gt;
+# /price/&lt;float:amount&gt;
+# /slug/&lt;path:subpath&gt; (يقبل "/")</code></pre>
+                    </div>
+
+                    <p>
+                        ميزة النوع: لو زار المستخدم <code>/student/abc</code> (نص بدل رقم)،
+                        سيرجع Flask <strong>404</strong> تلقائياً، لأن المسار لا يطابق.
+                        هذا يحسّن التحقق الأولي، ويجعل الكود أقصر.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-font"></i> النوع الافتراضي</h3>
+                            <ul>
+                                <li><code>&lt;name&gt;</code> = نص</li>
+                                <li>لا يحتوي <code>/</code></li>
+                                <li>يقبل أحرفاً وأرقاماً وشرطات</li>
+                                <li>يُستخدم للأسماء والـslugs</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-hashtag"></i> الأنواع المدعومة</h3>
+                            <ul>
+                                <li><code>string</code> (افتراضي)</li>
+                                <li><code>int</code> للأعداد</li>
+                                <li><code>float</code> للأرقام العشرية</li>
+                                <li><code>path</code> يقبل شرطة مائلة</li>
+                                <li><code>uuid</code> لمعرّفات UUID</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> تنبيه أمني</h3>
+                            <ul>
+                                <li>المعاملات نص من المستخدم</li>
+                                <li>لا تثق بها أبداً</li>
+                                <li>تحقق من الصلاحية في الخادم</li>
+                                <li>لا تستخدمها في استعلام SQL مباشرة</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>مبدأ أمني أساسي:</strong> ما يأتي من URL نص خارجي. حتى مع
+                            نوع <code>int</code>، تحقق في داخل الدالة أن المعرّف موجود فعلاً
+                            (مثلاً في قاعدة البيانات). لا تعتمد على القيد النوعي فقط.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HTTP methods -->
+                <section class="lecture-section" id="http-methods" aria-labelledby="methods-title">
+                    <h2 class="section-title" id="methods-title">
+                        <i class="fas fa-right-left"></i> طرق HTTP (GET وPOST)
+                    </h2>
+                    <p>
+                        كل طلب HTTP له <strong>طريقة</strong>. الافتراضي في Flask هو
+                        <code>GET</code>، وهو المناسب لصفحات القراءة. أما <code>POST</code>
+                        فهو لإرسال بيانات (تسجيل، نموذج، تحديث). نحدد الطريقة في
+                        <code>@app.route</code> عبر <code>methods</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — GET وPOST</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>from flask import Flask, request
+
+app = Flask(__name__)
+
+
+@app.route("/subscribe", methods=["GET", "POST"])
+def subscribe():
+    if request.method == "POST":
+        # البيانات ستُرسَل لاحقاً من نموذج
+        email = request.form.get("email", "")
+        return f"تم استلام البريد: {email}"
+
+    # GET: نعرض صفحة بسيطة
+    return "أرسل بريدك عبر POST إلى هذا المسار."
+
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>المحور</th>
+                                    <th>GET</th>
+                                    <th>POST</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>الافتراضي</td>
+                                    <td>نعم (Flask يستخدمه افتراضياً)</td>
+                                    <td>لا، يجب تحديده صراحة</td>
+                                </tr>
+                                <tr>
+                                    <td>البيانات</td>
+                                    <td>في عنوان URL (query string)</td>
+                                    <td>في جسم الطلب</td>
+                                </tr>
+                                <tr>
+                                    <td>يُخزَّن في السجل</td>
+                                    <td>غالباً نعم</td>
+                                    <td>غالباً لا</td>
+                                </tr>
+                                <tr>
+                                    <td>مناسب لـ</td>
+                                    <td>قراءة، بحث، تصفح</td>
+                                    <td>تسجيل، تسجيل دخول، إنشاء</td>
+                                </tr>
+                                <tr>
+                                    <td>قراءة البيانات في Flask</td>
+                                    <td><code>request.args</code></td>
+                                    <td><code>request.form</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>الخطوة التالية:</strong> في المحاضرة 13 سنبني نموذج HTML
+                            يرسل بيانات POST إلى هذا المسار، وسنستعرضها ونعرضها من جديد في
+                            صفحة. الآن يكفي أن تفهم أن <code>methods</code> تحدد ما يقبله
+                            المسار، و<code>request.method</code> داخل الدالة يخبرك بالطريقة
+                            الحالية.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>لا ترسل بيانات حساسة عبر GET.</strong> كلمات المرور
+                            والرموز تُرسل POST مع HTTPS. GET يظهر في عنوان المتصفح وسجلات
+                            الخادم، وهذا خطر أمني واضح.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Responses -->
+                <section class="lecture-section" id="responses" aria-labelledby="responses-title">
+                    <h2 class="section-title" id="responses-title">
+                        <i class="fas fa-reply-all"></i> الاستجابات: نص وHTML وقوالب
+                    </h2>
+                    <p>
+                        ناتج الدالة هو ما يراه المتصفح. الشكل الأبسط هو <strong>نص</strong>،
+                        وهو ما فعلناه حتى الآن. لكن تطبيقاً حقيقياً يحتاج HTML. أمامك
+                        خياران: نص HTML صريح داخل الدالة، أو <strong>قالب Jinja</strong>
+                        منفصل.
+                    </p>
+
+                    <h3 class="section-title" style="font-size:1.1rem;margin-top:1.4rem;">
+                        <i class="fas fa-code"></i> الخيار الأول: HTML داخل الدالة
+                    </h3>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — HTML مضمّن (للبداية فقط)</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>@app.route("/html")
+def html_demo():
+    return """
+    &lt;!DOCTYPE html&gt;
+    &lt;html lang="ar" dir="rtl"&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;صفحة من Flask&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;مرحباً من Flask&lt;/h1&gt;
+        &lt;p&gt;هذا HTML مضمّن داخل دالة Python.&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
+    """</code></pre>
+                    </div>
+
+                    <p>
+                        هذا يعمل، لكنه فوضوي عند تطوير تطبيق حقيقي: نصوص HTML داخل Python،
+                        وسوم مبعثرة، وإعادة كتابة القالب نفسه في كل مسار. لهذا أعطتنا Flask
+                        <strong>engine القوالب Jinja2</strong>.
+                    </p>
+
+                    <h3 class="section-title" style="font-size:1.1rem;margin-top:1.4rem;">
+                        <i class="fas fa-file-lines"></i> الخيار الثاني: render_template
+                    </h3>
+
+                    <p>
+                        نضع الملفات في مجلد <code>templates/</code>، ثم نطلب من Flask أن يقرأ
+                        القالب ويمرّر له بعض المتغيرات. النتيجة: HTML نظيف في ملفه، ومنطق في
+                        ملفه.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-folder-open"></i> الهيكل</span>
+                            <span class="code-lang">TREE</span>
+                        </div>
+                        <pre><code>flask-lab12/
+├── app.py
+└── templates/
+    └── home.html</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> templates/home.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ar" dir="rtl"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;{{ title }}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;{{ title }}&lt;/h1&gt;
+    &lt;p&gt;مرحباً {{ name }}، هذا قالب من Jinja2.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — استخدام القالب</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>from flask import Flask, render_template
+
+app = Flask(__name__)
+
+
+@app.route("/template")
+def template_demo():
+    return render_template(
+        "home.html",
+        title="مرحباً من القالب",
+        name="سارة"
+    )</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-file"></i> templates/</h3>
+                            <ul>
+                                <li>مجلد افتراضي في Flask</li>
+                                <li>يحتوي ملفات <code>.html</code></li>
+                                <li>يُبحث فيه تلقائياً</li>
+                                <li>اسم الملف يُمرَّر كسلسلة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-code"></i> {{ متغير }}</h3>
+                            <ul>
+                                <li>تعبير Jinja داخل القالب</li>
+                                <li>يُستبدل بقيمته قبل العرض</li>
+                                <li>مرّرها بـ<code>render_template</code></li>
+                                <li>غالباً نصوص آمنة تلقائياً</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> أمان القوالب</h3>
+                            <ul>
+                                <li>Jinja يهرّب تلقائياً</li>
+                                <li>لكن لا تثق بمدخلات المستخدم</li>
+                                <li><code>|safe</code> خطر</li>
+                                <li>لا تعرض نص مستخدم بـ<code>safe</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>لماذا نفصل؟</strong> لأن HTML داخل Python يجعل الكود
+                            صعباً في القراءة، ويصعب تحريره، ويخلط المسؤوليات. القوالب
+                            المنفصلة تحل كل هذا، وتفتح الباب للوراثة بين القوالب
+                            ({% block %}) التي سنراها لاحقاً. اعتمد على
+                            <code>render_template</code> منذ البداية.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Debug -->
+                <section class="lecture-section" id="debug" aria-labelledby="debug-title">
+                    <h2 class="section-title" id="debug-title">
+                        <i class="fas fa-bug"></i> وضع التصحيح وقراءة الأخطاء
+                    </h2>
+                    <p>
+                        <code>debug=True</code> عند تشغيل التطبيق يوفّر ميزتين مهمتين:
+                        <strong>إعادة التحميل التلقائي</strong> عند تعديل الملفات،
+                        <strong>وصفحات أخطاء تفصيلية</strong> في المتصفح. هذه ميزة لا تقدّر
+                        بثمن أثناء التطوير، لكنها <strong>ممنوعة في الإنتاج</strong> — تكشف
+                        تفاصيل قد تكون خطيرة.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-redo"></i> التحميل التلقائي</h3>
+                            <ul>
+                                <li>تعديل ملف Python يعيد التشغيل</li>
+                                <li>لا حاجة لإيقاف وتشغيل</li>
+                                <li>تعديل القوالب قد لا يحتاج إعادة تشغيل</li>
+                                <li>توفير وقت كبير</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-hand"></i> Interactive Debugger</h3>
+                            <ul>
+                                <li>عند وقوع خطأ في العرض</li>
+                                <li>يعرض Traceback كامل</li>
+                                <li>يسمح بفتح Console داخل الخطأ</li>
+                                <li>فقط في بيئة التطوير</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-shield-halved"></i> تحذير الإنتاج</h3>
+                            <ul>
+                                <li>عطّل <code>debug</code> في الإنتاج</li>
+                                <li>لا تنشر رسائل الأخطاء للمستخدم</li>
+                                <li>المخترق يستفيد من Traceback</li>
+                                <li>سجل الأخطاء في ملف بدلاً</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — مثال يسبّب خطأ</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>@app.route("/broken")
+def broken():
+    # قسمة على صفر
+    return 10 / 0</code></pre>
+                    </div>
+
+                    <p>
+                        زُر <code>/broken</code>. مع <code>debug=True</code> سترى صفحة خطأ
+                        تفصيلية تعرض:
+                    </p>
+                    <ol class="steps-list">
+                        <li>نوع الاستثناء (<code>ZeroDivisionError</code>).</li>
+                        <li>الرسالة ("division by zero").</li>
+                        <li>مسار الملف ورقم السطر.</li>
+                        <li>تتبّع الاستدعاء (Traceback) كاملاً.</li>
+                        <li>أحياناً Console تفاعلي لفحص المتغيرات.</li>
+                    </ol>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>خطأ قاتل في الإنتاج:</strong> ترك
+                            <code>debug=True</code> عند النشر يفتح ثغرة حقيقية. صفحة الخطأ
+                            التفصيلية تعرض شيفرتك ومتغيراتك ومفاتيحك للمستخدم. عطّله دائماً
+                            قبل النشر (<code>debug=False</code>)، أو شغّل عبر خادم إنتاج
+                            (gunicorn, uWSGI).
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>اقرأ الخطأ قبل التخمين:</strong> صفحة Flask تعطيك اسم
+                            الاستثناء ورقم السطر. اذهب إلى السطر مباشرة. 90% من الحل في
+                            قراءة رسالة الخطأ بعناية، لا في تغيير الكود عشوائياً.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Structure -->
+                <section class="lecture-section" id="structure" aria-labelledby="structure-title">
+                    <h2 class="section-title" id="structure-title">
+                        <i class="fas fa-folder-tree"></i> هيكل مشروع Flask
+                    </h2>
+                    <p>
+                        حتى مع تطبيق صغير، اعتمد هيكلاً واضحاً من اليوم الأول. سنكبر عليه
+                        في المحاضرات القادمة.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-folder-open"></i> هيكل مقترح</span>
+                            <span class="code-lang">TREE</span>
+                        </div>
+                        <pre><code>flask-lab12/
+├── app.py
+├── requirements.txt
+├── templates/
+│   ├── base.html
+│   ├── home.html
+│   ├── about.html
+│   └── contact.html
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── main.js
+└── venv/                (مستثنى من Git)</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-file"></i> app.py</h3>
+                            <ul>
+                                <li>نقطة الدخول</li>
+                                <li>فيه <code>app</code> والمسارات</li>
+                                <li>يمكن تقسيمه لاحقاً لـblueprints</li>
+                                <li>حالياً ملف واحد يكفي</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-file-lines"></i> templates/</h3>
+                            <ul>
+                                <li>ملفات HTML / Jinja</li>
+                                <li>يُبحث فيها تلقائياً</li>
+                                <li>لكل صفحة ملف</li>
+                                <li>قاعدة عامة عبر <code>base.html</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-image"></i> static/</h3>
+                            <ul>
+                                <li>CSS، JS، صور، خطوط</li>
+                                <li>تُستخدم عبر <code>url_for('static', ...)</code></li>
+                                <li>لا تمر عبر <code>render_template</code></li>
+                                <li>تُقدَّم مباشرة للمتصفح</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-list-check"></i> requirements.txt</h3>
+                            <ul>
+                                <li>توليده: <code>pip freeze &gt; requirements.txt</code></li>
+                                <li>استخدامه: <code>pip install -r requirements.txt</code></li>
+                                <li>يوثّق إصدارات المكتبات</li>
+                                <li>ضروري للفريق والنشر</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>كيف أربط CSS في القوالب؟</strong> داخل القالب:
+                            <code>&lt;link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"&gt;</code>.
+                            <code>url_for</code> يولّد المسار الصحيح تلقائياً، ويتكيّف مع
+                            اختلاف المسار الجذري. سنتوسّع في هذا في المحاضرة 13.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        المطلوب تطبيق Flask يحتوي أربعة مسارات على الأقل، بينها مسار ديناميكي،
+                        مع بيئة افتراضية نظيفة، وتشغيل ناجح من المتصفح.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 12</h3>
+                        <ol>
+                            <li>أنشئ مجلد <code>flask-lab12/</code>، ثم انتقل إليه في الطرفية.</li>
+                            <li>أنشئ بيئة افتراضية: <code>python -m venv venv</code>.</li>
+                            <li>فعّلها: <code>venv\Scripts\activate</code> (Windows) أو
+                                <code>source venv/bin/activate</code> (macOS / Linux).</li>
+                            <li>ثبّت Flask: <code>pip install flask</code>، وتأكد بـ
+                                <code>pip show flask</code>.</li>
+                            <li>أنشئ ملف <code>app.py</code> فيه:
+                                <ul>
+                                    <li>المسار <code>/</code> يرجع: "الصفحة الرئيسية لمساق SYBS 2309".</li>
+                                    <li>المسار <code>/about</code> يرجع: اسمك ورقم الأسبوع.</li>
+                                    <li>المسار <code>/contact</code> يرجع: بريدك الإلكتروني.</li>
+                                    <li>المسار <code>/student/&lt;int:sid&gt;</code> يرجع:
+                                        "المعرّف: N" حيث N هو الرقم الممرّر.</li>
+                                </ul>
+                            </li>
+                            <li>شغّل التطبيق: <code>python app.py</code> أو <code>flask run</code>.</li>
+                            <li>اختبر كل مسار في المتصفح:
+                                <ul>
+                                    <li><code>http://127.0.0.1:5000/</code></li>
+                                    <li><code>http://127.0.0.1:5000/about</code></li>
+                                    <li><code>http://127.0.0.1:5000/contact</code></li>
+                                    <li><code>http://127.0.0.1:5000/student/42</code></li>
+                                </ul>
+                            </li>
+                            <li>اختبر حالة خطأ مقصودة:
+                                <ul>
+                                    <li>افتح <code>/missing</code> → يجب أن ترى صفحة 404.</li>
+                                    <li>افتح <code>/student/abc</code> → 404 لأن <code>int</code> لا يطابق نصاً.</li>
+                                </ul>
+                            </li>
+                            <li>جرّب <code>debug=True</code>: أضف مساراً جديداً واختبره (بدون إعادة تشغيل يدوي).</li>
+                            <li>جرّب خطأً متعمداً: أضف مسار <code>/boom</code> يعيد <code>1/0</code>،
+                                ولاحظ صفحة Flask التفصيلية.</li>
+                            <li>أنشئ <code>requirements.txt</code> بـ<code>pip freeze &gt; requirements.txt</code>.</li>
+                            <li>أرفق <code>app.py</code>، و<code>requirements.txt</code>، وصورة من الطرفية،
+                                وصورة من كل مسار في المتصفح (4 صور على الأقل).</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — نموذج البداية</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># flask-lab12/app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def home():
+    return "الصفحة الرئيسية لمساق SYBS 2309"
+
+
+@app.route("/about")
+def about():
+    return "عن المساق — الأسبوع 12 — Flask"
+
+
+@app.route("/contact")
+def contact():
+    return "البريد: your-email@example.com"
+
+
+@app.route("/student/&lt;int:sid&gt;")
+def student(sid):
+    return f"المعرّف: {sid}"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> التطبيق يعمل في المتصفح، كل
+                            المسارات الأربعة ترجع نصوصها الصحيحة، المسار الديناميكي يقبل
+                            الأرقام، <code>debug=True</code> يعمل، والطرفية تعرض
+                            "Running on http://127.0.0.1:5000". لا أخطاء حمراء في الطرفية.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-arrow-right-slash"></i> نسيان / في المسار</h3>
+                            <p>
+                                <code>@app.route("about")</code> خطأ. الصواب
+                                <code>@app.route("/about")</code>. المسار يجب أن يبدأ بـ<code>/</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-rotate"></i> تشغيل التطبيق من مجلد خاطئ</h3>
+                            <p>
+                                <code>flask run</code> يحتاج أن يكون في المجلد الذي فيه
+                                <code>app.py</code> (أو استخدام <code>--app</code>).
+                                إذا لم يجد الملف، يعطي <code>Could not locate an app</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-signature"></i> اسم معامل لا يطابق</h3>
+                            <p>
+                                في <code>/hello/&lt;name&gt;</code> يجب أن تكون الدالة
+                                <code>def hello(name)</code>. اختلاف الاسم يُنتج
+                                <code>TypeError</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-lock-open"></i> ترك debug=True في الإنتاج</h3>
+                            <p>
+                                يمكّن مستخدماً من رؤية شيفرتك وبياناتك. عطّله قبل النشر،
+                                واستخدم خادم إنتاج.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-folder"></i> نسيان templates/</h3>
+                            <p>
+                                <code>render_template("home.html")</code> يبحث في
+                                <code>templates/</code>. إن كان الملف في الجذر أو في مجلد
+                                آخر، ستحصل على <code>TemplateNotFound</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-circle-exclamation"></i> تشغيل أكثر من نسخة</h3>
+                            <p>
+                                إذا كان المنفذ 5000 مشغولاً، يظهر
+                                <code>Address already in use</code>. أغلق النسخة القديمة،
+                                أو شغّل على <code>app.run(port=5001)</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-plug"></i> عدم تفعيل البيئة</h3>
+                            <p>
+                                إن نسيت تفعيل <code>venv</code>، فقد يظهر "Flask غير مثبت"
+                                رغم تثبيته داخل البيئة. افتح الطرفية الجديدة دائماً وتأكد
+                                من <code>(venv)</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-globe"></i> استخدام 127.0.0.1 خارج الجهاز</h3>
+                            <p>
+                                <code>127.0.0.1</code> يعني "هذا الجهاز فقط". لتعرض التطبيق
+                                على شبكتك المحلية، <code>app.run(host="0.0.0.0")</code> —
+                                وبحذر، فهو يفتح المنفذ للشبكة.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نصائح ذهبية:</strong>
+                            <br>• اقرأ رسالة الخطأ في الطرفية أو صفحة Flask بالكامل.
+                            <br>• ابدأ بأبسط تطبيق (مسار واحد يعيد نصاً)، ثم أضف.
+                            <br>• استخدم أسماء مسارات إنجليزية قصيرة.
+                            <br>• رتّب المشروع من البداية: <code>templates/</code>، <code>static/</code>.
+                            <br>• لا تنسَ <code>requirements.txt</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>Flask إطار عمل خفيف يربط دورات Python بمسارات URL.</li>
+                        <li>البيئة الافتراضية <code>venv</code> تعزل مكتبات المشروع عن بقية النظام.</li>
+                        <li>الخطوات الثابتة: <code>python -m venv venv</code>، تفعيل،
+                            <code>pip install flask</code>.</li>
+                        <li>أول تطبيق: <code>app = Flask(__name__)</code>، ثم
+                            <code>@app.route("/")</code>، ثم <code>app.run()</code>.</li>
+                        <li>المسار يُعرَّف بـ<code>@app.route("/path")</code> ويبدأ دائماً بـ<code>/</code>.</li>
+                        <li>المعاملات الديناميكية بـ<code>&lt;name&gt;</code> و<code>&lt;int:sid&gt;</code>.</li>
+                        <li>الطرق: <code>methods=["GET", "POST"]</code>، وتُقرأ بـ<code>request.method</code>.</li>
+                        <li>الاستجابات: نص، HTML مضمّن، أو <code>render_template</code> (الأفضل).</li>
+                        <li><code>debug=True</code> للتطوير فقط، وللإنتاج عطّله.</li>
+                        <li>هيكل المشروع: <code>app.py</code> + <code>templates/</code> + <code>static/</code> + <code>requirements.txt</code>.</li>
+                        <li>الأخطاء الشائعة: نسيان <code>/</code>، تشغيل من مجلد خاطئ، ترك debug في الإنتاج.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما دور إطار العمل مثل Flask، ولماذا لا نكتب الخادم يدوياً؟</summary>
+                        <p>
+                            لأنه يوفّر استقبال الطلبات، توجيهها إلى المسار المناسب، تحليل
+                            البيانات، إعداد الاستجابة، والتعامل مع الأخطاء. كتابة ذلك يدوياً
+                            تعني إعادة نفس الكود في كل مشروع، بينما Flask يوفّره جاهزاً لتتركز
+                            على منطق تطبيقك.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) لماذا نستخدم البيئة الافتراضية قبل تثبيت Flask؟</summary>
+                        <p>
+                            لعزل مكتبات المشروع عن بقية النظام. هذا يمنع تعارض الإصدارات بين
+                            المشاريع، ويجعل إعداد أي جهاز آخر ممكناً من
+                            <code>requirements.txt</code>. كما يضمن أن تثبيت/تحديث مكتبة
+                            هنا لا يؤثر على مشروع آخر.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) ما الفرق بين <code>@app.route("/about")</code> و<code>@app.route("/hello/&lt;name&gt;")</code>؟</summary>
+                        <p>
+                            الأول مسار ثابت، يطابق فقط <code>/about</code>. الثاني مسار
+                            ديناميكي، يطابق أي اسم، ويُمرّر النص إلى دالة <code>hello(name)</code>
+                            كمعامل. النوع يمكن تقييده مثل <code>&lt;int:id&gt;</code>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) متى نستخدم GET ومتى نستخدم POST؟</summary>
+                        <p>
+                            GET لصفحات القراءة والبحث والتصفح؛ بياناته في عنوان URL. POST
+                            لإرسال بيانات (تسجيل، دخول، تحديث)؛ بياناته في جسم الطلب، ولا
+                            تظهر في العنوان. للبيانات الحساسة: POST مع HTTPS.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) لماذا لا نضع <code>debug=True</code> في الإنتاج؟</summary>
+                        <p>
+                            لأنه يعرض صفحات أخطاء تفصيلية تكشف شيفرتك ومتغيراتك ومفاتيحك،
+                            وقد تفتح Console تفاعلياً في المتصفح. هذا خطر أمني حقيقي.
+                            للإنتاج: <code>debug=False</code>، مع خادم إنتاج مثل gunicorn
+                            أو uWSGI.
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="lecture11.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> المحاضرة السابقة
+                    </a>
+                    <a href="lecture13.html">
+                        المحاضرة التالية: القوالب والنماذج في Flask <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 12 · مقدمة إلى Flask — المسارات والطلبات | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

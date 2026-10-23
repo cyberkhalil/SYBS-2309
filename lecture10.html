@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 10 | مقدمة إلى Python — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة العاشرة من مساق SYBS 2309: مقدمة إلى Python — تشغيل السكربتات من CLI وVS Code، المتغيرات وأسلوب snake_case، الأنواع المدمجة (str, int, float, bool, None)، print وinput والتحويل بين الأنواع بأمان، النصوص وf-strings، القوائم والقواميس، والتطبيق العملي: حاسبة بقشيش ومحول وحدات.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 10</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 10: مقدمة إلى Python</h1>
+            <p class="lecture-lead">
+                نغادر الآن عالم الواجهة الأمامية للانتقال إلى <strong>برمجة جهة الخادم</strong>. لغة
+                <strong>Python</strong> هي بوابتنا: لغة حديثة، سهلة القراءة، ولها حضور قوي في الأمن
+                المعلوماتي وأتمتة المهام وخدمات الويب. في هذه المحاضرة نبدأ من الصفر: نثبّت Python
+                ونعدّ VS Code، ثم نفهم الفرق بين <strong>REPL</strong> و<strong>ملفات السكربت</strong>،
+                ونكتب أول برامجنا باستخدام <strong>المتغيرات</strong> و<strong>الأنواع المدمجة</strong>
+                (<code>str</code>، <code>int</code>، <code>float</code>، <code>bool</code>،
+                <code>None</code>)، ثم ندخل إلى <strong>print</strong> و<strong>input</strong>
+                و<strong>التحويل الآمن بين الأنواع</strong>، ونتعلم <strong>f-strings</strong>
+                لننسّق المخرجات، وننتهي بـ<strong>القوائم</strong> و<strong>القواميس</strong>
+                — وهما العمود الفقري لأي بيانات لاحقاً في Flask. تطبيق المحاضرة: حاسبة بقشيش
+                ومحوّل وحدات ومنسّق بيانات.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 10</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-laptop-code"></i> مختبر معمّق</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 2 · الواجهة الخلفية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script10.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script10.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#what-is-python">ما هي Python ولماذا نتعلمها</a></li>
+                        <li><a href="#install-setup">تثبيت Python وإعداد بيئة العمل</a></li>
+                        <li><a href="#run-python">تشغيل Python: REPL مقابل السكربتات</a></li>
+                        <li><a href="#variables-types">المتغيرات والأنواع المدمجة</a></li>
+                        <li><a href="#numbers-strings">الأرقام والنصوص والتحويل بين الأنواع</a></li>
+                        <li><a href="#print-input">print و input و f-strings</a></li>
+                        <li><a href="#lists-dicts">القوائم والقواميس</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> هذه المحاضرة تفتح ملفاً جديداً تماماً بعد الامتحان النصفي.
+                    لا تقلق إن بدت Python مختلفة عن JavaScript — هي <strong>أسهل قراءةً</strong>، لكن
+                    اصطلاحاتها (snake_case، الإزاحة الإلزامية، عدم وجود أقواس معقوفة للكتل) تحتاج
+                    تعوّداً في اليوم الأول.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على تثبيت Python وتشغيلها من الطرفية ومن
+                        VS Code، وتعريف متغيرات بأسلوب <code>snake_case</code>، والتمييز بين الأنواع
+                        المدمجة الأساسية، وقراءة الإدخال وطباعة مخرجات منسّقة بـ<code>f-strings</code>،
+                        والتحويل بين الأنواع بحذر، والتعامل مع القوائم والقواميس — وهذه كلها أساس
+                        Flask لاحقاً.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>شرح الفرق بين REPL وملف السكربت</li>
+                                <li>معرفة الأنواع المدمجة في Python</li>
+                                <li>فهم أن <code>input()</code> ترجع دائماً نصاً</li>
+                                <li>التمييز بين القائمة والقواميس واستخدامهما</li>
+                                <li>إدراك أن الإزاحة (Indentation) جزء من الصياغة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>تثبيت Python والتحقق من الإصدار</li>
+                                <li>تشغيل سكربت من CLI ومن VS Code</li>
+                                <li>كتابة سكربتات تحسب وتطبع وتقرأ مدخلات</li>
+                                <li>استخدام <code>type()</code> للتحقق من النوع</li>
+                                <li>تنسيق المخرجات بـ<code>f-strings</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>الاستعداد لكتابة منطق Flask</li>
+                                <li>تجربة أتمتة مهام صغيرة بلغة Python</li>
+                                <li>قراءة أخطاء Python وفهمها</li>
+                                <li>بناء عادة كتابة كود نظيف مع تعليقات</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- What is Python -->
+                <section class="lecture-section" id="what-is-python" aria-labelledby="python-title">
+                    <h2 class="section-title" id="python-title">
+                        <i class="fa-brands fa-python"></i> ما هي Python ولماذا نتعلمها
+                    </h2>
+                    <p>
+                        <strong>Python</strong> لغة برمجة عالية المستوى، صمّمها <strong>Guido van Rossum</strong>
+                        في أوائل التسعينيات، واشتهرت بقراءتها القريبة من اللغة الطبيعية. مبدؤها أن
+                        الكود يُكتب مرة ويُقرأ عشر مرات، لذلك فضّلت الوضوح على الاختصار. اليوم لها
+                        حضور قوي في <strong>تطوير الويب</strong> (Flask, Django)، و<strong>علم
+                        البيانات</strong>، و<strong>الأمن المعلوماتي</strong>، و<strong>الأتمتة</strong>.
+                    </p>
+                    <p>
+                        لماذا نختارها لجهة الخادم في هذا المساق؟ لأنها تتيح لنا التركيز على
+                        <strong>مفاهيم الويب</strong> لا على تعقيد اللغة. Flask ذاته كلغة إطار
+                        عمل صغير وواضح، ويفتح الباب لاحقاً لفهم Django وغيره.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-language"></i> سهولة القراءة</h3>
+                            <ul>
+                                <li>صياغة قريبة من الإنجليزية الطبيعية</li>
+                                <li>أقواس معقوفة غائبة — الإزاحة تحدد الكتل</li>
+                                <li>مكتبة قياسية ضخمة مدمجة</li>
+                                <li>مناسبة للمبتدئين والمحترفين</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-globe"></i> حضور قوي في الويب</h3>
+                            <ul>
+                                <li>Flask خفيف ومناسب للتعلّم</li>
+                                <li>Django كامل وقوي للمشاريع الكبيرة</li>
+                                <li>FastAPI حديث وسريع</li>
+                                <li>مجتمع كبير وتوثيق ممتاز</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-shield-halved"></i> في أمن المعلومات</h3>
+                            <ul>
+                                <li>أتمتة اختبار الاختراق (بإذن)</li>
+                                <li>تحليل السجلات والبيانات</li>
+                                <li>كتابة أدوات فحص</li>
+                                <li>معالجة النصوص والـ JSON بسهولة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-info-circle"></i> Python 2 مقابل 3</h3>
+                            <ul>
+                                <li>Python 2 ميت دعماً</li>
+                                <li>نستخدم Python 3 حصراً</li>
+                                <li>أي درس يذكر Python 2 تجاهله</li>
+                                <li>الإصدارات الحديثة: 3.10+</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>ملاحظة للطلبة ذوي خلفية JavaScript:</strong> ستلاحظ ثلاثة فروق جوهرية
+                            منذ البداية: (1) الإزاحة ليست ذوقاً بل قاعدة إجبارية، (2) لا توجد أقواس
+                            معقوفة للكتل، (3) اصطلاح الأسماء هو <code>snake_case</code> لا
+                            <code>camelCase</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Install setup -->
+                <section class="lecture-section" id="install-setup" aria-labelledby="install-title">
+                    <h2 class="section-title" id="install-title">
+                        <i class="fas fa-download"></i> تثبيت Python وإعداد بيئة العمل
+                    </h2>
+                    <p>
+                        نزّل Python من الموقع الرسمي <code>python.org</code>، واختر الإصدار 3.10 أو
+                        أحدث. في Windows، لا تنسَ تفعيل خيار <strong>Add Python to PATH</strong> أثناء
+                        التثبيت — بدونه لن تعمل أوامر <code>python</code> و<code>pip</code> من
+                        الطرفية. في macOS وLinux غالباً Python 3 موجود مسبقاً كـ<code>python3</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-terminal"></i> التحقق من التثبيت</span>
+                            <span class="code-lang">SHELL</span>
+                        </div>
+                        <pre><code># في Windows
+python --version
+# أو
+py --version
+
+# في macOS / Linux
+python3 --version
+
+# تثبيت مكتبة خارجية (سنستخدمها لاحقاً لـ Flask)
+pip install flask
+# أو
+pip3 install flask</code></pre>
+                    </div>
+
+                    <p>
+                        بعد تثبيت Python، ثبّت إضافة <strong>Python extension</strong> في VS Code من
+                        <strong>Microsoft</strong>. هذه الإضافة تعطيك إكمالاً تلقائياً، تنسيقاً،
+                        وتصحيحاً (debugging) مدمجاً. ثم أضف إضافة <strong>Pylance</strong> لتحسين
+                        تجربة الكتابة.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-folder-tree"></i> هيكل مجلد العمل</h3>
+                            <ul>
+                                <li>مجلد <code>python-course/</code> منفصل</li>
+                                <li>ملف سكربت لكل تمرين</li>
+                                <li>ملف <code>README.md</code> للتوثيق</li>
+                                <li>مجلد <code>venv/</code> لاحقاً لمشروع Flask</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-terminal"></i> طرفية مدمجة</h3>
+                            <ul>
+                                <li>افتحها بـ<kbd>Ctrl + `</kbd></li>
+                                <li>نفس مجلد المشروع يعمل مباشرة</li>
+                                <li>أسهل من التنقل في CMD/PowerShell</li>
+                                <li>تشغيل السكربت مباشرة من الطرفية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> مشاكل شائعة</h3>
+                            <ul>
+                                <li><code>python not found</code> → لم يُضف إلى PATH</li>
+                                <li><code>py</code> تعمل و<code>python</code> لا → استخدم <code>py</code></li>
+                                <li>صلاحيات Windows → شغّل التثبيت كمسؤول</li>
+                                <li>مسارات عربية → تجنّبها في المجلد</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Run Python -->
+                <section class="lecture-section" id="run-python" aria-labelledby="run-title">
+                    <h2 class="section-title" id="run-title">
+                        <i class="fas fa-play"></i> تشغيل Python: REPL مقابل السكربتات
+                    </h2>
+                    <p>
+                        Python تعمل بطريقتين أساسيتين: <strong>REPL</strong> (وضع تفاعلي) و<strong>ملفات
+                        السكربت</strong> (ملفات <code>.py</code>). كلتاهما مفيدة، لكن لكل منهما سياقها.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>المحور</th>
+                                    <th>REPL</th>
+                                    <th>السكربت (.py)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>طريقة الدخول</td>
+                                    <td>اكتب <code>python</code> بدون اسم ملف</td>
+                                    <td>اكتب <code>python script.py</code></td>
+                                </tr>
+                                <tr>
+                                    <td>التنفيذ</td>
+                                    <td>سطر بسطر، فوري</td>
+                                    <td>الملف كاملاً</td>
+                                </tr>
+                                <tr>
+                                    <td>الاستخدام الأنسب</td>
+                                    <td>تجربة سريعة، استكشاف</td>
+                                    <td>برامج حقيقية، تسليمات</td>
+                                </tr>
+                                <tr>
+                                    <td>الحفظ</td>
+                                    <td>لا يُحفظ بعد الإغلاق</td>
+                                    <td>يُحفظ في الملف</td>
+                                </tr>
+                                <tr>
+                                    <td>الخروج</td>
+                                    <td><code>exit()</code> أو <kbd>Ctrl + D</kbd> أو <kbd>Ctrl + Z</kbd></td>
+                                    <td>ينتهي تلقائياً</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-terminal"></i> REPL — وضع تفاعلي</span>
+                            <span class="code-lang">SHELL</span>
+                        </div>
+                        <pre><code>$ python3
+Python 3.12.0 (main, Oct  2 2023)
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; 2 + 3
+5
+&gt;&gt;&gt; print("مرحباً")
+مرحباً
+&gt;&gt;&gt; name = "سارة"
+&gt;&gt;&gt; name.upper()
+'سارة'
+&gt;&gt;&gt; exit()
+$</code></pre>
+                    </div>
+
+                    <p>
+                        لاحظ العلامة <code>&gt;&gt;&gt;</code> التي تعني أنك داخل REPL. أي سطر تكتبه
+                        يُنفَّذ فوراً ويُطبع ناتجه. لا يمكن أن تكتب كتلة متعددة الأسطر بسهولة في REPL
+                        (رغم إمكانية ذلك بإدخال سطر فارغ). لهذا السكربتات هي الخيار الأصلي.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> first.py — أول سكربت</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># first.py — أول سكربت Python
+print("مرحباً بك في Python")
+
+# متغيرات بسيطة
+name = "سارة"
+age = 20
+is_student = True
+
+# طباعة باستخدام f-string
+print(f"الاسم: {name} — العمر: {age} — طالب: {is_student}")</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-terminal"></i> تشغيل السكربت</span>
+                            <span class="code-lang">SHELL</span>
+                        </div>
+                        <pre><code>$ python3 first.py
+مرحباً بك في Python
+الاسم: سارة — العمر: 20 — طالب: True</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>عادات جيدة منذ اليوم الأول:</strong> ابدأ كل سكربت بتعليق يوضح الهدف
+                            والتاريخ. ثبّت الإزاحة على <strong>4 مسافات</strong> (لا Tab). سمّ الملفات
+                            بأسماء وصفية بحروف صغيرة: <code>tip_calculator.py</code> لا
+                            <code>test1.py</code>.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>تحذير على المسارات:</strong> إذا كان مجلد مشروعك يحتوي مسافات أو
+                            حروفاً عربية، فقد تفشل بعض أوامر <code>pip</code>. استخدم مجلداً إنجليزياً
+                            قصيراً باسم <code>python-course</code>، وأنشئ السكربتات داخله.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Variables & types -->
+                <section class="lecture-section" id="variables-types" aria-labelledby="variables-title">
+                    <h2 class="section-title" id="variables-title">
+                        <i class="fas fa-box"></i> المتغيرات والأنواع المدمجة
+                    </h2>
+                    <p>
+                        المتغير في Python هو <strong>اسم مرتبط بكائن</strong>. لا تحتاج لتصريح نوعه —
+                        Python تكتشفه من القيمة تلقائياً. هذا يجعل الكود أنظف، لكنه يحتّم عليك
+                        الانتباه للنوع عند التحويل.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> variables.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># تعريف متغيرات
+name = "سارة"             # str
+age = 20                  # int
+height = 1.68             # float
+is_student = True         # bool
+nothing = None            # NoneType (قيمة فارغة متعمدة)
+
+# التحقق من النوع
+print(type(name))         # &lt;class 'str'&gt;
+print(type(age))          # &lt;class 'int'&gt;
+print(type(height))       # &lt;class 'float'&gt;
+print(type(is_student))   # &lt;class 'bool'&gt;
+print(type(nothing))      # &lt;class 'NoneType'&gt;</code></pre>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>النوع</th>
+                                    <th>أمثلة</th>
+                                    <th>ملاحظة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>str</code></td>
+                                    <td><code>"مرحباً"</code>، <code>'Hi'</code></td>
+                                    <td>مفردة أو مزدوجة، لا فرق</td>
+                                </tr>
+                                <tr>
+                                    <td><code>int</code></td>
+                                    <td><code>42</code>، <code>-7</code>، <code>0</code></td>
+                                    <td>أرقام صحيحة، لا حد عملي</td>
+                                </tr>
+                                <tr>
+                                    <td><code>float</code></td>
+                                    <td><code>3.14</code>، <code>1.0e3</code></td>
+                                    <td>كسور عشرية</td>
+                                </tr>
+                                <tr>
+                                    <td><code>bool</code></td>
+                                    <td><code>True</code>، <code>False</code></td>
+                                    <td>حرف كبير أولاً (مهم)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>None</code></td>
+                                    <td><code>None</code></td>
+                                    <td>قيمة "لا شيء" متعمدة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>list</code></td>
+                                    <td><code>[1, 2, 3]</code></td>
+                                    <td>قائمة مرتبة، قابلة للتعديل</td>
+                                </tr>
+                                <tr>
+                                    <td><code>dict</code></td>
+                                    <td><code>{"name": "سارة"}</code></td>
+                                    <td>أزواج مفتاح/قيمة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>tuple</code></td>
+                                    <td><code>(1, 2, 3)</code></td>
+                                    <td>قائمة غير قابلة للتعديل</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-pen"></i> اصطلاحات الأسماء</h3>
+                            <ul>
+                                <li><code>snake_case</code>: <code>user_name</code></li>
+                                <li>حروف صغيرة فقط</li>
+                                <li>أسماء وصفية لا مختصرة</li>
+                                <li>لا كلمات محجوزة (<code>if</code>، <code>for</code>)</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-shield-halved"></i> الثوابت</h3>
+                            <ul>
+                                <li>Python لا تفرض الثوابت</li>
+                                <li>اصطلاح: <code>UPPER_CASE</code></li>
+                                <li>مثال: <code>TAX_RATE = 0.05</code></li>
+                                <li>المبرمج يحترم الاصطلاح</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-retweet"></i> إعادة التعيين</h3>
+                            <ul>
+                                <li>المتغير يمكن أن يغيّر نوعه</li>
+                                <li><code>x = 5</code> ثم <code>x = "نص"</code> مسموح</li>
+                                <li>لكن قد يكون مربكاً — تجنّبه</li>
+                                <li>يفضَّل احترام النوع طوال السكربت</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-tag"></i> bool</h3>
+                            <ul>
+                                <li><code>True</code> و<code>False</code> بحرف كبير</li>
+                                <li><code>true</code> صغيرة خطأ</li>
+                                <li>ليست نصاً بل نوع مستقل</li>
+                                <li>تُستخدم في الشروط لاحقاً</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>خطأ شائع في اليوم الأول:</strong> كتابة <code>true</code> أو
+                            <code>false</code> بحروف صغيرة — هذه <code>NameError</code> في Python.
+                            الصواب <code>True</code> و<code>False</code> بحرف كبير.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Numbers & Strings -->
+                <section class="lecture-section" id="numbers-strings" aria-labelledby="numbers-title">
+                    <h2 class="section-title" id="numbers-title">
+                        <i class="fas fa-calculator"></i> الأرقام والنصوص والتحويل بين الأنواع
+                    </h2>
+                    <p>
+                        الأرقام في Python نوعان أساسيان: <code>int</code> للصحيح، <code>float</code>
+                        للكسور. العمليات الحسابية المعتادة تعمل مباشرة، مع إضافات لطيفة: القسمة الصحيحة
+                        <code>//</code>، الأس <code>**</code>، وباقي القسمة <code>%</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> numbers.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>a = 10
+b = 3
+
+print(a + b)         # 13 (جمع)
+print(a - b)         # 7 (طرح)
+print(a * b)         # 30 (ضرب)
+print(a / b)         # 3.3333… (قسمة عادية → float دائماً)
+print(a // b)        # 3 (قسمة صحيحة)
+print(a % b)         # 1 (باقي القسمة)
+print(a ** b)        # 1000 (الأس)
+
+# دالة round للتقرير
+print(round(3.14159, 2))   # 3.14
+# دالة abs للقيمة المطلقة
+print(abs(-7))             # 7</code></pre>
+                    </div>
+
+                    <p>
+                        النصوص في Python لها واجهة غنية جداً: دمج، تحويل حالة، تقطيع، بحث.
+                        أهمها ما ستحتاجه في كل سكربت تقريباً:
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> strings.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>text = "  مرحباً بالعالم  "
+
+# إزالة الفراغات من الطرفين
+print(text.strip())              # "مرحباً بالعالم"
+
+# تحويل الحالة
+print(text.upper())              # "  مرحباً بالعالم  " (لا يؤثر على العربية)
+print("Python".lower())           # "python"
+print("python".capitalize())      # "Python"
+
+# الاستبدال
+print("hello world".replace("world", "Python"))
+
+# التقسيم
+words = "a, b, c".split(", ")
+print(words)                      # ['a', 'b', 'c']
+
+# الدمج
+joined = "-".join(words)
+print(joined)                     # "a-b-c"
+
+# القياس
+print(len("مرحباً"))              # 6
+
+# الفهرسة والتقطيع
+s = "Python"
+print(s[0])                       # P
+print(s[-1])                      # n
+print(s[0:3])                     # Pyt
+print(s[:3])                      # Pyt
+print(s[3:])                      # hon</code></pre>
+                    </div>
+
+                    <p>
+                        أما <strong>التحويل بين الأنواع</strong> فهو من أهم المهارات لأن مدخلات
+                        المستخدم تأتي دائماً نصوصاً، لكنك تحتاجها أرقاماً في الحساب:
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> conversions.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># نص → رقم
+n1 = int("42")           # 42
+n2 = float("3.14")       # 3.14
+
+# رقم → نص
+s1 = str(42)             # "42"
+
+# تحقق من النجاح
+print(type(n1))          # &lt;class 'int'&gt;
+
+# خطر: تحويل غير صالح
+try:
+    int("abc")           # ValueError
+except ValueError:
+    print("قيمة غير صالحة")
+
+# تحويل بين int و float
+print(int(3.99))         # 3 (يقتطع)
+print(float(7))          # 7.0
+
+# bool من قيمة أخرى
+print(bool(0))           # False
+print(bool(""))          # False
+print(bool(None))        # False
+print(bool(42))          # True
+print(bool("0"))         # True (النص غير فارغ!)</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>قاعدة ذهبية:</strong> قبل أي عملية حسابية على مدخل مستخدم، حوّله
+                            إلى رقم مع تحقق. استخدم <code>try/except ValueError</code> بدل الثقة
+                            العمياء. التحويل بدون تحقق هو أحد أشهر أسباب تعطّل التطبيقات لاحقاً.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Print, Input, f-strings -->
+                <section class="lecture-section" id="print-input" aria-labelledby="print-title">
+                    <h2 class="section-title" id="print-title">
+                        <i class="fas fa-terminal"></i> print و input و f-strings
+                    </h2>
+                    <p>
+                        <code>print()</code> تطبع 값을 على الطرفية، و<code>input()</code> تقرأ سطراً
+                        من المستخدم. هما نافذة التواصل الأساسية في سكربتات اليوم. معاً، وبمساعدة
+                        <code>f-strings</code>، تصنع سكربتات محادثة تفاعلية.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> io-basics.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># print بسيطة
+print("مرحباً")
+
+# print بعدة قيم — تفصل بينها مسافة تلقائياً
+print("الاسم:", "سارة", "— العمر:", 20)
+
+# طباعة بدون سطر جديد في النهاية
+print("بدون", end="")
+print(" فصل")
+
+# الطباعة بقيم مفصولة بفاصل مخصص
+print("a", "b", "c", sep="-")       # a-b-c
+
+# input ترجع دائماً نصاً
+name = input("ما اسمك؟ ")
+age_str = input("كم عمرك؟ ")
+age = int(age_str)                   # تحويل إلى رقم
+
+print(f"مرحباً {name}، عمرك {age} سنة")</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>نقطة حرجة:</strong> <code>input()</code> <strong>ترجع دائماً str</strong>.
+                            حتى لو كتب المستخدم <code>42</code>، فالقيمة هي النص <code>"42"</code>.
+                            إذا نسيت التحويل إلى <code>int</code> ثم حاولت إضافة رقم إليها، ستحصل
+                            على <code>TypeError</code>. حوّل دائماً قبل الحسابات.
+                        </div>
+                    </div>
+
+                    <h3 class="section-title" style="font-size:1.1rem;margin-top:1.6rem;">
+                        <i class="fas fa-quote-right"></i> f-strings لأنظف مخرجات
+                    </h3>
+                    <p>
+                        <strong>f-strings</strong> (formatted string literals) هي أوضح طريقة لتنسيق النصوص:
+                        ضع <code>f</code> قبل علامة الاقتباس، وأدخل قيم داخل <code>{}</code>.
+                        داخل الأقواس لا تضع متغيراً فقط، بل يمكنك وضع تعبير كامل.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> fstrings.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>name = "سارة"
+age = 20
+price = 49.5
+
+# دمج بسيط
+print(f"مرحباً {name}، عمرك {age} سنة")
+
+# تعبير حسابي داخل الأقواس
+print(f"المجموع: {price * 2}")
+
+# تنسيق الأرقام (2 خانة عشرية)
+print(f"السعر: {price:.2f}")         # السعر: 49.50
+
+# تنسيق الأرقام الكبيرة بفواصل
+big = 1234567
+print(f"{big:,}")                     # 1,234,567
+
+# محاذاة النصوص
+print(f"{'سارة':&gt;10}")               # "     سارة"
+print(f"{'سارة':&lt;10}")               # "سارة     "</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>لماذا f-strings؟</strong> لأن بدائلها القديمة
+                            (<code>%</code> و<code>.format()</code>) أثقل وأصعب قراءة. في Python 3.6+
+                            صارت f-strings هي الأسلوب المفضّل، وفي المساق سنستخدمها دائماً.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lists & Dicts -->
+                <section class="lecture-section" id="lists-dicts" aria-labelledby="lists-title">
+                    <h2 class="section-title" id="lists-title">
+                        <i class="fas fa-list"></i> القوائم والقواميس
+                    </h2>
+                    <p>
+                        القوائم والقواميس هما العمود الفقري لأي بيانات في Python. تقريباً كل شيء في
+                        Flask لاحقاً سيمر عبر قائمة أو قاموس: قائمة مستخدمين، قاموس إعدادات، قاموس
+                        طلب JSON.
+                    </p>
+
+                    <h3 class="section-title" style="font-size:1.1rem;margin-top:1.4rem;">
+                        <i class="fas fa-bars-staggered"></i> القوائم (list)
+                    </h3>
+                    <p>
+                        قائمة مرتبة قابلة للتعديل، تُكتب بين <code>[ ]</code>، وتُفهرس من 0. تدعم
+                        التكرار والتقطيع وإضافة/حذف العناصر.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> lists.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>skills = ["HTML", "CSS", "JavaScript", "Python"]
+
+# الوصول بالفهرس
+print(skills[0])              # HTML
+print(skills[-1])             # Python
+
+# الطول
+print(len(skills))            # 4
+
+# التقطيع
+print(skills[1:3])            # ['CSS', 'JavaScript']
+
+# إضافة
+skills.append("Flask")        # في الأخير
+skills.insert(0, "Git")       # في الأول
+
+# حذف
+skills.remove("CSS")          # بحسب القيمة
+last = skills.pop()           # من الأخير
+
+# البحث
+print("Python" in skills)     # True
+print(skills.index("Python")) # فهرس أول ظهور
+
+# الفرز
+numbers = [3, 1, 4, 1, 5, 9, 2]
+numbers.sort()                # تصاعدي
+numbers.sort(reverse=True)    # تنازلي
+print(sorted(numbers))        # نسخة مفروزة دون تعديل الأصلية
+
+# التكرار
+for skill in skills:
+    print("-", skill)</code></pre>
+                    </div>
+
+                    <h3 class="section-title" style="font-size:1.1rem;margin-top:1.4rem;">
+                        <i class="fas fa-key"></i> القواميس (dict)
+                    </h3>
+                    <p>
+                        القاموس <strong>سجل أزواج مفتاح/قيمة</strong>، يُكتب بين <code>{ }</code>،
+                        ويُستخدم عندما تريد الوصول للقيمة عبر اسم لا عبر موقع. هو الوسيط القياسي
+                        للبيانات القادمة من/إلى JSON في Flask.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> dicts.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>student = {
+    "name": "سارة",
+    "age": 20,
+    "skills": ["HTML", "CSS", "Python"],
+    "active": True
+}
+
+# الوصول
+print(student["name"])             # سارة
+print(student.get("age"))          # 20
+print(student.get("missing"))      # None
+print(student.get("missing", 0))   # 0 (قيمة افتراضية)
+
+# الإضافة والتعديل
+student["city"] = "غزة"
+student["age"] = 21
+
+# الحذف
+del student["active"]
+
+# المفاتيح والقيم
+print(student.keys())     # dict_keys(['name', 'age', 'skills', 'city'])
+print(student.values())   # dict_values([...])
+print(student.items())    # dict_items([...])
+
+# التكرار
+for key, value in student.items():
+    print(f"{key}: {value}")
+
+print(len(student))       # عدد الأزواج</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-key-fill"></i> list vs dict</h3>
+                            <ul>
+                                <li>list: وصول بالفهرس (0,1,2…)</li>
+                                <li>dict: وصول بالمفتاح ("name")</li>
+                                <li>list: مرتبة دائماً</li>
+                                <li>dict: غير مضمون الترتيب قبل Python 3.7</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-circle-check"></i> متى نستخدم كل واحدة</h3>
+                            <ul>
+                                <li>قائمة أسماء → <code>list</code></li>
+                                <li>سجل طالب واحد → <code>dict</code></li>
+                                <li>قائمة سجلات → <code>list of dict</code></li>
+                                <li>إعدادات التطبيق → <code>dict</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> نقاط انتباه</h3>
+                            <ul>
+                                <li>فهرس قائمة غير موجود → <code>IndexError</code></li>
+                                <li>مفتاح قاموس غير موجود → <code>KeyError</code></li>
+                                <li>استخدم <code>.get()</code> للوصول الآمن</li>
+                                <li>لا تعدّل قائمة أثناء المرور عليها</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        المطلوب ثلاثة سكربتات منفصلة، كل واحد يعالج موضوعاً. اكتبها بنفسك (لا
+                        تنسخ)، وشغّلها من الطرفية ومن VS Code، وراقب المخرجات.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 10</h3>
+                        <ol>
+                            <li>أنشئ مجلد <code>python-course/</code> وافتحه في VS Code.</li>
+                            <li><strong>السكربت الأول — حاسبة بقشيش:</strong> <code>tip_calculator.py</code>
+                                <ul>
+                                    <li>اقرأ <code>bill</code> و<code>tip_percent</code> من <code>input()</code>.</li>
+                                    <li>تحقق من صلاحية الأرقام بـ<code>try/except</code>.</li>
+                                    <li>احسب <code>tip</code> و<code>total</code>.</li>
+                                    <li>اطبع النتيجة بـ<code>f-string</code> بخانتين عشريتين.</li>
+                                </ul>
+                            </li>
+                            <li><strong>السكربت الثاني — محوّل وحدات:</strong> <code>unit_converter.py</code>
+                                <ul>
+                                    <li>اسأل المستخدم: قيمة، ونوع التحويل (C→F أو F→C).</li>
+                                    <li>ابدأ بقائمة <code>list</code> للخيارات المتاحة.</li>
+                                    <li>استخدم <code>if/elif/else</code> للتحويل.</li>
+                                    <li>اطبع النتيجة بخطأ واضح عند مدخل خاطئ.</li>
+                                </ul>
+                            </li>
+                            <li><strong>السكربت الثالث — منسّق بيانات:</strong> <code>profile_formatter.py</code>
+                                <ul>
+                                    <li>أنشئ قاموس <code>dict</code> فيه: name، age، city.</li>
+                                    <li>اطلب من المستخدم إدخال ثلاث قيم.</li>
+                                    <li>حدّث القاموس ثم اطبعه بـ<code>f-strings</code> منسقاً.</li>
+                                    <li>أضف قائمة <code>list</code> للمهارات واطبعها كقائمة نقطية.</li>
+                                </ul>
+                            </li>
+                            <li>شغّل كل سكربت من CLI: <code>python filename.py</code>.</li>
+                            <li>شغّل مرة أخرى من VS Code (زر Run أو <kbd>F5</kbd>).</li>
+                            <li>جرّب مدخلات خاطئة (نص حيث يُتوقع رقم)، ولاحظ كيف يلتقطها
+                                <code>try/except</code> دون انهيار.</li>
+                            <li>أرفق الملفات الثلاثة، وصورة من مخرجات الطرفية لكل سكربت.</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> tip_calculator.py — نموذج البداية</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># tip_calculator.py
+print("=== حاسبة البقشيش ===")
+
+try:
+    bill = float(input("قيمة الفاتورة: "))
+    tip_percent = float(input("نسبة البقشيش (%): "))
+except ValueError:
+    print("خطأ: يُرجى إدخال أرقام صحيحة.")
+    exit(1)
+
+if bill &lt;= 0 or tip_percent &lt; 0:
+    print("خطأ: القيم يجب أن تكون موجبة.")
+    exit(1)
+
+tip = bill * tip_percent / 100
+total = bill + tip
+
+print(f"الفاتورة:   {bill:.2f}")
+print(f"البقشيش:    {tip:.2f}")
+print(f"المجموع:    {total:.2f}")</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> السكربتات الثلاثة تعمل بلا توقف عند
+                            مدخلات صحيحة، وتتعامل مع المدخلات الخاطئة بلا انهيار، والمخرجات بالعربية
+                            منسقة، والتحويلات معقولة. لا تحذيرات أو أخطاء عند التشغيل العادي.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-indent"></i> الإزاحة الخاطئة</h3>
+                            <p>
+                                Python تعتمد الإزاحة لتحديد الكتل. اختلاط Tab ومسافات، أو إزاحة سطر
+                                بسطر غير مناسب، يُنتج <code>IndentationError</code>. اضبط VS Code
+                                على 4 مسافات دائماً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-font"></i> True/False صغيرة</h3>
+                            <p>
+                                <code>true</code> و<code>false</code> بحروف صغيرة خطأ. اكتب
+                                <code>True</code> و<code>False</code> بحرف كبير أولاً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-keyboard"></i> نسيان تحويل input</h3>
+                            <p>
+                                <code>input()</code> ترجع نصاً. كل عملية حسابية تحتاج
+                                <code>int()</code> أو <code>float()</code>. هذا أشهر سبب
+                                لـ<code>TypeError</code> عند المبتدئين.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-equals"></i> استخدام = بدل ==</h3>
+                            <p>
+                                <code>if x = 5:</code> خطأ نحوي. المُقارنة بـ<code>==</code>.
+                                هذا يتضح بسرعة من رسالة الخطأ.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-xmark"></i> تحويل بدون try/except</h3>
+                            <p>
+                                <code>int("abc")</code> يرفع <code>ValueError</code> ويوقف البرنامج.
+                                لفّ التحويلات في <code>try/except</code> عند التعامل مع مدخلات
+                                المستخدم.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-key"></i> مفتاح قاموس مفقود</h3>
+                            <p>
+                                <code>d["missing"]</code> يرفع <code>KeyError</code>. استخدم
+                                <code>d.get("missing")</code> عندما لا تتأكد من وجود المفتاح.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-list"></i> فهرس قائمة خارج النطاق</h3>
+                            <p>
+                                <code>skills[10]</code> في قائمة من 3 عناصر يرفع
+                                <code>IndexError</code>. تحقق من <code>len()</code> قبل الوصول
+                                بفهرس متغير.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-file"></i> تسمية ملف باسم مكتبة</h3>
+                            <p>
+                                إذا سمّيت ملفك <code>random.py</code> أو <code>json.py</code>،
+                                فسيحل محل المكتبة القياسية نفسها، وتحدث أخطاء غامضة. تجنّب ذلك.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نصائح ذهبية:</strong>
+                            <br>• اقرأ رسالة الخطأ كاملة — Python تشرح مكان الخطأ ونوعه.
+                            <br>• اطبع القيم قبل السطر الذي يفشل: <code>print(type(x), x)</code>.
+                            <br>• ابدأ بالحالة البسيطة، ثم أضف التعقيد.
+                            <br>• شغّل السكربت من الطرفية، لا من داخل VS Code فقط.
+                            <br>• درّب نفسك على كتابة الكود بلا نسخ — أهم عادة في المساق.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>Python لغة برمجة تُستخدم في الويب والأمن وتحليل البيانات والأتمتة.</li>
+                        <li>نستخدم Python 3.x حصراً، ونغلّف سكربتاتنا بحرفية وإزاحة صحيحة.</li>
+                        <li>REPL للتجربة السريعة، وملفات <code>.py</code> للبرامج الحقيقية.</li>
+                        <li>المتغيرات بلا تصريح نوع، بأسماء <code>snake_case</code> وصفية.</li>
+                        <li>الأنواع المدمجة: <code>str</code>، <code>int</code>، <code>float</code>،
+                            <code>bool</code>، <code>None</code>، <code>list</code>، <code>dict</code>.</li>
+                        <li><code>True</code> و<code>False</code> بحرف كبير — لا صغيرة.</li>
+                        <li><code>input()</code> ترجع دائماً نصاً، وحوّلها إلى رقم قبل الحساب.</li>
+                        <li>التحويل الآمن عبر <code>try/except ValueError</code>.</li>
+                        <li><code>f-strings</code> أفضل طريقة لتنسيق المخرجات: <code>f"... {expr} ..."</code>.</li>
+                        <li>القوائم لقوائم الأسماء والبيانات المتساوية، والقواميس للسجلات المفتاحية.</li>
+                        <li>الوصول الآمن: <code>d.get()</code> للقاموس، وتحقّق من <code>len()</code> للقوائم.</li>
+                        <li>كل قاعدة أمان في الواجهة يُعاد التحقق منها في الخادم — وهو دور Python لاحقاً.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما الفرق بين REPL وملف السكربت؟</summary>
+                        <p>
+                            REPL وضع تفاعلي للتنفيذ الفوري سطر بسطر (لا يُحفظ)، ممتاز للتجربة.
+                            السكربت ملف <code>.py</code> يُحفظ ويُشغَّل كاملاً عبر
+                            <code>python script.py</code>، مناسب للبرامج الحقيقية والتسليمات.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) ماذا ترجع <code>input()</code> وما نتيجتها على الحسابات؟</summary>
+                        <p>
+                            <code>input()</code> ترجع <strong>دائماً من نوع <code>str</code></strong>،
+                            حتى لو كتب المستخدم رقماً. لذلك قبل أي عملية حسابية يجب تحويل النص:
+                            <code>int()</code> أو <code>float()</code>، مع لفّها في
+                            <code>try/except ValueError</code>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) ما الفرق بين القائمة والقاموس؟</summary>
+                        <p>
+                            القائمة <code>list</code> مرتبة وتُفهرس بأرقام (<code>[0]</code>،
+                            <code>[1]</code>)، والقاموس <code>dict</code> سجل أزواج مفتاح/قيمة
+                            يُفهرس بالمفتاح (<code>["name"]</code>). القائمة للعناصر المتساوية،
+                            والقاموس للسجلات ذات السمات.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) كيف نتعامل مع مدخل غير صالح عند التحويل إلى رقم؟</summary>
+                        <p>
+                            عبر <code>try/except ValueError</code>. نحاول التحويل داخل
+                            <code>try</code>، وفي <code>except</code> نطبع رسالة واضحة ونوقف
+                            التنفيذ برفق (أو نكرر الطلب). هذه أفضل من انهيار السكربت.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) لماذا نستخدم <code>f-strings</code>؟</summary>
+                        <p>
+                            لأنها الأوضح والأقصر لتنسيق المخرجات. تسمح بإدراج متغيرات وتعابير
+                            داخل النص مباشرة: <code>f"المجموع: {total:.2f}"</code>. بدائلها القديمة
+                            (<code>%</code> و<code>.format()</code>) أثقل قراءة.
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="index.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> العودة إلى الصفحة الرئيسية
+                    </a>
+                    <a href="lecture11.html">
+                        المحاضرة التالية: أساسيات Python البرمجية <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 10 · مقدمة إلى Python | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

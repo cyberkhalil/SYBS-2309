@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المشروع النهائي: بناء تطبيق ويب متكامل | SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description" content="المشروع النهائي لمساق تصميم وبرمجة الويب SYBS 2309 — بناء تطبيق ويب متكامل باستخدام HTML وCSS وJavaScript وPython Flask، مع توثيق وتحميل PDF.">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ============================================================
+           SYBS 2309 — Final Project Page
+           Standalone CSS — لا يعتمد على style.css أو lecture.css
+           ============================================================ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0b1120;
+            --bg-card: rgba(18, 25, 45, 0.96);
+            --bg-inner: rgba(0, 0, 0, 0.30);
+            --border-light: #334366;
+            --border-soft: #223354;
+            --text-main: #eef4fb;
+            --text-muted: #a8b5c8;
+            --text-dim: #7c8aa0;
+            --accent: #7dd3fc;
+            --accent-light: #c7edff;
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --success: #10b981;
+            --success-dark: #059669;
+            --warn: #f59e0b;
+            --violet: #8b5cf6;
+            --danger: #ef4444;
+        }
+
+        html {
+            font-size: 18px;
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Segoe UI', system-ui, sans-serif;
+            direction: rtl;
+            text-align: right;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.8;
+            padding-bottom: 2rem;
+            min-height: 100vh;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.12), transparent 45%),
+                radial-gradient(circle at 85% 5%, rgba(139, 92, 246, 0.10), transparent 45%),
+                radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.07), transparent 55%),
+                linear-gradient(rgba(30, 50, 80, 0.13) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 50, 80, 0.13) 1px, transparent 1px);
+            background-size: auto, auto, auto, 60px 60px, 60px 60px;
+            pointer-events: none;
+        }
+
+        /* ================= HEADER ================= */
+        .project-header {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #2563eb 0%, #6d28d9 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .course-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 999px;
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 0.9rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            text-wrap: balance;
+        }
+
+        .header-content p {
+            color: #e0e7ff;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* ================= LAYOUT ================= */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .main-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 1rem 1.4rem;
+        }
+
+        .card-header.green {
+            background: linear-gradient(90deg, #059669 0%, #047857 100%);
+        }
+
+        .card-header.violet {
+            background: linear-gradient(90deg, #7c3aed 0%, #6d28d9 100%);
+        }
+
+        .card-header.amber {
+            background: linear-gradient(90deg, #d97706 0%, #b45309 100%);
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            line-height: 1.5;
+            font-weight: 800;
+        }
+
+        .card-body {
+            padding: 1.4rem 1.5rem;
+        }
+
+        .card-body > p,
+        .card-body > ul,
+        .card-body > ol {
+            color: var(--text-muted);
+            line-height: 1.9;
+            margin-bottom: 0.9rem;
+        }
+
+        .card-body strong {
+            color: var(--accent-light);
+        }
+
+        .card-body ul,
+        .card-body ol {
+            padding-right: 1.4rem;
+        }
+
+        .card-body li {
+            margin-bottom: 0.35rem;
+        }
+
+        .question {
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid var(--border-soft);
+            border-right: 4px solid var(--success);
+            padding: 1rem 1.1rem;
+            margin: 1.2rem 0;
+            border-radius: 10px;
+        }
+
+        .question p {
+            color: #e3ecf7;
+            line-height: 1.85;
+            margin-bottom: 0.7rem;
+        }
+
+        .question p:last-child {
+            margin-bottom: 0;
+        }
+
+        .command-box {
+            background: #080d18;
+            color: #f8f8f2;
+            padding: 0.9rem 1rem;
+            border-radius: 8px;
+            direction: ltr;
+            text-align: left;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.86rem;
+            line-height: 1.7;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-soft);
+        }
+
+        .answer-textarea {
+            width: 100%;
+            padding: 0.75rem 0.85rem;
+            border: 1px solid #3b4a6b;
+            border-radius: 8px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            min-height: 120px;
+            resize: vertical;
+            background: #0f172a;
+            color: #eef4fb;
+            outline: none;
+        }
+
+        .answer-textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.18);
+        }
+
+        .answer-textarea::placeholder {
+            color: #64748b;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            margin: 0.6rem 0;
+            color: #d5deea;
+            line-height: 1.7;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+            accent-color: var(--success);
+        }
+
+        .checkbox-item code {
+            background: rgba(0, 0, 0, 0.4);
+            color: #fbbf24;
+            padding: 0.12rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.88em;
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+
+        /* ================= STUDENT INFO ================= */
+        .student-info-card {
+            background: rgba(18, 25, 45, 0.96);
+            border: 2px solid var(--primary);
+            border-radius: 14px;
+            padding: 1.4rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.28);
+        }
+
+        .info-item {
+            flex: 1;
+            min-width: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .info-item label {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .info-item input {
+            padding: 0.6rem 0.7rem;
+            border: 1px solid #3b4a6b;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #0f172a;
+            color: #eef4fb;
+            outline: none;
+        }
+
+        .info-item input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.18);
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, var(--success), var(--success-dark));
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 999px;
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s ease;
+            min-height: 46px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .start-btn:hover {
+            background: linear-gradient(135deg, #0f9f6e, #047857);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(16, 185, 129, 0.28);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ================= IMAGE UPLOAD ================= */
+        .image-upload-area {
+            border: 2px dashed #4b5c7c;
+            background: rgba(0, 0, 0, 0.22);
+            padding: 1rem;
+            text-align: center;
+            margin: 1rem 0;
+            border-radius: 10px;
+            transition: border-color 0.25s ease, background 0.25s ease;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .image-upload-area.dragover {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.12);
+        }
+
+        .image-upload-area img {
+            max-width: 100%;
+            max-height: 240px;
+            margin-top: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-soft);
+        }
+
+        .placeholder-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 0.35rem;
+        }
+
+        .placeholder-text {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .remove-btn {
+            margin-top: 0.55rem;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.3rem 0.65rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+
+        /* ================= LOCK ================= */
+        .lock-message {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: #fde68a;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 700;
+            line-height: 1.8;
+        }
+
+        /* ================= BUTTONS ================= */
+        .print-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .print-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            color: var(--text-dim);
+            border-top: 1px solid var(--border-soft);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        footer strong {
+            color: var(--text-muted);
+        }
+
+        /* ================= PRINT VALUES ================= */
+        .print-value {
+            display: none;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 680px) {
+            html {
+                font-size: 17px;
+            }
+
+            .container {
+                padding: 0 0.75rem;
+            }
+
+            .card-body {
+                padding: 1.1rem 1rem;
+            }
+
+            .student-info-card {
+                padding: 1.1rem;
+                gap: 1rem;
+            }
+
+            .info-item {
+                min-width: 100%;
+            }
+
+            .start-btn {
+                width: 100%;
+            }
+
+            .print-btn {
+                left: 12px;
+                bottom: 12px;
+                padding: 0.7rem 1.1rem;
+                font-size: 0.92rem;
+            }
+        }
+
+        /* ================= PRINT ================= */
+        @media print {
+            html {
+                font-size: 12pt;
+            }
+
+            body {
+                background: #fff !important;
+                color: #0b1120 !important;
+            }
+
+            .bg-grid { display: none !important; }
+
+            .print-btn,
+            .student-info-card input,
+            .start-btn,
+            .lock-message,
+            .remove-btn,
+            .placeholder-icon,
+            .placeholder-text,
+            input[type="file"] {
+                display: none !important;
+            }
+
+            .image-upload-area {
+                border: 1px solid #ccc !important;
+                background: #fff !important;
+            }
+
+            .answer-textarea {
+                display: none !important;
+            }
+
+            .print-value {
+                display: block !important;
+                background: #f8f9fa;
+                padding: 0.5rem;
+                border: 1px solid #ddd;
+                margin-top: 0.5rem;
+                white-space: pre-wrap;
+                color: #111;
+                border-radius: 6px;
+                line-height: 1.8;
+            }
+
+            .student-info-card .print-value {
+                display: inline-block !important;
+            }
+
+            .main-card {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                page-break-inside: avoid;
+            }
+
+            .card-header {
+                background: #e5e7eb !important;
+                color: #111 !important;
+            }
+
+            .card-body,
+            .question {
+                background: #fff !important;
+                color: #111 !important;
+            }
+
+            .question {
+                border-right-color: #059669 !important;
+            }
+
+            .question p,
+            .card-body p,
+            .card-body li,
+            .checkbox-item {
+                color: #111 !important;
+            }
+
+            .command-box {
+                background: #f1f5f9 !important;
+                color: #111 !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+
+            footer {
+                color: #334155 !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <button class="print-btn" type="button" onclick="window.print()">
+        <i class="fas fa-print"></i> تحميل الصفحة كـ PDF
+    </button>
+
+    <header class="project-header">
+        <div class="header-content">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المشروع النهائي: بناء تطبيق ويب متكامل</h1>
+            <p>تصميم وبرمجة الويب — HTML · CSS · JavaScript · Python Flask</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- ================= تعليمات المشروع ================= -->
+        <div class="main-card">
+            <div class="card-header violet">
+                <h2>تعليمات المشروع</h2>
+            </div>
+            <div class="card-body">
+                <p>
+                    <i class="fas fa-info-circle"></i>
+                    هذا المشروع النهائي يهدف إلى بناء <strong>تطبيق ويب متكامل</strong> يجمع بين
+                    الواجهة الأمامية التي تعلّمتها في المرحلة الأولى (HTML · CSS · JavaScript)
+                    والواجهة الخلفية باستخدام <strong>Python وFlask</strong>.
+                    يجب تنفيذ التطبيق، توثيقه، واختباره، ثم تعبئة هذه الصفحة وتحميلها كملف PDF وتقديمها.
+                </p>
+                <ul>
+                    <li><strong>الدرجة:</strong> 30% من التقييم النهائي.</li>
+                    <li><strong>العمل:</strong> فردي (أو حسب تعليمات المحاضر).</li>
+                    <li><strong>المتطلبات:</strong> Python 3، Flask، VS Code، متصفح حديث.</li>
+                    <li><strong>هام:</strong> أدخل الاسم والرقم الجامعي ثم اضغط «بدء المشروع» لتمكين الإجابة.</li>
+                    <li><strong>التسليم:</strong> ملف PDF + ملفات المشروع (بدون مجلد <code>venv</code>).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= معلومات الطالب ================= -->
+        <div class="student-info-card" id="studentInfoCard">
+            <div class="info-item">
+                <label for="studentName">الاسم الكامل:</label>
+                <input type="text" id="studentName" placeholder="أدخل اسمك الرباعي">
+                <span class="print-value" id="print_studentName"></span>
+            </div>
+            <div class="info-item">
+                <label for="studentId">الرقم الجامعي:</label>
+                <input type="text" id="studentId" inputmode="numeric" placeholder="أدخل رقمك الجامعي">
+                <span class="print-value" id="print_studentId"></span>
+            </div>
+            <div class="info-item">
+                <button id="startProjectBtn" class="start-btn" type="button">
+                    <i class="fas fa-play"></i> بدء المشروع
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= محتوى المشروع ================= -->
+        <div id="projectContent" style="opacity: 0.6; pointer-events: none;">
+            <div class="lock-message" id="lockMsg">
+                <i class="fas fa-lock"></i>
+                المشروع مقفل. أدخل الاسم والرقم الجامعي ثم اضغط «بدء المشروع».
+            </div>
+
+            <!-- ================= المهمة 1 ================= -->
+            <div class="main-card">
+                <div class="card-header">
+                    <h2>المهمة 1: فكرة المشروع والتخطيط</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        اختر فكرة تطبيق ويب بسيطة لكن متكاملة: ملاحظات، مهام، مخزون، جهات اتصال،
+                        حجز مواعيد، أو أي فكرة مناسبة. يجب أن تحتوي على عمليات إضافة وعرض وتعديل وحذف
+                        (CRUD) أو ما يعادلها.
+                    </p>
+
+                    <div class="question">
+                        <p><strong>سؤال 1:</strong> صف فكرة تطبيقك في 3–5 أسطر: ما المشكلة التي يحلها؟ من الجمهور المستهدف؟</p>
+                        <textarea id="q1" data-save class="answer-textarea" placeholder="اكتب وصف فكرة التطبيق هنا..."></textarea>
+                        <div class="print-value" id="print_q1"></div>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>سؤال 2:</strong> اذكر 4 ميزات أساسية و2 ميزات إضافية في التطبيق.</p>
+                        <textarea id="q2" data-save class="answer-textarea" placeholder="الميزات الأساسية: ... &#10;الميزات الإضافية: ..."></textarea>
+                        <div class="print-value" id="print_q2"></div>
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task1">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة مخطط الصفحات أو هيكل ملفات المشروع<br>اسحب وأفلت الصورة هنا أو انقر للاختيار</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= المهمة 2 ================= -->
+            <div class="main-card">
+                <div class="card-header">
+                    <h2>المهمة 2: الواجهة الأمامية — HTML الدلالي والوصولية</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        يجب أن تحتوي صفحاتك على بنية HTML دلالية: <code>header</code>، <code>nav</code>،
+                        <code>main</code>، <code>section</code>، <code>footer</code>،
+                        مع تسميات <code>label</code> للنماذج، ونص <code>alt</code> للصور.
+                    </p>
+
+                    <div class="question">
+                        <p><strong>سؤال 3:</strong> اشرح كيف حققت الدلالة والوصولية في صفحتين على الأقل من مشروعك (اذكر عناصر محددة).</p>
+                        <textarea id="q3" data-save class="answer-textarea" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <div class="print-value" id="print_q3"></div>
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task2">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة لصفحة HTML أو لتبويب Elements يوضح البنية الدلالية</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= المهمة 3 ================= -->
+            <div class="main-card">
+                <div class="card-header green">
+                    <h2>المهمة 3: CSS المتجاوب والتخطيط</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        استخدم <strong>Flexbox</strong> و/أو <strong>Grid</strong>، ووحدات مناسبة
+                        (<code>rem</code>، <code>%</code>، <code>fr</code>)، و<strong>Media Queries</strong>
+                        بأسلوب Mobile-first.
+                    </p>
+
+                    <div class="question">
+                        <p><strong>سؤال 4:</strong> اذكر نقاط التوقف (breakpoints) التي استخدمتها، ولماذا اخترتها؟</p>
+                        <textarea id="q4" data-save class="answer-textarea" placeholder="مثال: 768px للوحي، 1024px للحاسوب..."></textarea>
+                        <div class="print-value" id="print_q4"></div>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>سؤال 5: (اختر الإجابة الصحيحة)</strong> أي وصف يطابق تصميمًا متجاوبًا سليمًا؟</p>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="q5_1" data-save>
+                            <span>استخدام عرض ثابت <code>1200px</code> لكل الصفحات.</span>
+                            <span class="print-value" id="print_q5_1"></span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="q5_2" data-save>
+                            <span>البدء بتصميم الهاتف ثم إضافة قواعد <code>@media (min-width)</code> للشاشات الأكبر.</span>
+                            <span class="print-value" id="print_q5_2"></span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="q5_3" data-save>
+                            <span>إخفاء مؤشر التركيز <code>outline</code> دائمًا لتحسين الشكل.</span>
+                            <span class="print-value" id="print_q5_3"></span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="q5_4" data-save>
+                            <span>استخدام الجداول لتخطيط الصفحة بدل CSS.</span>
+                            <span class="print-value" id="print_q5_4"></span>
+                        </div>
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task3">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة للصفحة على الهاتف وصورة على الحاسوب</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= المهمة 4 ================= -->
+            <div class="main-card">
+                <div class="card-header">
+                    <h2>المهمة 4: JavaScript وDOM والأحداث</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        استخدم JavaScript لإضافة تفاعل حقيقي: <code>addEventListener</code>،
+                        تعديل DOM، تحقق من نموذج، أو إظهار/إخفاء عناصر.
+                    </p>
+
+                    <div class="question">
+                        <p><strong>سؤال 6:</strong> اشرح تفاعلًا واحدًا نفذته بـ<code>addEventListener</code>، وما المشكلة التي يحلها؟</p>
+                        <textarea id="q6" data-save class="answer-textarea" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <div class="print-value" id="print_q6"></div>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>سؤال 7:</strong> أين استخدمت <code>e.preventDefault()</code> ولماذا؟</p>
+                        <textarea id="q7" data-save class="answer-textarea" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <div class="print-value" id="print_q7"></div>
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task4">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة لتفاعل JavaScript أو لـConsole يظهر النتيجة</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= المهمة 5 ================= -->
+            <div class="main-card">
+                <div class="card-header green">
+                    <h2>المهمة 5: Flask — البنية والمسارات</h2>
+                </div>
+                <div class="card-body">
+                    <p>يجب أن يعمل التطبيق عبر Flask، وأن يحتوي على عدة مسارات واضحة.</p>
+
+                    <div class="command-box">
+                        python -m venv venv<br>
+                        venv\Scripts\activate&nbsp;&nbsp;&nbsp;# Windows<br>
+                        source venv/bin/activate&nbsp;&nbsp;# macOS / Linux<br>
+                        pip install flask<br>
+                        flask run
+                    </div>
+
+                    <div class="question">
+                        <p><strong>سؤال 8:</strong> اكتب قائمة مسارات التطبيق: المسار، طريقة HTTP، والوظيفة.</p>
+                        <textarea id="q8" data-save class="answer-textarea" placeholder="مثال:&#10;/  — GET — الصفحة الرئيسية&#10;/notes — GET — عرض القائمة&#10;/notes/new — GET/POST — إضافة ملاحظة..."></textarea>
+                        <div class="print-value" id="print_q8"></div>
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task5">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة للتطبيق يعمل في المتصفح أو للطرفية عند تشغيل Flask</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= المهمة 6 ================= -->
+            <div class="main-card">
+                <div class="card-header">
+                    <h2>المهمة 6: قوالب Jinja ووراثة القوالب</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        استخدم <code>render_template</code>، و<code>extends</code>، و<code>block</code>،
+                        و<code>include</code> حيث يلزم. اربط ملفات CSS وJS عبر <code>url_for</code>.
+                    </p>
+
+                    <div class="question">
+                        <p><strong>سؤال 9:</strong> اشرح كيف استخدمت <code>extends</code> و<code>block</code> و/أو <code>include</code> لتقليل تكرار HTML.</p>
+                        <textarea id="q9" data-save class="answer-textarea" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <div class="print-value" id="print_q9"></div>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>سؤال 10:</strong> لماذا لا يُستخدم <code>|safe</code> مع مدخلات المستخدم في Jinja؟</p>
+                        <textarea id="q10" data-save class="answer-textarea" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <div class="print-value" id="print_q10"></div>
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task6">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة لملف قالب أو لصفحة تعمل عبر Flask</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= المهمة 7 ================= -->
+            <div class="main-card">
+                <div class="card-header green">
+                    <h2>المهمة 7: النماذج والتحقق في الخادم وFlash</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        يجب أن يستقبل التطبيق بيانات من نموذج، يتحقق منها في الخادم،
+                        ويعرض رسالة نجاح أو خطأ باستخدام <code>flash</code>.
+                    </p>
+
+                    <div class="question">
+                        <p><strong>سؤال 11:</strong> اذكر حقلين في نموذجك، وقاعدة التحقق في الخادم لكل منهما، ورسالة الخطأ التي تظهر.</p>
+                        <textarea id="q11" data-save class="answer-textarea" placeholder="مثال:&#10;العنوان: مطلوب، 3–100 حرف، وإلا: «العنوان مطلوب...»&#10;البريد: صيغة صحيحة، وإلا: «صيغة البريد غير صحيحة...»"></textarea>
+                        <div class="print-value" id="print_q11"></div>
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task7">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة لرسالة Flash ناجحة وأخرى لرسالة خطأ</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= المهمة 8 ================= -->
+            <div class="main-card">
+                <div class="card-header">
+                    <h2>المهمة 8: تخزين البيانات وعمليات CRUD</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        استخدم تخزينًا مناسبًا: قائمة في الذاكرة، أو ملف JSON، أو SQLite.
+                        يجب أن تستطيع إضافة عنصر، عرضه، تعديله، وحذفه.
+                    </p>
+
+                    <div class="question">
+                        <p><strong>سؤال 12:</strong> اشرح كيف تخزّن البيانات، وكيف نفّذت الإضافة/العرض/التعديل/الحذف.</p>
+                        <textarea id="q12" data-save class="answer-textarea" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <div class="print-value" id="print_q12"></div>
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task8">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة تعرض إضافة عنصر أو حذفه أو تعديله</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= المهمة 9 ================= -->
+            <div class="main-card">
+                <div class="card-header amber">
+                    <h2>المهمة 9: الأمان والاختبار</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        طبّق أساسيات الأمان: تحقق في الخادم، تهريب تلقائي عبر Jinja،
+                        عدم استخدام <code>|safe</code> مع مدخلات المستخدم، وتعطيل <code>debug</code>
+                        في ملف التسليم النهائي.
+                    </p>
+
+                    <div class="question">
+                        <p><strong>سؤال 13:</strong> اذكر إجراءين أمنيين طبّقتهما، واشرح فائدتهما.</p>
+                        <textarea id="q13" data-save class="answer-textarea" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <div class="print-value" id="print_q13"></div>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>سؤال 14:</strong> اذكر حالتي اختبار: مدخل صحيح ومدخل خاطئ، وماذا حدث في كل حالة.</p>
+                        <textarea id="q14" data-save class="answer-textarea" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <div class="print-value" id="print_q14"></div>
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task9">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة لرسالة خطأ أو لاختبار مدخل غير صالح</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= المهمة 10 ================= -->
+            <div class="main-card">
+                <div class="card-header green">
+                    <h2>المهمة 10: التشغيل والتوثيق والتسليم</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        اكتب خطوات التشغيل من الصفر، وتأكد من وجود
+                        <code>requirements.txt</code> و<code>README.md</code>.
+                    </p>
+
+                    <div class="question">
+                        <p><strong>سؤال 15:</strong> اكتب خطوات تشغيل المشروع من الصفر (venv، تثبيت المكتبات، التشغيل).</p>
+                        <textarea id="q15" data-save class="answer-textarea" placeholder="اكتب الخطوات هنا..."></textarea>
+                        <div class="print-value" id="print_q15"></div>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>قائمة التحقق قبل التسليم:</strong></p>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="check1" data-save>
+                            <span>ملف <code>requirements.txt</code> موجود وناتج عن <code>pip freeze</code>.</span>
+                            <span class="print-value" id="print_check1"></span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="check2" data-save>
+                            <span>ملف <code>README.md</code> يشرح طريقة التشغيل.</span>
+                            <span class="print-value" id="print_check2"></span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="check3" data-save>
+                            <span>جميع الروابط الداخلية تستخدم <code>url_for</code>.</span>
+                            <span class="print-value" id="print_check3"></span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="check4" data-save>
+                            <span>لا يوجد <code>|safe</code> على أي مدخل من المستخدم.</span>
+                            <span class="print-value" id="print_check4"></span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="check5" data-save>
+                            <span>تم اختبار حالة صحيحة وحالة خاطئة على الأقل.</span>
+                            <span class="print-value" id="print_check5"></span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="check6" data-save>
+                            <span>تم تعطيل <code>debug=True</code> في ملف التسليم النهائي.</span>
+                            <span class="print-value" id="print_check6"></span>
+                        </div>
+                    </div>
+
+                    <div class="command-box">
+                        pip freeze &gt; requirements.txt<br>
+                        pip install -r requirements.txt
+                    </div>
+
+                    <div class="image-upload-area" data-image-key="task10">
+                        <div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="placeholder-text">ارفع صورة لـREADME أو لطرفية التشغيل أو لملف requirements.txt</div>
+                        <input type="file" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= انتهت المهام ================= -->
+            <div class="main-card">
+                <div class="card-header green">
+                    <h2>انتهت مهام المشروع</h2>
+                </div>
+                <div class="card-body">
+                    <p>
+                        راجع جميع الإجابات والصور، وتأكد من أن التطبيق يعمل من الصفر.
+                        بعد ذلك استخدم زر «تحميل الصفحة كـ PDF» لحفظ المشروع وتقديمه عبر المنصة التعليمية.
+                    </p>
+                    <p>
+                        <strong>تذكير:</strong> لا ترفع مجلد <code>venv</code>، وتأكد من أن جميع
+                        ملفات المشروع تعمل على جهاز آخر عبر <code>requirements.txt</code>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            <i class="fas fa-university"></i>
+            الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+            رمز المساق: <strong>SYBS 2309</strong>
+        </p>
+        <p>المشروع النهائي · تصميم وبرمجة الويب | المحاضر: <strong>م. محمود خليل</strong></p>
+        <p>© <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        (function () {
+            'use strict';
+
+            /* ============================================================
+               متغيرات الحالة
+               ============================================================ */
+            let projectStarted = false;
+
+            const STORAGE_PREFIX = 'project_sybs2309_';
+            const STARTED_FLAG = STORAGE_PREFIX + 'started';
+            const NAME_KEY = STORAGE_PREFIX + 'studentName';
+            const ID_KEY = STORAGE_PREFIX + 'studentId';
+
+            const projectContent = document.getElementById('projectContent');
+            const lockMsg = document.getElementById('lockMsg');
+            const studentNameInput = document.getElementById('studentName');
+            const studentIdInput = document.getElementById('studentId');
+            const startBtn = document.getElementById('startProjectBtn');
+
+            /* ============================================================
+               دوال الحفظ والتحميل
+               ============================================================ */
+            function getSaveFields() {
+                return document.querySelectorAll('[data-save]');
+            }
+
+            function saveAllData() {
+                if (!projectStarted) return;
+
+                getSaveFields().forEach(function (el) {
+                    if (!el.id) return;
+                    const key = STORAGE_PREFIX + el.id;
+                    if (el.type === 'checkbox') {
+                        localStorage.setItem(key, String(el.checked));
+                    } else {
+                        localStorage.setItem(key, el.value);
+                    }
+                });
+
+ document.querySelectorAll('.image-upload-area').forEach(function (area) {
+    const imgKey = area.dataset.imageKey || '';
+    if (!imgKey) return;
+    const key = STORAGE_PREFIX + 'img_' + imgKey;
+    const img = area.querySelector('img');
+
+    if (img && img.src && img.src.indexOf('data:image') === 0) {
+        // حد تقريبي: 800KB لكل صورة
+        if (img.src.length > 800 * 1024) {
+            alert('حجم الصورة كبير جدًا (الحد ~800KB). اضغطها ثم أعد رفعها.');
+            resetImageArea(area);
+            return;
+        }
+        try {
+            localStorage.setItem(key, img.src);
+        } catch (err) {
+            alert('لم يتم حفظ الصورة: مساحة التخزين ممتلئة. احذف صورة أخرى.');
+        }
+    } else {
+        localStorage.removeItem(key);
+    }
+});
+
+                localStorage.setItem(STARTED_FLAG, 'true');
+                if (studentNameInput) localStorage.setItem(NAME_KEY, studentNameInput.value.trim());
+                if (studentIdInput) localStorage.setItem(ID_KEY, studentIdInput.value.trim());
+            }
+
+            function loadAllData() {
+                getSaveFields().forEach(function (el) {
+                    if (!el.id) return;
+                    const saved = localStorage.getItem(STORAGE_PREFIX + el.id);
+                    if (saved === null) return;
+                    if (el.type === 'checkbox') {
+                        el.checked = saved === 'true';
+                    } else {
+                        el.value = saved;
+                    }
+                });
+
+                document.querySelectorAll('.image-upload-area').forEach(function (area) {
+                    const imgKey = area.dataset.imageKey || '';
+                    if (!imgKey) return;
+                    const savedSrc = localStorage.getItem(STORAGE_PREFIX + 'img_' + imgKey);
+                    if (savedSrc && savedSrc.indexOf('data:image') === 0) {
+                        renderImage(area, savedSrc, false);
+                    }
+                });
+
+                syncPrintValues();
+            }
+
+            /* ============================================================
+               مزامنة قيم الطباعة
+               ============================================================ */
+            function syncPrintValues() {
+                getSaveFields().forEach(function (el) {
+                    if (!el.id) return;
+                    const printEl = document.getElementById('print_' + el.id);
+                    if (!printEl) return;
+
+                    if (el.type === 'checkbox') {
+                        printEl.textContent = el.checked ? '✓ محدد' : '—';
+                    } else {
+                        const value = String(el.value || '').trim();
+                        printEl.textContent = value !== '' ? el.value : '—';
+                    }
+                });
+
+                if (studentNameInput) {
+                    const printName = document.getElementById('print_studentName');
+                    if (printName) printName.textContent = studentNameInput.value.trim() || '—';
+                }
+                if (studentIdInput) {
+                    const printId = document.getElementById('print_studentId');
+                    if (printId) printId.textContent = studentIdInput.value.trim() || '—';
+                }
+            }
+
+            /* ============================================================
+               الصور: العرض والحذف والرفع
+               ============================================================ */
+            function resetImageArea(area) {
+                area.innerHTML = '' +
+                    '<div class="placeholder-icon"><i class="fas fa-cloud-upload-alt"></i></div>' +
+                    '<div class="placeholder-text">ارفع صورة مناسبة للمهمة<br>اسحب وأفلت الصورة هنا أو انقر للاختيار</div>' +
+                    '<input type="file" accept="image/*" style="display: none;">';
+
+                const fileInput = area.querySelector('input[type="file"]');
+                attachFileInput(area, fileInput);
+            }
+
+            function renderImage(area, src, doSave) {
+                area.innerHTML = '';
+
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'صورة مرفقة';
+                area.appendChild(img);
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.textContent = 'حذف الصورة';
+                removeBtn.className = 'remove-btn';
+                removeBtn.addEventListener('click', function (ev) {
+                    ev.stopPropagation();
+                    resetImageArea(area);
+                    if (doSave !== false) saveAllData();
+                });
+                area.appendChild(removeBtn);
+
+                if (doSave !== false) saveAllData();
+            }
+
+            function handleImage(file, area) {
+                if (!file || !file.type || file.type.indexOf('image/') !== 0) return;
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    renderImage(area, e.target.result, true);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function attachFileInput(area, fileInput) {
+                if (!fileInput || fileInput.dataset.attached === '1') return;
+                fileInput.dataset.attached = '1';
+
+                fileInput.addEventListener('change', function (e) {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) handleImage(file, area);
+                    fileInput.value = '';
+                });
+            }
+
+            function setupImageArea(area) {
+                if (!area || area.dataset.dropAttached === '1') {
+                    const existingInput = area ? area.querySelector('input[type="file"]') : null;
+                    if (existingInput) attachFileInput(area, existingInput);
+                    return;
+                }
+
+                area.dataset.dropAttached = '1';
+
+                area.addEventListener('click', function (e) {
+                    if (!projectStarted) return;
+                    if (e.target.tagName === 'IMG' || e.target.tagName === 'BUTTON') return;
+                    const fileInput = area.querySelector('input[type="file"]');
+                    if (fileInput) fileInput.click();
+                });
+
+                area.addEventListener('dragover', function (e) {
+                    if (!projectStarted) return;
+                    e.preventDefault();
+                    area.classList.add('dragover');
+                });
+
+                area.addEventListener('dragleave', function () {
+                    area.classList.remove('dragover');
+                });
+
+                area.addEventListener('drop', function (e) {
+                    if (!projectStarted) return;
+                    e.preventDefault();
+                    area.classList.remove('dragover');
+                    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+                    if (file) handleImage(file, area);
+                });
+
+                const fileInput = area.querySelector('input[type="file"]');
+                attachFileInput(area, fileInput);
+            }
+
+            function initAllImageAreas() {
+                document.querySelectorAll('.image-upload-area').forEach(function (area) {
+                    setupImageArea(area);
+                });
+            }
+
+            /* ============================================================
+               منع اللصق في الإجابات
+               ============================================================ */
+            function preventPasteOnTextareas() {
+                document.querySelectorAll('.answer-textarea').forEach(function (ta) {
+                    if (ta.dataset.pasteBlocked === '1') return;
+                    ta.dataset.pasteBlocked = '1';
+                    ta.addEventListener('paste', function (e) {
+                        e.preventDefault();
+                        alert('اللصق غير مسموح في الإجابات. يرجى الكتابة يدوياً.');
+                    });
+                });
+            }
+
+            /* ============================================================
+               تفعيل / تعطيل المشروع
+               ============================================================ */
+            function setProjectEnabled(enabled) {
+                if (!projectContent) return;
+
+                if (enabled) {
+                    projectContent.style.opacity = '1';
+                    projectContent.style.pointerEvents = 'auto';
+                    if (lockMsg) lockMsg.style.display = 'none';
+                } else {
+                    projectContent.style.opacity = '0.6';
+                    projectContent.style.pointerEvents = 'none';
+                    if (lockMsg) lockMsg.style.display = 'block';
+                }
+
+                getSaveFields().forEach(function (el) {
+                    el.disabled = !enabled;
+                });
+
+                document.querySelectorAll('.image-upload-area').forEach(function (area) {
+                    area.style.pointerEvents = enabled ? 'auto' : 'none';
+                    area.style.cursor = enabled ? 'pointer' : 'default';
+                });
+            }
+
+            /* ============================================================
+               حفظ تلقائي
+               ============================================================ */
+            function attachAutoSave() {
+                if (!projectContent || projectContent.dataset.autoSave === '1') return;
+                projectContent.dataset.autoSave = '1';
+
+                projectContent.addEventListener('input', function () {
+                    if (!projectStarted) return;
+                    saveAllData();
+                    syncPrintValues();
+                });
+
+                projectContent.addEventListener('change', function () {
+                    if (!projectStarted) return;
+                    saveAllData();
+                    syncPrintValues();
+                });
+            }
+
+            /* ============================================================
+               بدء المشروع
+               ============================================================ */
+            function startProject() {
+                const name = studentNameInput ? studentNameInput.value.trim() : '';
+                const id = studentIdInput ? studentIdInput.value.trim() : '';
+
+                if (!name || !id) {
+                    alert('يرجى إدخال الاسم الكامل والرقم الجامعي قبل بدء المشروع.');
+                    return;
+                }
+
+                localStorage.setItem(NAME_KEY, name);
+                localStorage.setItem(ID_KEY, id);
+                localStorage.setItem(STARTED_FLAG, 'true');
+
+                projectStarted = true;
+
+                const printName = document.getElementById('print_studentName');
+                const printId = document.getElementById('print_studentId');
+                if (printName) printName.textContent = name;
+                if (printId) printId.textContent = id;
+
+                if (studentNameInput) studentNameInput.disabled = true;
+                if (studentIdInput) studentIdInput.disabled = true;
+                if (startBtn) startBtn.disabled = true;
+
+                setProjectEnabled(true);
+                loadAllData();
+                attachAutoSave();
+                preventPasteOnTextareas();
+                syncPrintValues();
+            }
+
+            /* ============================================================
+               استعادة حالة البدء السابقة
+               ============================================================ */
+            function checkPreviousStart() {
+                const started = localStorage.getItem(STARTED_FLAG);
+                const savedName = localStorage.getItem(NAME_KEY);
+                const savedId = localStorage.getItem(ID_KEY);
+
+                if (started === 'true' && savedName && savedId) {
+                    if (studentNameInput) {
+                        studentNameInput.value = savedName;
+                        studentNameInput.disabled = true;
+                    }
+                    if (studentIdInput) {
+                        studentIdInput.value = savedId;
+                        studentIdInput.disabled = true;
+                    }
+                    if (startBtn) startBtn.disabled = true;
+
+                    const printName = document.getElementById('print_studentName');
+                    const printId = document.getElementById('print_studentId');
+                    if (printName) printName.textContent = savedName;
+                    if (printId) printId.textContent = savedId;
+
+                    projectStarted = true;
+                    setProjectEnabled(true);
+                    loadAllData();
+                    attachAutoSave();
+                    preventPasteOnTextareas();
+                } else {
+                    setProjectEnabled(false);
+                }
+            }
+
+            /* ============================================================
+               التهيئة
+               ============================================================ */
+            document.addEventListener('DOMContentLoaded', function () {
+                const yearEl = document.getElementById('current-year');
+                if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+                initAllImageAreas();
+                checkPreviousStart();
+                preventPasteOnTextareas();
+
+                if (startBtn) {
+                    startBtn.addEventListener('click', startProject);
+                }
+
+                window.addEventListener('beforeprint', syncPrintValues);
+            });
+        })();
+    </script>
+</body>
+</html>

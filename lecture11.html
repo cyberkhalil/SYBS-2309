@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 11 | أساسيات Python البرمجية — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة الحادية عشرة من مساق SYBS 2309: أساسيات Python البرمجية — الشروط if/elif/else، الحلقات for و while مع break وcontinue وelse، القوائم والصفوف والقواميس، List comprehensions، الدوال مع المعاملات وreturn ونطاق المتغيرات، معالجة الاستثناءات try/except/else/finally، وتنظيم الكود في وحدات. التطبيق: عدّاد كلمات، مخزون بسيط، ودفتر جهات اتصال.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 11</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 11: أساسيات Python البرمجية</h1>
+            <p class="lecture-lead">
+                في المحاضرة السابقة بدأنا من الصفر: تثبيت Python، المتغيرات، الأنواع،
+                <code>print</code>، <code>input</code>، و<code>f-strings</code>. اليوم ننتقل من
+                مجرّد "طباعة قيم" إلى <strong>بناء برنامج حقيقي</strong>. سنتعلّم
+                <strong>التحكم في التدفق</strong> (<code>if/elif/else</code>)، و<strong>الحلقات</strong>
+                (<code>for</code>، <code>while</code>، مع <code>break</code>، <code>continue</code>،
+                و<code>else</code>)، ونفهم <strong>القوائم والصفوف والقواميس</strong> بعمق أكبر،
+                ونكتب <strong>List comprehensions</strong> لاختصار التحويلات، ثم ننتقل إلى
+                <strong>الدوال</strong> بأنواع معاملاتها و<code>return</code> والنطاق، ونختم بـ
+                <strong>try/except/else/finally</strong> و<strong>تنظيم الكود في وحدات</strong>
+                ليكون جاهزاً للملفات المتعددة في Flask.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 11</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-laptop-code"></i> مختبر معمّق</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 2 · الواجهة الخلفية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script11.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script11.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#recap">مراجعة سريعة لما بنيناه في المحاضرة 10</a></li>
+                        <li><a href="#control-flow">التحكم في التدفق: if / elif / else</a></li>
+                        <li><a href="#loops">الحلقات: for و while</a></li>
+                        <li><a href="#lists-tuples">القوائم والصفوف (list وtuple)</a></li>
+                        <li><a href="#dicts-sets">القواميس والمجموعات (dict وset)</a></li>
+                        <li><a href="#comprehensions">List comprehensions</a></li>
+                        <li><a href="#functions">الدوال: المعاملات وreturn والنطاق</a></li>
+                        <li><a href="#exceptions">معالجة الاستثناءات try/except/else/finally</a></li>
+                        <li><a href="#modules">تنظيم الكود في وحدات</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> هذه المحاضرة هي الجسر بين "سكربتات صغيرة" و"منطق حقيقي".
+                    كل ما تتعلمه هنا سيُستخدم حرفياً في المحاضرة القادمة عند بناء أول تطبيق Flask.
+                    من يتقن هذا الأسبوع، يجد Flask سهلاً.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على كتابة برنامج Python كامل بحلقات و
+                        شروط ودوال، وتنظيم بيانات معقّدة في قوائم وقواميس، ومعالجة الأخطاء دون
+                        انهيار، وتقسيم الكود إلى وحدات. هذه هي المهارات التي ستحتاجها في كل
+                        مسار Flask لاحقاً.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>كتابة شروط <code>if/elif/else</code> بأسلوب صحيح</li>
+                                <li>التمييز بين <code>for</code> و<code>while</code> ومتى نستخدم كلاً منهما</li>
+                                <li>فهم <code>break</code>، <code>continue</code>، و<code>else</code> في الحلقات</li>
+                                <li>الفرق بين <code>list</code> و<code>tuple</code> و<code>dict</code> و<code>set</code></li>
+                                <li>كتابة List comprehension بسيطة</li>
+                                <li>فهم تدفق <code>try/except/else/finally</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>بناء دالة تستقبل معاملات وتُرجع قيمة</li>
+                                <li>تنظيم قائمة سجلات على شكل <code>list of dict</code></li>
+                                <li>استخدام <code>range</code> و<code>enumerate</code> بفعالية</li>
+                                <li>كتابة <code>try/except</code> لالتقاط أخطاء التحويل</li>
+                                <li>تقسيم الكود إلى وحدة (module) واستيرادها</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>بناء منطق تطبيق Flask قبل Flask نفسه</li>
+                                <li>فصل الاهتمامات بين ملفات متعددة</li>
+                                <li>تفادي الشيفرة المتكررة عبر الدوال</li>
+                                <li>قراءة أخطاء Python ومنطق التتبع (Traceback)</li>
+                                <li>عادات كود نظيف (naming + indentation + docstrings)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recap -->
+                <section class="lecture-section" id="recap" aria-labelledby="recap-title">
+                    <h2 class="section-title" id="recap-title">
+                        <i class="fas fa-rotate-left"></i> مراجعة سريعة لما بنيناه في المحاضرة 10
+                    </h2>
+                    <p>
+                        قبل الدخول في الجديد، لنثبّت ما سبق. في المحاضرة 10 تعلّمنا:
+                        المتغيرات بأسلوب <code>snake_case</code>، والأنواع المدمجة <code>str</code>،
+                        <code>int</code>، <code>float</code>، <code>bool</code>، <code>None</code>،
+                        وأساسيات القوائم والقواميس، و<code>input()</code> و<code>print()</code>
+                        و<code>f-strings</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> recap.py — سكربت يأخذ مدخلات ويطبع مخرجات</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>name = input("ما اسمك؟ ").strip()
+age_str = input("كم عمرك؟ ")
+
+try:
+    age = int(age_str)
+except ValueError:
+    print("خطأ: يُرجى إدخال رقم صحيح.")
+    exit(1)
+
+if age &lt; 0:
+    print("عمر غير صالح.")
+    exit(1)
+
+print(f"مرحباً {name}، عمرك {age} سنة.")
+
+skills = ["HTML", "CSS", "JavaScript", "Python"]
+for skill in skills:
+    print("-", skill)</code></pre>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>ملاحظة:</strong> لاحظوا أننا هنا استخدمنا بالفعل <code>if</code> و
+                            <code>try/except</code>. لكن لم نشرحهما بعمق. هذه المحاضرة
+                            تُعمّقها وتضيف عليها.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Control flow -->
+                <section class="lecture-section" id="control-flow" aria-labelledby="control-flow-title">
+                    <h2 class="section-title" id="control-flow-title">
+                        <i class="fas fa-code-branch"></i> التحكم في التدفق: if / elif / else
+                    </h2>
+                    <p>
+                        البرنامج الافتراضي ينفّذ سطرًا بعد سطر. عندما نضيف شروطًا، يبدأ بالتفكير:
+                        "إن تحقّق كذا افعل كذا، وإلا إن تحقّق كذا افعل كذا، وإلا افعل الافتراضي".
+                        هذه هي أداة <strong>التحكم في التدفق</strong>. فرقها الرئيسي عن JavaScript
+                        أن <strong>الإزاحة إلزامية</strong>، ولا توجد أقواس معقوفة للكتل.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> if-basic.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>grade = 85
+
+if grade &gt;= 90:
+    print("امتياز")
+elif grade &gt;= 80:
+    print("جيد جداً")
+elif grade &gt;= 70:
+    print("جيد")
+elif grade &gt;= 60:
+    print("مقبول")
+else:
+    print("راسب")
+
+# الناتج: جيد جداً</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-equals"></i> المقارنة</h3>
+                            <ul>
+                                <li><code>==</code>، <code>!=</code></li>
+                                <li><code>&lt;</code>، <code>&lt;=</code></li>
+                                <li><code>&gt;</code>، <code>&gt;=</code></li>
+                                <li><code>in</code> للاحتواء</li>
+                                <li><code>is</code> للتحقق من الهوية (غالباً مع <code>None</code>)</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-code-branch"></i> المنطق</h3>
+                            <ul>
+                                <li><code>and</code> (بدل <code>&amp;&amp;</code>)</li>
+                                <li><code>or</code> (بدل <code>||</code>)</li>
+                                <li><code>not</code> (بدل <code>!</code>)</li>
+                                <li>الكلمات نفسها لا الرموز</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-circle-check"></i> Truthy / Falsy</h3>
+                            <ul>
+                                <li>Falsy: <code>0</code>، <code>""</code>، <code>[]</code>، <code>{}</code>، <code>None</code>، <code>False</code></li>
+                                <li>كل ما عدا ذلك Truthy</li>
+                                <li>مثل JavaScript تماماً</li>
+                                <li>احترس من <code>"0"</code> (نص غير فارغ = Truthy)</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> أخطاء شائعة</h3>
+                            <ul>
+                                <li>استخدام <code>=</code> بدل <code>==</code></li>
+                                <li>نسيان <code>:</code> في نهاية الشرط</li>
+                                <li>إزاحة غير متسقة</li>
+                                <li>ترتيب الشروط من الأصغر للأكبر (خطأ)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>ترتيب الشروط مهم:</strong> ابدأ دائمًا بالشرط الأكبر/الأضيق.
+                            لأن أول شرط يتحقق يوقف الفحص. لو بدأت بـ<code>&gt;= 60</code> قبل
+                            <code>&gt;= 90</code>، سيعطي "مقبول" حتى لدرجة 95.
+                        </div>
+                    </div>
+
+                    <h3 class="section-title" style="font-size:1.1rem;margin-top:1.6rem;">
+                        <i class="fas fa-arrow-right-arrow-left"></i> التعبير الثلاثي (Ternary)
+                    </h3>
+                    <p>
+                        إذا كانت الحالة بسيطة (نعم/لا)، يمكن استخدام صيغة قصيرة في سطر واحد:
+                        <code>قيمة_إن_تحقق if الشرط else قيمة_إن_لم_يتحقق</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> ternary.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>age = 20
+status = "بالغ" if age &gt;= 18 else "قاصر"
+print(status)   # بالغ
+
+# مفيد في القيم الافتراضية
+name = input("اسمك؟ ").strip()
+display = name if name else "زائر"
+print(f"مرحباً {display}")</code></pre>
+                    </div>
+
+                    <h3 class="section-title" style="font-size:1.1rem;margin-top:1.6rem;">
+                        <i class="fas fa-list-check"></i> match — بديل switch (Python 3.10+)
+                    </h3>
+                    <p>
+                        في Python 3.10+ هناك <code>match</code> الذي يشبه <code>switch</code> في
+                        لغات أخرى، لكنه أقوى. لن نعتمد عليه كثيرًا، لكن من الجيد معرفته.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> match.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>day = "الجمعة"
+
+match day:
+    case "السبت" | "الأحد" | "الاثنين" | "الثلاثاء" | "الأربعاء" | "الخميس":
+        print("يوم عمل")
+    case "الجمعة":
+        print("نهاية الأسبوع")
+    case _:
+        print("قيمة غير معروفة")</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>قاعدة عملية:</strong> استخدم <code>if/elif/else</code> في
+                            99% من الحالات. استخدم <code>match</code> فقط إذا كنت على Python
+                            3.10+ وكان لديك مطابقة بنيوية معقدة. لا تعقّد كودك بلا سبب.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Loops -->
+                <section class="lecture-section" id="loops" aria-labelledby="loops-title">
+                    <h2 class="section-title" id="loops-title">
+                        <i class="fas fa-rotate"></i> الحلقات: for و while
+                    </h2>
+                    <p>
+                        الحلقات تكرّر كتلة كود. Python تقدّم شكلين أساسيين: <code>for</code>
+                        للتكرار على تسلسل، و<code>while</code> للتكرار بحسب شرط.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-list-ol"></i> for</h3>
+                            <ul>
+                                <li>للتكرار على تسلسل (قائمة، نص، مدى)</li>
+                                <li>لا تحتاج فهرسًا في الغالب</li>
+                                <li>مع <code>range()</code> نولّد أرقامًا</li>
+                                <li>مع <code>enumerate()</code> نحصل على فهرس وقيمة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-circle-notch"></i> while</h3>
+                            <ul>
+                                <li>للتكرار بحسب شرط</li>
+                                <li>قد ينفّذ صفر مرة</li>
+                                <li>احترس من الحلقات اللانهائية</li>
+                                <li>يحتاج شيئًا يقرّب الشرط من الانتهاء</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-forward"></i> break وcontinue</h3>
+                            <ul>
+                                <li><code>break</code> يخرج من الحلقة</li>
+                                <li><code>continue</code> يتخطى التكرار الحالي</li>
+                                <li>لا يعملان مع <code>else</code> بشكل غير متوقع</li>
+                                <li>كلاهما يوقفان الدورة الحالية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-clock-rotate-left"></i> else في الحلقات</h3>
+                            <ul>
+                                <li>ميزة Python غير موجودة في لغات أخرى</li>
+                                <li>تُنفّذ بعد انتهاء الحلقة <strong>بدون break</strong></li>
+                                <li>مفيدة للبحث</li>
+                                <li>"لم أجد العدد" تُكتب في <code>else</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> loops.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># 1) for على مدى
+for i in range(5):
+    print(i)        # 0 1 2 3 4
+
+# 2) for على قائمة
+skills = ["HTML", "CSS", "JavaScript"]
+for skill in skills:
+    print("-", skill)
+
+# 3) مع enumerate (فهرس + قيمة)
+for i, skill in enumerate(skills, start=1):
+    print(f"{i}. {skill}")
+
+# 4) while
+count = 0
+while count &lt; 3:
+    print("count =", count)
+    count += 1
+
+# 5) break
+for n in range(10):
+    if n == 5:
+        break
+    print(n)        # 0 1 2 3 4
+
+# 6) continue
+for n in range(10):
+    if n % 2 == 0:
+        continue
+    print(n)        # 1 3 5 7 9
+
+# 7) else في حلقة for — للبحث
+numbers = [1, 2, 3, 4, 5]
+target = 7
+
+for n in numbers:
+    if n == target:
+        print("وجدت", target)
+        break
+else:
+    print("لم أجد", target)</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> range-details.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>range(5)            # 0 1 2 3 4
+range(2, 6)         # 2 3 4 5
+range(0, 10, 2)     # 0 2 4 6 8
+range(5, 0, -1)     # 5 4 3 2 1
+len(range(5))       # 5
+
+# range لا ينشئ قائمة كاملة في الذاكرة
+# (مفيد للأرقام الكبيرة)
+
+# تحويله إلى قائمة إذا احتجت
+list(range(5))      # [0, 1, 2, 3, 4]</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>احذر الحلقات اللانهائية:</strong> إذا نسيت
+                            <code>count += 1</code> في <code>while</code>، سيبقى البرنامج يعمل
+                            للأبد. في Python، يمكنك إيقافه بـ<kbd>Ctrl + C</kbd> في الطرفية.
+                            هذه أهم مهارة تشخيصية في مختبِر Python.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lists & Tuples -->
+                <section class="lecture-section" id="lists-tuples" aria-labelledby="lists-title">
+                    <h2 class="section-title" id="lists-title">
+                        <i class="fas fa-list"></i> القوائم والصفوف (list وtuple)
+                    </h2>
+                    <p>
+                        في المحاضرة 10 تعرّفنا على القوائم. اليوم نتعمق أكثر، ونضيف التوبلز.
+                        الفرق الجوهري: <strong>القائمة قابلة للتعديل (mutable)</strong>،
+                        <strong>والصف غير قابل للتعديل (immutable)</strong>. اختيار النوع الصحيح
+                        يحمي بياناتك من التعديل غير المقصود.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>الخصيصة</th>
+                                    <th>list</th>
+                                    <th>tuple</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>البنية</td>
+                                    <td><code>[1, 2, 3]</code></td>
+                                    <td><code>(1, 2, 3)</code></td>
+                                </tr>
+                                <tr>
+                                    <td>قابلة للتعديل</td>
+                                    <td>نعم</td>
+                                    <td>لا</td>
+                                </tr>
+                                <tr>
+                                    <td>الاستخدام</td>
+                                    <td>قوائم متغير المحتوى</td>
+                                    <td>أزواج ثابتة، إحداثيات، نتائج دوال متعددة</td>
+                                </tr>
+                                <tr>
+                                    <td>الأداء</td>
+                                    <td>مرن</td>
+                                    <td>أسرع قليلًا</td>
+                                </tr>
+                                <tr>
+                                    <td>الاستخدام كمفتاح قاموس</td>
+                                    <td>لا (غير قابل للتجزئة)</td>
+                                    <td>نعم، إذا كانت عناصره غير قابلة للتعديل</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> lists-tuples.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># ===== القوائم =====
+numbers = [3, 1, 4, 1, 5, 9, 2]
+
+numbers.append(6)        # في النهاية
+numbers.insert(0, 0)     # في البداية
+numbers.remove(1)        # بحسب القيمة
+last = numbers.pop()     # من النهاية
+
+numbers.sort()           # تصاعديًا
+numbers.sort(reverse=True)  # تنازليًا
+sorted(numbers)          # نسخة دون تعديل الأصلية
+numbers.reverse()        # عكس الترتيب
+
+print(len(numbers))
+print(sum(numbers))
+print(min(numbers))
+print(max(numbers))
+
+# البحث
+print(4 in numbers)          # True/False
+print(numbers.index(4))      # موضع أول ظهور
+print(numbers.count(1))      # عدد مرات الظهور
+
+# ===== الصفوف =====
+point = (3, 7)
+x, y = point                 # تفكيك
+print(x, y)                  # 3 7
+
+rgb = (255, 128, 0)
+
+# محاولة التعديل — خطأ
+# rgb[0] = 0                 # TypeError
+
+# صف من عنصر واحد — لاحظ الفاصلة
+single = (42,)
+not_tuple = (42)             # int، وليس tuple!
+
+print(type(single))          # tuple
+print(type(not_tuple))       # int
+
+# دالة تُرجع صفًا
+def min_max(nums):
+    return min(nums), max(nums)
+
+low, high = min_max([3, 1, 4, 1, 5])
+print(low, high)             # 1 5</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+<strong>متى نستخدم tuple؟</strong> عندما تكون لديك بيانات لا يجب
+أن تُعدَّل: إحداثيات، قيم ثابتة، مفاتيح قاموس. وأيضًا لتفكيك نتائج
+دوال متعددة القيم: <code>return min, max</code>.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>مصيدة tuple من عنصر واحد:</strong> <code>(42)</code> هو
+                            int وليس tuple. الصحيح: <code>(42,)</code> — بفاصلة زائدة.
+                            هذا خطأ شائع جدًا، والـ <code>type()</code> يكشفه فورًا.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dicts & Sets -->
+                <section class="lecture-section" id="dicts-sets" aria-labelledby="dicts-title">
+                    <h2 class="section-title" id="dicts-title">
+                        <i class="fas fa-key"></i> القواميس والمجموعات (dict وset)
+                    </h2>
+                    <p>
+                        القاموس هو قلب أي تطبيق Flask: كل استجابة JSON هي قاموس، وكل سجل
+                        (مستخدم، منتج، ملاحظة) هو قاموس. المجموعة (set) أقل شيوعًا لكنها
+                        ممتازة للتحقق من العضوية وإزالة التكرار.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> dicts.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>student = {
+    "name": "سارة",
+    "age": 20,
+    "skills": ["HTML", "CSS", "Python"],
+    "active": True
+}
+
+# الوصول
+print(student["name"])              # سارة
+print(student.get("age"))           # 20
+print(student.get("missing"))       # None
+print(student.get("missing", 0))    # 0
+
+# الإضافة والتعديل
+student["city"] = "غزة"
+student["age"] = 21
+
+# الحذف
+del student["active"]
+removed = student.pop("city")
+
+# المرور على المفاتيح والقيم
+for key in student:
+    print(key, "=", student[key])
+
+for key, value in student.items():
+    print(f"{key}: {value}")
+
+# تحديث دفعة واحدة
+student.update({"city": "غزة", "email": "sara@example.com"})
+
+# الدمج
+extra = {"major": "أمن معلومات"}
+student.update(extra)
+
+# نسخة (shallow)
+copy1 = student.copy()</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> list-of-dicts.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># القائمة من القواميس هي "جدول" في الذاكرة
+students = [
+    {"name": "سارة", "age": 20, "grade": 88},
+    {"name": "أحمد", "age": 21, "grade": 74},
+    {"name": "ليلى", "age": 19, "grade": 92},
+]
+
+# البحث
+for s in students:
+    if s["name"] == "أحمد":
+        print(s["grade"])   # 74
+
+# فلترة الناجحين
+passed = [s for s in students if s["grade"] &gt;= 80]
+print(passed)
+
+# متوسط الدرجات
+avg = sum(s["grade"] for s in students) / len(students)
+print(f"المتوسط: {avg:.2f}")
+
+# الترتيب بحسب الدرجة
+by_grade = sorted(students, key=lambda s: s["grade"], reverse=True)
+print(by_grade[0]["name"])</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> sets.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># مجموعة: بلا ترتيب، بلا تكرار
+tags = {"html", "css", "js", "html"}
+print(tags)               # {"html", "css", "js"}
+
+# إضافة وحذف
+tags.add("python")
+tags.discard("css")       # لا يرفع خطأ إذا لم يوجد
+tags.remove("js")         # يرفع KeyError إذا لم يوجد
+
+# التحقق
+print("html" in tags)     # True
+
+# عمليات المجموعات
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+
+print(a | b)              # اتحاد    → {1,2,3,4,5,6}
+print(a &amp; b)              # تقاطع    → {3,4}
+print(a - b)              # فرق      → {1,2}
+print(a ^ b)              # فرق متماثل → {1,2,5,6}
+
+# إزالة التكرار من قائمة
+nums = [1, 2, 2, 3, 3, 3, 4]
+unique = list(set(nums))
+print(unique)             # [1, 2, 3, 4] (الترتيب غير مضمون)</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>متى نستخدم set؟</strong> عندما نحتاج "هل هذا العنصر موجود؟"
+                            بسرعة. البحث في <code>set</code> فوري تقريبًا (O(1))، بينما البحث في
+                            <code>list</code> يتطلب المرور على العناصر (O(n)). للقوائم الكبيرة،
+                            استخدم <code>set</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Comprehensions -->
+                <section class="lecture-section" id="comprehensions" aria-labelledby="comprehensions-title">
+                    <h2 class="section-title" id="comprehensions-title">
+                        <i class="fas fa-wand-magic-sparkles"></i> List comprehensions
+                    </h2>
+                    <p>
+                        هذه إحدى أجمل ميزات Python. بدلًا من حلقة و<code>append</code>،
+                        تستطيع كتابة العملية كاملة في سطر واحد. مفيدة جدًا لتحويل أو تصفية القوائم.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> comprehensions.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># ===== الطريقة التقليدية =====
+nums = [1, 2, 3, 4, 5, 6]
+squares = []
+for n in nums:
+    squares.append(n * n)
+
+print(squares)   # [1, 4, 9, 16, 25, 36]
+
+# ===== List comprehension =====
+squares = [n * n for n in nums]
+print(squares)
+
+# ===== مع شرط =====
+evens = [n for n in nums if n % 2 == 0]
+print(evens)     # [2, 4, 6]
+
+# ===== نصوص =====
+words = ["hello", "world", "python"]
+upper = [w.upper() for w in words]
+print(upper)     # ['HELLO', 'WORLD', 'PYTHON']
+
+lengths = [len(w) for w in words]
+print(lengths)   # [5, 5, 6]
+
+# ===== على قاموس =====
+students = [
+    {"name": "سارة", "grade": 88},
+    {"name": "أحمد", "grade": 74},
+    {"name": "ليلى", "grade": 92},
+]
+
+names = [s["name"] for s in students]
+passed = [s for s in students if s["grade"] &gt;= 80]
+
+# ===== Dict comprehension =====
+squares_dict = {n: n * n for n in range(5)}
+print(squares_dict)   # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+
+# ===== Set comprehension =====
+unique_lengths = {len(w) for w in words}
+print(unique_lengths)   # {5, 6}
+
+# ===== تعبير مولد (generator) — أقواس بدل مربعات =====
+total = sum(n * n for n in nums)
+print(total)   # 91</code></pre>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>متى نتجنّبها؟</strong> عندما يتجاوز التعبير سطرًا واحدًا، أو
+                            يحتوي شروطًا متداخلة، أو منطقًا معقدًا. في هذه الحالة، حلقة عادية
+                            مع تعليقات أوضح للقراءة. Comprehension أداة للوضوح، لا للتباهي.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Functions -->
+                <section class="lecture-section" id="functions" aria-labelledby="functions-title">
+                    <h2 class="section-title" id="functions-title">
+                        <i class="fas fa-cube"></i> الدوال: المعاملات وreturn والنطاق
+                    </h2>
+                    <p>
+                        الدالة كتلة كود مسماة، تُستدعى عند الحاجة. هدفها الأول: عدم التكرار.
+                        هدفها الثاني: جعل الكود مفهومًا. في Flask، كل مسار
+                        (route) هو دالة. لذا إتقان الدوال شرط أساسي.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> functions-basic.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># 1) دالة بسيطة
+def greet():
+    print("مرحباً")
+
+greet()
+
+# 2) دالة بمعاملات
+def greet_user(name):
+    print(f"مرحباً {name}")
+
+greet_user("سارة")
+
+# 3) دالة تُرجع قيمة
+def add(a, b):
+    return a + b
+
+result = add(5, 3)
+print(result)   # 8
+
+# 4) return يوقف التنفيذ
+def check_age(age):
+    if age &lt; 0:
+        return "عمر غير صالح"
+    if age &gt;= 18:
+        return "بالغ"
+    return "قاصر"
+
+print(check_age(20))
+print(check_age(15))
+print(check_age(-1))
+
+# 5) دالة بلا return ترجع None
+def show(x):
+    print(x)
+
+print(show("hi"))   # hi ثم None</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> functions-advanced.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># 1) قيمة افتراضية
+def greet(name="زائر"):
+    return f"مرحباً {name}"
+
+print(greet())          # مرحباً زائر
+print(greet("سارة"))    # مرحباً سارة
+
+# 2) معاملات مسماة (keyword arguments)
+def register(name, email, age=18):
+    return f"{name} - {email} - {age}"
+
+print(register("سارة", "s@x.com"))
+print(register(name="سارة", email="s@x.com", age=25))
+
+# 3) عدد متغير من المعاملات
+def total(*numbers):
+    return sum(numbers)
+
+print(total(1, 2, 3))          # 6
+print(total(10, 20, 30, 40))   # 100
+
+# 4) معاملات مفتاحية
+def show_info(**info):
+    for key, value in info.items():
+        print(f"{key}: {value}")
+
+show_info(name="سارة", age=20, city="غزة")
+
+# 5) فرق بين *numbers و**info:
+#    *  → tuple
+#    ** → dict</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> scope.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>app_name = "المساق"      # Global
+
+def show():
+    total = 100           # Local
+    print(app_name)       # الوصول للعام مسموح
+    print(total)
+
+show()
+# print(total)          # خطأ — Local خارج الدالة
+
+# ملاحظة: بدون global، التعديل ينشئ متغيرًا محليًا
+counter = 0
+
+def increment():
+    global counter
+    counter += 1
+
+increment()
+print(counter)            # 1
+
+# لكن يُفضّل تجنّب global
+# استخدم return بدلًا منه</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-tag"></i> التسمية</h3>
+                            <ul>
+                                <li>snake_case</li>
+                                <li>فعل واضح: <code>calculate_</code></li>
+                                <li>لا اختصارات غامضة</li>
+                                <li>اسم يصف ما تفعله</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-cube"></i> مسؤولية واحدة</h3>
+                            <ul>
+                                <li>كل دالة تفعل شيئًا واحدًا</li>
+                                <li>لا تطبع وتُرجع وتعدّل الملف</li>
+                                <li>سهلة الاختبار</li>
+                                <li>سهلة القراءة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-book"></i> Docstring</h3>
+                            <ul>
+                                <li>سطر توضيحي داخل الدالة</li>
+                                <li>بين <code>"""</code></li>
+                                <li>يظهر في <code>help()</code></li>
+                                <li>عادة احترافية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> الخطأ الشائع</h3>
+                            <ul>
+                                <li><code>print</code> بدل <code>return</code></li>
+                                <li>نسيان return فيساوي None</li>
+                                <li>استخدام global بكثرة</li>
+                                <li>معاملات غير مستخدمة</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> function-template.py — التصميم الاحترافي</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>def calculate_total(prices, tax_rate=0.15):
+    """
+    تحسب الإجمالي مع الضريبة.
+
+    المعاملات:
+        prices (list): قائمة الأسعار
+        tax_rate (float): نسبة الضريبة، افتراضيًا 0.15
+
+    الإرجاع:
+        float: الإجمالي بعد الضريبة
+    """
+    if not prices:
+        return 0.0
+
+    subtotal = sum(prices)
+    tax = subtotal * tax_rate
+    return round(subtotal + tax, 2)
+
+
+# الاستخدام
+print(calculate_total([100, 200]))              # 345.0
+print(calculate_total([100, 200], 0.20))        # 360.0
+print(calculate_total([]))                      # 0.0</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>قاعدة الدوال:</strong> ابدأ دائمًا بتعريف الدالة كأنها
+                            ستُستخدم في مكان آخر. ماذا يمرَّر لها؟ ماذا تُرجع؟ لا تعتمد
+                            على متغيرات خارجية. هذا يجعلها قابلة للاختبار وإعادة الاستخدام
+                            في Flask والوحدات.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Exceptions -->
+                <section class="lecture-section" id="exceptions" aria-labelledby="exceptions-title">
+                    <h2 class="section-title" id="exceptions-title">
+                        <i class="fas fa-shield-halved"></i> معالجة الاستثناءات try/except/else/finally
+                    </h2>
+                    <p>
+                        في Python، الأخطاء "استثناءات" (Exceptions). إذا لم نعالجها، البرنامج
+                        يتوقف ويعرض Traceback. <code>try/except</code> تسمح لنا بالتقاط الخطأ
+                        والتعامل معه. و<code>else</code> و<code>finally</code> يوسّعان التحكم.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> try-except.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code># 1) الأساسي
+try:
+    age = int("abc")
+except ValueError:
+    print("قيمة غير صالحة")
+
+# 2) استثناءات متعددة
+try:
+    numbers = [1, 2, 3]
+    print(numbers[10])
+    x = 1 / 0
+except IndexError:
+    print("فهرس خارج النطاق")
+except ZeroDivisionError:
+    print("قسمة على صفر")
+
+# 3) عدة استثناءات في except واحد
+try:
+    value = int(input("رقم: "))
+    result = 10 / value
+except (ValueError, ZeroDivisionError):
+    print("مدخل غير صالح أو صفر")
+
+# 4) كائن الخطأ
+try:
+    int("abc")
+except ValueError as e:
+    print(f"الخطأ: {e}")
+
+# 5) else — يُنفَّذ إذا لم يحدث خطأ
+try:
+    x = int("42")
+except ValueError:
+    print("فشل التحويل")
+else:
+    print(f"نجح: {x}")
+
+# 6) finally — يُنفَّذ دائمًا
+try:
+    x = int("hello")
+except ValueError:
+    print("خطأ")
+finally:
+    print("انتهت المحاولة")   # يُطبع في كل الحالات
+
+# 7) إعادة رفع الاستثناء
+try:
+    x = int("abc")
+except ValueError:
+    print("سجّل الخطأ")
+    raise    # يعيد رفعه للمستوى الأعلى</code></pre>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>الاستثناء</th>
+                                    <th>متى يحدث</th>
+                                    <th>كيف نتجنّبه</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>ValueError</code></td>
+                                    <td>قيمة غير صالحة للتحويل</td>
+                                    <td><code>try/except</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>TypeError</code></td>
+                                    <td>عملية غير مناسبة للنوع</td>
+                                    <td>تحقق من النوع</td>
+                                </tr>
+                                <tr>
+                                    <td><code>IndexError</code></td>
+                                    <td>فهرس قائمة خارج النطاق</td>
+                                    <td>تحقق من <code>len()</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>KeyError</code></td>
+                                    <td>مفتاح قاموس مفقود</td>
+                                    <td>استخدم <code>.get()</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>ZeroDivisionError</code></td>
+                                    <td>قسمة على صفر</td>
+                                    <td>تحقق قبل القسمة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>FileNotFoundError</code></td>
+                                    <td>ملف غير موجود</td>
+                                    <td><code>try/except</code> أو <code>os.path.exists</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>AttributeError</code></td>
+                                    <td>خاصية غير موجودة</td>
+                                    <td>تحقق من النوع</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>لا تلتقط Exception عشوائيًا:</strong>
+                            <code>except Exception:</code> يلتقط كل شيء، حتى الأخطاء
+                            البرمجية التي يجب أن تظهر. القاعدة: التقِط الاستثناءات التي
+                            تتوقعها فقط: <code>ValueError</code>، <code>KeyError</code>، إلخ.
+                            هذا يجعل تشخيص الأخطاء أسهل بكثير.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Modules -->
+                <section class="lecture-section" id="modules" aria-labelledby="modules-title">
+                    <h2 class="section-title" id="modules-title">
+                        <i class="fas fa-boxes-stacked"></i> تنظيم الكود في وحدات
+                    </h2>
+                    <p>
+                        عندما يكبر مشروعك، لا يمكن أن يبقى في ملف واحد. <strong>الوحدات (modules)</strong>
+                        هي ملفات <code>.py</code> يمكنك استيرادها في ملفات أخرى. هذا ينظّم الكود،
+                        ويجعل الصيانة والاختبار أسهل، ويجنّبك تكرار نفس الدوال.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-folder-open"></i> هيكل مشروع Python</span>
+                            <span class="code-lang">TREE</span>
+                        </div>
+                        <pre><code>python-course/
+├── lab11.py
+├── utils/
+│   ├── __init__.py
+│   ├── validators.py
+│   └── formatters.py
+└── README.md</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> utils/validators.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>def is_valid_email(value):
+    if not isinstance(value, str):
+        return False
+    if "@" not in value:
+        return False
+    parts = value.split("@")
+    if len(parts) != 2:
+        return False
+    if not parts[0] or not parts[1]:
+        return False
+    if "." not in parts[1]:
+        return False
+    return True
+
+
+def is_positive_number(value):
+    try:
+        n = float(value)
+    except (TypeError, ValueError):
+        return False
+    return n &gt; 0</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> utils/formatters.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>def format_currency(amount, currency="ILS"):
+    return f"{amount:.2f} {currency}"
+
+
+def title_case(name):
+    if not name:
+        return ""
+    return " ".join(w.capitalize() for w in name.split())</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> lab11.py</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>from utils.validators import is_valid_email, is_positive_number
+from utils.formatters import format_currency, title_case
+
+email = input("Email: ").strip()
+if not is_valid_email(email):
+    print("البريد غير صحيح")
+else:
+    print("البريد صالح")
+
+amount_str = input("Amount: ")
+if not is_positive_number(amount_str):
+    print("المبلغ غير صحيح")
+else:
+    amount = float(amount_str)
+    print(format_currency(amount))
+
+name = input("Name: ")
+print(title_case(name))</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-book"></i> المكتبة القياسية</h3>
+                            <ul>
+                                <li><code>math</code> دوال رياضية</li>
+                                <li><code>random</code> قيم عشوائية</li>
+                                <li><code>json</code> ترميز JSON</li>
+                                <li><code>datetime</code> تواريخ وأوقات</li>
+                                <li><code>os</code> نظام الملفات</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-download"></i> مكتبات خارجية</h3>
+                            <ul>
+                                <li>تُثبّت بـ<code>pip</code></li>
+                                <li><code>pip install flask</code></li>
+                                <li><code>pip list</code> لمعرفة المثبتة</li>
+                                <li>تُدار عبر <code>requirements.txt</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-folder"></i> ملفات الوحدات</h3>
+                            <ul>
+                                <li>ملف <code>.py</code> = وحدة</li>
+                                <li>مجلد فيه <code>__init__.py</code> = حزمة</li>
+                                <li><code>__name__ == "__main__"</code> للتنفيذ المباشر</li>
+                                <li>يمكن استيراد أي دالة من أي وحدة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> أخطاء شائعة</h3>
+                            <ul>
+                                <li>ملف باسم مكتبة قياسية (<code>json.py</code>)</li>
+                                <li><code>import</code> غير مستخدم</li>
+                                <li>استيراد دائري (circular import)</li>
+                                <li>تعديل متغيرات عامة بين وحدات</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        المطلوب ثلاثة سكربتات متكاملة، كل واحد يعالج مفهومًا من المحاضرة:
+                        حلقة + قواميس، ودوال + معالجة استثناءات، ووحدات + تنظيم.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 11</h3>
+                        <ol>
+                            <li>أنشئ مجلد <code>python-lab11/</code> وافتحه في VS Code.</li>
+                            <li>
+                                <strong>السكربت الأول — عدّاد الكلمات:</strong> <code>word_counter.py</code>
+                                <ul>
+                                    <li>اطلب نصًا من المستخدم.</li>
+                                    <li>قسّمه إلى كلمات بـ<code>split()</code>.</li>
+                                    <li>احسب تكرار كل كلمة باستخدام <code>dict</code>.</li>
+                                    <li>اطبع أكثر 5 كلمات تكرارًا باستخدام <code>sorted</code>.</li>
+                                    <li>لفّ المدخل في <code>try/except</code> للتأكد من أنه نص.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>السكربت الثاني — مخزون بسيط:</strong> <code>inventory.py</code>
+                                <ul>
+                                    <li>أنشئ قائمة من قواميس: <code>[{"name": ..., "qty": ..., "price": ...}, ...]</code>.</li>
+                                    <li>أضف دالة <code>add_item()</code> تضيف منتجًا.</li>
+                                    <li>أضف دالة <code>update_qty()</code> تعدّل الكمية بمفتاح الاسم.</li>
+                                    <li>أضف دالة <code>total_value()</code> تحسب قيمة المخزون.</li>
+                                    <li>هذه الدوال تستخدم <code>.get()</code> و<code>raise</code> للأخطاء.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>السكربت الثالث — دفتر جهات اتصال:</strong> <code>contacts.py</code>
+                                <ul>
+                                    <li>قاموس خارجي: <code>{"name": "+970-xxx"}</code>.</li>
+                                    <li>دالة <code>add_contact(name, phone)</code> تتحقق من الصيغة.</li>
+                                    <li>دالة <code>delete_contact(name)</code> تتعامل مع <code>KeyError</code>.</li>
+                                    <li>دالة <code>search(term)</code> تبحث عن تطابق جزئي.</li>
+                                    <li>قائمة واجهة بسيطة (while + input) للتفاعل.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                انقل الدوال المشتركة (التحقق من البريد، تنسيق العملة) إلى وحدة
+                                <code>utils.py</code> في نفس المجلد، و<code>import</code> منها
+                                في السكربتات الثلاثة.
+                            </li>
+                            <li>
+                                أضف تعليقًا في أعلى كل سكربت يوضح الهدف والتاريخ.
+                            </li>
+                            <li>
+                                اختبر كل سكربت مرتين: مرة ببيانات صحيحة، ومرة بمدخلات خاطئة.
+                                لاحظ أن <code>try/except</code> يلتقط الأخطاء.
+                            </li>
+                            <li>
+                                أرفق الملفات الأربعة (السكربتات الثلاثة + <code>utils.py</code>)،
+                                وصورتين لكل سكربت (صحيحة وخاطئة).
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> word_counter.py — نموذج البداية</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>def count_words(text):
+    if not isinstance(text, str):
+        raise TypeError("يجب تمرير نص")
+
+    words = text.split()
+    freq = {}
+    for word in words:
+        key = word.strip().lower()
+        if not key:
+            continue
+        freq[key] = freq.get(key, 0) + 1
+
+    return freq
+
+
+def top_n(freq, n=5):
+    return sorted(freq.items(), key=lambda x: x[1], reverse=True)[:n]
+
+
+def main():
+    try:
+        text = input("أدخل نصًا: ")
+    except KeyboardInterrupt:
+        print("\nتم الإلغاء")
+        return
+
+    freq = count_words(text)
+
+    if not freq:
+        print("لم تُدخل أي كلمات.")
+        return
+
+    print(f"عدد الكلمات: {len(freq)}")
+    print("الأكثر تكرارًا:")
+    for word, count in top_n(freq):
+        print(f"  {word} → {count}")
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> السكربتات الثلاثة تعمل بلا توقف عند
+                            مدخلات صحيحة، وتلتقط الأخطاء عند المدخلات الخاطئة. كل ملف فيه دالة
+                            <code>main()</code> مع <code>if __name__ == "__main__":</code>.
+                            الدوال المشتركة في <code>utils.py</code> ويتم استيرادها. الكود
+                            نظيف، بأسماء واضحة، وتعليقات مفيدة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-indent"></i> الإزاحة غير المتسقة</h3>
+                            <p>
+                                اختلاط Tab ومسافات يسبب <code>IndentationError</code>.
+                                اضبط VS Code على "Insert Spaces: 4" والتزم به دائمًا.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-rotate-left"></i> نسيان : بعد الشرط</h3>
+                            <p>
+                                <code>if x &gt; 5</code> بدون نقطتين رأسيتين خطأ نحوي.
+                                الـ<code>:</code> إلزامية في <code>if</code>، <code>for</code>،
+                                <code>while</code>، <code>def</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-equals"></i> = بدل ==</h3>
+                            <p>
+                                <code>if x = 5:</code> خطأ نحوي. المقارنة بـ<code>==</code>،
+                                والتعيين بـ<code>=</code>. استثناء: في تعبير معيّن
+                                <code>(x := 5)</code> (Python 3.8+) لكن لا حاجة لها الآن.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-key"></i> KeyError في قاموس</h3>
+                            <p>
+                                <code>d["missing"]</code> يرفع <code>KeyError</code>.
+                                استخدم <code>d.get("missing")</code> أو <code>d.get("k", 0)</code>
+                                عندما لا تتأكد من وجود المفتاح.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-list"></i> تعديل المصفوفة أثناء المرور</h3>
+                            <p>
+                                حذف عنصر داخل حلقة <code>for</code> على نفس المصفوفة يسبب تخطي.
+                                استنسخها أولًا: <code>for x in arr.copy():</code>، أو استخدم
+                                <code>filter</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-infinity"></i> حلقة لانهائية</h3>
+                            <p>
+                                نسيت <code>i += 1</code> في <code>while</code>؟ البرنامج يعمل للأبد.
+                                أوقفه بـ<kbd>Ctrl + C</kbd>، وأصلح. تفقّد دائمًا: ما الذي يقرّب
+                                الشرط من الانتهاء؟
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-shield-slash"></i> except Exception عشوائي</h3>
+                            <p>
+                                يخفي كل الأخطاء، حتى البرمجية. التقط فقط الاستثناءات التي تتوقعها:
+                                <code>ValueError</code>، <code>KeyError</code>، <code>TypeError</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-file"></i> ملف باسم مكتبة</h3>
+                            <p>
+                                <code>random.py</code> أو <code>json.py</code> أو <code>string.py</code>
+                                في مجلدك سيحل محل المكتبة القياسية، وتحدث أخطاء غامضة. تجنّبها.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نصائح ذهبية:</strong>
+                            <br>• اطبع <code>type(x)</code> و<code>repr(x)</code> قبل السطر الذي يفشل.
+                            <br>• اختبر كل دالة منفصلة قبل تجميع السكربت.
+                            <br>• استخدم <code>python -i script.py</code> للدخول إلى REPL بعد
+                            تنفيذ السكربت، لفحص حالة المتغيرات.
+                            <br>• اسم ملفك يعكس وظيفته: <code>word_counter.py</code> لا
+                            <code>test12.py</code>.
+                            <br>• درّب نفسك على كتابة الكود بلا نسخ.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>الشروط <code>if/elif/else</code> تبني القرارات، والترتيب مهم.</li>
+                        <li><code>None</code> و<code>0</code> و<code>""</code> و<code>[]</code> و<code>{}</code> تُعتبر False في الشروط.</li>
+                        <li><code>for</code> للتكرار على تسلسل، <code>while</code> للشرط.</li>
+                        <li><code>break</code> يخرج، <code>continue</code> يتخطى، <code>else</code> بعد <code>break</code> لا تُنفّذ.</li>
+                        <li><code>list</code> قابلة للتعديل، <code>tuple</code> غير قابلة.</li>
+                        <li><code>dict</code> سجل مفتاح/قيمة، <code>set</code> بلا ترتيب ولا تكرار.</li>
+                        <li>List comprehensions تختصر التحويلات البسيطة في سطر واحد.</li>
+                        <li>الدوال تحمل اسمًا واضحًا، ومعاملات مفهومة، و<code>return</code> صريحًا.</li>
+                        <li>القيم الافتراضية و<code>*args</code> و<code>**kwargs</code> توسّع الدوال.</li>
+                        <li><code>try/except/else/finally</code> تمنع الانهيار عند الأخطاء المتوقعة.</li>
+                        <li>الوحدات تنظّم الكود، وتُستورد بـ<code>import</code> و<code>from</code>.</li>
+                        <li>كل هذا يُستخدم حرفيًا في Flask بالجلسة القادمة.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما الفرق بين <code>for</code> و<code>while</code>؟</summary>
+                        <p>
+                            <code>for</code> للتكرار على تسلسل معروف الطول (قائمة، مدى، نص).
+                            <code>while</code> للتكرار بحسب شرط قد لا يتحقق أبدًا (ينفّذ صفر مرة).
+                            كلتاهما تدعمان <code>break</code> و<code>continue</code>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) ما وظيفة <code>else</code> بعد الحلقة؟</summary>
+                        <p>
+                            تُنفّذ بعد انتهاء الحلقة بشكل طبيعي، أي <strong>بدون</strong> حدوث
+                            <code>break</code>. مفيدة جدًا للبحث: إذا وجدت العنصر تُنفّذ
+                            <code>break</code> ولا تُنفّذ <code>else</code>، وإلا تُنفّذ
+                            <code>else</code> "لم أجد".
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) متى نستخدم tuple بدلًا من list؟</summary>
+                        <p>
+                            عندما تكون البيانات ثابتة (إحداثيات، ثوابت)، أو عندما نريد كفاءة
+                            أعلى قليلًا، أو عندما نحتاجها كمفتاح قاموس (لأنها قابلة للتجزئة).
+                            أيضًا لتفكيك قيم متعددة من دالة.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) لماذا نستخدم <code>try/except</code> ولماذا لا نستخدم <code>except Exception</code> دائمًا؟</summary>
+                        <p>
+                            <code>try/except</code> يحمي البرنامج من الانهيار عند الأخطاء
+                            المتوقعة. لكن <code>except Exception</code> يلتقط حتى الأخطاء
+                            البرمجية (مثل خطأ إملائي في اسم متغير) ويخفيها، فيصعب التشخيص.
+                            الأفضل: التقاط فقط <code>ValueError</code>، <code>KeyError</code>، إلخ.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) ما وظيفة <code>if __name__ == "__main__":</code>؟</summary>
+                        <p>
+                            تسمح بتشغيل الكود فقط عندما يُنفَّذ الملف مباشرة (<code>python script.py</code>)،
+                            وليس عند استيراده من وحدة أخرى. هذا يفصل "سلوك التنفيذ المباشر" عن
+                            "الدوال القابلة للاستيراد".
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="lecture10.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> المحاضرة السابقة
+                    </a>
+                    <a href="lecture12.html">
+                        المحاضرة التالية: مقدمة إلى Flask <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 11 · أساسيات Python البرمجية | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

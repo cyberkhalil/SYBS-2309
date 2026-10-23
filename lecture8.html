@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 8 | DOM والأحداث والتحقق من المدخلات — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة الثامنة من مساق SYBS 2309: DOM والأحداث والتحقق من المدخلات — ما هو DOM، اختيار العناصر بـquerySelector وgetElementById، تعديل المحتوى والخصائص والأصناف، إرفاق الأحداث بـaddEventListener، التحقق من النماذج في الواجهة الأمامية، وعرض رسائل خطأ مفيدة وقابلة للوصول.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖱️</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 8</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 8: DOM والأحداث والتحقق من المدخلات</h1>
+            <p class="lecture-lead">
+                في المحاضرة السابقة تعلمنا <strong>المنطق البرمجي والدوال</strong>. اليوم نصل إلى اللحظة التي
+                تصبح فيها الصفحة <strong>تفاعلية حقيقية</strong>: نتعرف على <strong>DOM</strong> — التمثيل
+                الشجري للصفحة الذي يستطيع JavaScript التعامل معه — ثم نتعلم كيف نختار العناصر بـ
+                <code>querySelector</code> و<code>getElementById</code>، ونعدّل <strong>المحتوى والخصائص
+                والأصناف</strong>، ونستجيب <strong>للأحداث</strong> (نقر، إدخال، إرسال نموذج) عبر
+                <code>addEventListener</code>، وننهي ببناء <strong>تحقق من النماذج</strong> في الواجهة الأمامية
+                مع رسائل خطأ واضحة وقابلة للوصول — ليس هذا نهاية الأمان، بل بدايته، والتحقق النهائي يبقى في
+                الخادم.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 8</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 1 · الواجهة الأمامية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script8.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script8.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#what-is-dom">ما هو DOM وكيف يبنيه المتصفح</a></li>
+                        <li><a href="#selecting-elements">اختيار العناصر</a></li>
+                        <li><a href="#modifying-elements">تعديل المحتوى والخصائص والأصناف</a></li>
+                        <li><a href="#events">الأحداث وaddEventListener</a></li>
+                        <li><a href="#form-validation">التحقق من النماذج في الواجهة الأمامية</a></li>
+                        <li><a href="#accessible-errors">رسائل خطأ مفيدة وقابلة للوصول</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> هذه المحاضرة هي نقطة التحول الحقيقية. حتى الآن كانت JS تعمل في
+                    Console فقط. اليوم ستبدأ بالتعامل مع الصفحة نفسها، وأي خطأ ستراه على الشاشة أمامك مباشرة.
+                    خذ وقتك في التطبيق العملي.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على قراءة صفحة HTML والتعامل معها برمجياً: تختار أي
+                        عنصر تريد، تغيّر نصه أو خصائصه أو أصنافه، تستمع لنقرات المستخدم وإدخالاته، تتحقق من
+                        صحة مدخلات النموذج قبل الإرسال، وتُظهر رسائل خطأ واضحة وقابلة للوصول. هذه المهارات
+                        هي جوهر أي تطبيق ويب تفاعلي — وهي ما سيمكّنك لاحقاً من فهم كيف يستقبل Flask البيانات
+                        من الواجهة.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>شرح ما هو DOM وكيف يبنيه المتصفح</li>
+                                <li>التمييز بين <code>querySelector</code> و<code>getElementById</code></li>
+                                <li>فهم دورة حياة الحدث وكائن <code>event</code></li>
+                                <li>معرفة الفرق بين <code>textContent</code> و<code>innerHTML</code></li>
+                                <li>إدراك أن تحقق الواجهة ليس أماناً كاملاً</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>اختيار العناصر وتعديل محتواها</li>
+                                <li>الاستماع لأحداث <code>click</code> و<code>submit</code> و<code>input</code></li>
+                                <li>منع إرسال النموذج عبر <code>e.preventDefault()</code></li>
+                                <li>بناء تحقق مخصص من الاسم والبريد وكلمة المرور</li>
+                                <li>عرض رسائل خطأ مرتبطة بالحقول</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>تجنّب أخطاء <code>null</code> عند تشغيل السكربت قبل DOM</li>
+                                <li>كتابة مستمعات أحداث نظيفة وغير متكررة</li>
+                                <li>تصميم نماذج تفاعلية صديقة للمستخدم</li>
+                                <li>الاستعداد لمحاضرة الامتحان النصفي (مراجعة الأسابيع 1–8)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- What is DOM -->
+                <section class="lecture-section" id="what-is-dom" aria-labelledby="dom-title">
+                    <h2 class="section-title" id="dom-title">
+                        <i class="fas fa-sitemap"></i> ما هو DOM وكيف يبنيه المتصفح
+                    </h2>
+                    <p>
+                        <strong>DOM</strong> اختصار <strong>Document Object Model</strong> — نموذج كائنات المستند.
+                        هو التمثيل البرمجي للصفحة كنظام من الكائنات المتداخلة، أي شجرة. عندما يقرأ المتصفح ملف
+                        HTML، يحوّله إلى هذا النموذج، ويصبح كل وسم <strong>عنصراً (Element)</strong> له خصائص
+                        ويمكن التعامل معه عبر JavaScript.
+                    </p>
+                    <p>
+                        المتصفح لا يقرأ HTML حرفياً عند تنفيذ JavaScript، بل يقرأ <strong>الشجرة</strong> التي
+                        بناها من HTML. أي تعديل تجريه JavaScript على DOM ينعكس مباشرة على الصفحة المرئية —
+                        وهذا هو سر التفاعل.
+                    </p>
+
+                    <div class="flow-diagram" role="img" aria-label="مخطط يوضح تحويل ملف HTML إلى شجرة DOM ثم إلى صفحة مرئية">
+                        <div class="flow-box">
+                            <i class="fas fa-file-code"></i>
+                            <h3>ملف HTML</h3>
+                            <p>نص مكتوب في الملف، لا يفهمه JavaScript مباشرة.</p>
+                        </div>
+                        <div class="flow-connector" aria-hidden="true">
+                            <span>يُحلَّل</span>
+                            <i class="fas fa-arrow-left"></i>
+                            <span class="response-arrow">يُرسم</span>
+                            <i class="fas fa-arrow-right response-arrow"></i>
+                        </div>
+                        <div class="flow-box server-box">
+                            <i class="fas fa-sitemap"></i>
+                            <h3>شجرة DOM</h3>
+                            <p>كائنات مترابطة: html ← body ← عناصر ← نصوص.</p>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> DOM Tree — مفهوم</span>
+                            <span class="code-lang">TREE</span>
+                        </div>
+                        <pre><code>document
+└── html
+    ├── head
+    │   ├── meta (charset)
+    │   ├── title
+    │   └── link (stylesheet)
+    └── body
+        ├── header
+        │   └── h1 → "مرحباً"
+        ├── main
+        │   ├── p → "فقرة نص"
+        │   └── ul
+        │       ├── li → "HTML"
+        │       └── li → "CSS"
+        └── footer</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-cube"></i> Element</h3>
+                            <ul>
+                                <li>كل وسم HTML يصبح عنصراً</li>
+                                <li>له خصائص (<code>attributes</code>) وأبناء</li>
+                                <li>عليه نطبّق التعديلات</li>
+                                <li>أمثلة: <code>&lt;h1&gt;</code>، <code>&lt;p&gt;</code>، <code>&lt;img&gt;</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-font"></i> Text Node</h3>
+                            <ul>
+                                <li>النص داخل العنصر</li>
+                                <li>ليس عنصراً بل عقدة نصية</li>
+                                <li>نقرأه بـ<code>textContent</code></li>
+                                <li>يظهر في الصفحة المرئية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-book"></i> document</h3>
+                            <ul>
+                                <li>الجذر البرمجي للشجرة</li>
+                                <li>منه تبدأ كل عمليات البحث</li>
+                                <li>مثال: <code>document.body</code></li>
+                                <li>موجود تلقائياً في المتصفح</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> متى يُبنى DOM؟</h3>
+                            <ul>
+                                <li>يتدرّج أثناء قراءة HTML</li>
+                                <li>ليس كاملاً حتى يصل المتصفح للنهاية</li>
+                                <li>لهذا نضع السكربت في نهاية body</li>
+                                <li>أو في head مع <code>defer</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>مشكلة شائعة:</strong> تشغيل السكربت قبل اكتمال بناء DOM يُنتج خطأ
+                            <code>Cannot read properties of null</code>. السبب أن
+                            <code>document.querySelector('h1')</code> تُرجع <code>null</code> لأن العنصر
+                            لم يُبنَ بعد. الحل: <code>defer</code> أو نهاية <code>body</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Selecting elements -->
+                <section class="lecture-section" id="selecting-elements" aria-labelledby="selecting-title">
+                    <h2 class="section-title" id="selecting-title">
+                        <i class="fas fa-crosshairs"></i> اختيار العناصر
+                    </h2>
+                    <p>
+                        كل عملية في DOM تبدأ بـ<strong>اختيار</strong>: نحدد عنصراً موجوداً في الصفحة
+                        ثم نتعامل معه. الأدوات الأساسية لذلك:
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>الأداة</th>
+                                    <th>ترجع</th>
+                                    <th>المثال</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>getElementById('x')</code></td>
+                                    <td>عنصر واحد بـ id</td>
+                                    <td><code>document.getElementById('hero')</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>querySelector('.c')</code></td>
+                                    <td>أول عنصر يطابق المحدد</td>
+                                    <td><code>document.querySelector('.card')</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>querySelectorAll('.c')</code></td>
+                                    <td>كل العناصر المطابقة (NodeList)</td>
+                                    <td><code>document.querySelectorAll('.card')</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>getElementsByClassName('c')</code></td>
+                                    <td>كل عناصر الصنف (HTMLCollection حية)</td>
+                                    <td>أقل استخداماً اليوم</td>
+                                </tr>
+                                <tr>
+                                    <td><code>getElementsByTagName('p')</code></td>
+                                    <td>كل عناصر الوسم</td>
+                                    <td>نادر استخدامه</td>
+                                </tr>
+                                <tr>
+                                    <td><code>element.children</code></td>
+                                    <td>أبناء عنصر مباشرون</td>
+                                    <td><code>card.children</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>element.parentElement</code></td>
+                                    <td>الأب المباشر</td>
+                                    <td><code>btn.parentElement</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>element.closest('.c')</code></td>
+                                    <td>أقرب سلف يطابق المحدد</td>
+                                    <td><code>link.closest('article')</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> selecting.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// اختيار عنصر واحد
+const title = document.querySelector('h1');
+
+// اختيار بـ id
+const hero = document.getElementById('hero');
+
+// اختيار كل البطاقات
+const cards = document.querySelectorAll('.card');
+
+// المرور عليها
+cards.forEach(card => {
+    console.log(card.textContent);
+});
+
+// تحويل NodeList إلى مصفوفة (إذا احتجت)
+const arr = Array.from(cards);
+console.log(arr.length);</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check"></i> querySelector</h3>
+                            <ul>
+                                <li>يقبل أي محدد CSS</li>
+                                <li>يعيد أول تطابق فقط</li>
+                                <li>مرن جداً</li>
+                                <li>الخيار اليومي</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-list"></i> querySelectorAll</h3>
+                            <ul>
+                                <li>يعيد NodeList من كل التطابقات</li>
+                                <li>يدعم <code>forEach</code></li>
+                                <li>مفيد للبطاقات والقوائم</li>
+                                <li>ثابت (لا يتحدث تلقائياً)</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-bug"></i> احترس من null</h3>
+                            <ul>
+                                <li>إذا لم يجد العنصر يرجع <code>null</code></li>
+                                <li>محاولة الوصول لخاصية أو <code>null</code> = خطأ</li>
+                                <li>تحقق قبل الاستخدام أو استخدم <code>?.</code></li>
+                                <li>مثال: <code>title?.textContent</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>قاعدة عملية:</strong> استخدم <code>querySelector</code> عندما تحتاج عنصراً
+                            أو محدداً معقداً، و<code>querySelectorAll</code> عندما تحتاج مجموعة. تجنّب
+                            <code>getElementsByClassName</code> في المشاريع الحديثة لأن مجموعتها "حية" —
+                            تتغير تلقائياً عند تعديل DOM، وهذا يسبب مفاجآت.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Modifying elements -->
+                <section class="lecture-section" id="modifying-elements" aria-labelledby="modifying-title">
+                    <h2 class="section-title" id="modifying-title">
+                        <i class="fas fa-pen-to-square"></i> تعديل المحتوى والخصائص والأصناف
+                    </h2>
+                    <p>
+                        بعد اختيار العنصر، نستطيع تعديل عدة جوانب: المحتوى، الخصائص (attributes)، الأصناف،
+                        والأنماط. كل جانب له واجهته الخاصة في DOM.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-font"></i> textContent</h3>
+                            <ul>
+                                <li>يقرأ أو يكتب النص الخام</li>
+                                <li>يتجاهل وسوم HTML داخله</li>
+                                <li>آمن ضد XSS تقريباً</li>
+                                <li>الخيار المفضل للنصوص</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-code"></i> innerHTML</h3>
+                            <ul>
+                                <li>يقرأ أو يكتب HTML كامل</li>
+                                <li>يفسّر الوسوم وينشئ عناصر</li>
+                                <li>خطر XSS إذا جاء من المستخدم</li>
+                                <li>استخدمه بحذر شديد</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-tag"></i> setAttribute / removeAttribute</h3>
+                            <ul>
+                                <li>تعديل خصائص مثل <code>href</code> و<code>src</code></li>
+                                <li>مثال: <code>a.href = 'https://...'</code></li>
+                                <li>يمكن القراءة بـ <code>getAttribute</code></li>
+                                <li>الخاصية المباشرة أسرع في الغالب</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-palette"></i> classList</h3>
+                            <ul>
+                                <li><code>add('a')</code> يضيف صنفاً</li>
+                                <li><code>remove('a')</code> يحذف صنفاً</li>
+                                <li><code>toggle('a')</code> يبدّل الحالة</li>
+                                <li><code>contains('a')</code> يتحقق</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> modify.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>const title = document.querySelector('h1');
+const card = document.querySelector('.card');
+const link = document.querySelector('.hero-link');
+const btn = document.querySelector('.toggle-btn');
+
+// النص
+title.textContent = 'عنوان جديد';
+
+// الصنف
+card.classList.add('active');
+card.classList.remove('hidden');
+card.classList.toggle('dark');       // يضيف أو يحذف
+const hasActive = card.classList.contains('active');
+console.log(hasActive);               // true
+
+// الخصائص
+link.href = 'https://developer.mozilla.org/ar/';
+link.setAttribute('target', '_blank');
+link.setAttribute('rel', 'noopener noreferrer');
+
+// الأنماط — للأخطاء البرمجية فقط، لا للتصميم
+card.style.borderColor = '#3b82f6';
+
+// ملاحظة على textContent مقابل innerHTML
+const box = document.querySelector('.box');
+
+// آمن — يظهر النص كما هو
+box.textContent = '<b>نص حرفي</b>';
+
+// خطر — إذا كان النص من المستخدم، قد يُنفّذ سكربتاً
+box.innerHTML = '<b>نص عريض</b>';</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-shield-halved"></i>
+                        <div>
+                            <strong>تحذير أمني مهم:</strong> <code>innerHTML</code> مع نص قادم من المستخدم
+                            (تعليق، اسم، رسالة) يفتح باب <strong>XSS</strong>. المستخدم قد يكتب
+                            <code>&lt;img src=x onerror=alert(1)&gt;</code> فيُستثمر مباشرة. القاعدة:
+                            استخدم <code>textContent</code> لكل ما هو نصي، و<code>innerHTML</code> فقط
+                            للـHTML الذي تكتبه أنت أو تأتي من مصدر موثوق ومُنقّى.
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>لمسة احترافية:</strong> اجعل تعديل الأصناف هو أسلوبك الرئيسي للتفاعل.
+                            بدلاً من تغيير <code>style.color</code> مباشرة، أضف أو احذف صنفاً في CSS.
+                            هذا يفصل الشكل عن السلوك، ويجعل تجربة استخدامك متسقة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Events -->
+                <section class="lecture-section" id="events" aria-labelledby="events-title">
+                    <h2 class="section-title" id="events-title">
+                        <i class="fas fa-hand-pointer"></i> الأحداث وaddEventListener
+                    </h2>
+                    <p>
+                        <strong>الحدث (Event)</strong> هو شيء يحدث في الصفحة: نقر، إدخال، تمرير، إرسال نموذج،
+                        تحميل. JavaScript تستطيع "الاستماع" لهذه الأحداث وتنفيذ كود استجابةً لها. الأداة
+                        الأساسية هي <code>addEventListener</code>.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> events.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>const btn = document.querySelector('.btn');
+const form = document.querySelector('form');
+const input = document.querySelector('#email');
+
+// نقر
+btn.addEventListener('click', () => {
+    console.log('تم النقر');
+});
+
+// إرسال نموذج
+form.addEventListener('submit', (e) => {
+    e.preventDefault();       // منع إعادة التحميل
+    console.log('داخل submit');
+});
+
+// إدخال أثناء الكتابة
+input.addEventListener('input', (e) => {
+    console.log('القيمة الحالية:', e.target.value);
+});
+
+// خروج العنصر من التركيز
+input.addEventListener('blur', () => {
+    console.log('انتهى الإدخال');
+});</code></pre>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>الحدث</th>
+                                    <th>يُطلق عند</th>
+                                    <th>الاستخدام الشائع</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>click</code></td>
+                                    <td>نقر أو لمس</td>
+                                    <td>أزرار، تبويبات، قوائم</td>
+                                </tr>
+                                <tr>
+                                    <td><code>submit</code></td>
+                                    <td>إرسال النموذج</td>
+                                    <td>التحقق قبل الإرسال</td>
+                                </tr>
+                                <tr>
+                                    <td><code>input</code></td>
+                                    <td>تغيّر قيمة الحقل أثناء الكتابة</td>
+                                    <td>تحقق فوري، عدّاد أحرف</td>
+                                </tr>
+                                <tr>
+                                    <td><code>change</code></td>
+                                    <td>تغيّر قيمة ثم مغادرة الحقل</td>
+                                    <td>قوائم، تشيك بوكس</td>
+                                </tr>
+                                <tr>
+                                    <td><code>blur</code> / <code>focus</code></td>
+                                    <td>خروج / دخول تركيز</td>
+                                    <td>التحقق عند المغادرة</td>
+                                </tr>
+                                <tr>
+                                    <td><code>keydown</code></td>
+                                    <td>ضغط مفتاح</td>
+                                    <td>اختصارات لوحة المفاتيح</td>
+                                </tr>
+                                <tr>
+                                    <td><code>DOMContentLoaded</code></td>
+                                    <td>بناء DOM كامل</td>
+                                    <td>بدء السكربت بأمان</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-mouse-pointer"></i> e.target</h3>
+                            <ul>
+                                <li>العنصر الذي أطلق الحدث</li>
+                                <li>مثال: حقل الإدخال ذاته</li>
+                                <li>نقرأ قيمته بـ <code>e.target.value</code></li>
+                                <li>مفيد لمعالجة جماعية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-hand"></i> preventDefault</h3>
+                            <ul>
+                                <li>يمنع السلوك الافتراضي للمتصفح</li>
+                                <li>أهم استخدام: منع إرسال النموذج</li>
+                                <li>مفيد أيضاً في منع اتباع رابط</li>
+                                <li>يُستخدم قبل أي منطق آخر</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-tag"></i> addEventListener مقابل onclick</h3>
+                            <ul>
+                                <li>addEventListener يسمح بمستمعات متعددة</li>
+                                <li>onclick يستبدل المستمع السابق</li>
+                                <li>addEventListener أفضل دائماً</li>
+                                <li>لا تستخدم السمة <code>onclick=""</code> في HTML</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-redo"></i> once وpassive</h3>
+                            <ul>
+                                <li><code>{ once: true }</code> لمستمع يعمل مرة</li>
+                                <li><code>{ passive: true }</code> لتحسين الأداء</li>
+                                <li>مفيد لأحداث <code>scroll</code> و<code>touch</code></li>
+                                <li>لا يؤثر على <code>click</code> عادة</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>لا تنسَ <code>e.preventDefault()</code>:</strong> بدونها، سيحاول المتصفح
+                            إرسال النموذج إلى الخادم (أو إعادة تحميل الصفحة بمسار <code>action</code>)،
+                            وستفقد كل تعديلاتك وتحققك. ضعها في أول سطر من معالج <code>submit</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Form validation -->
+                <section class="lecture-section" id="form-validation" aria-labelledby="validation-title">
+                    <h2 class="section-title" id="validation-title">
+                        <i class="fas fa-shield-halved"></i> التحقق من النماذج في الواجهة الأمامية
+                    </h2>
+                    <p>
+                        التحقق في الواجهة الأمامية يفعل ثلاثة أمور: يحسّن التجربة (المستخدم لا ينتظر إرسال
+                        الخادم ليعرف خطأه)، يقلل الطلبات غير الصالحة، ويُظهر رسائل واضحة. لكنه
+                        <strong>ليس أماناً</strong>. التحقق الحقيقي يبقى في الخادم.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check"></i> التحقق المدمج</h3>
+                            <ul>
+                                <li><code>required</code>، <code>minlength</code>، <code>pattern</code></li>
+                                <li>المتصفح يمنع الإرسال تلقائياً</li>
+                                <li>رسائل مدمجة (رسائل المتصفح)</li>
+                                <li>لا تعتمد عليه وحده</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-code"></i> التحقق المخصص</h3>
+                            <ul>
+                                <li>نكتبه بأنفسنا في JavaScript</li>
+                                <li>رسائل عربية واضحة في مكان محدد</li>
+                                <li>يعمل مع <code>novalidate</code></li>
+                                <li>التحكم الكامل بالتجربة</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> form.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;form id="register-form" novalidate&gt;
+    &lt;p&gt;
+        &lt;label for="email"&gt;البريد الإلكتروني&lt;/label&gt;
+        &lt;input type="email" id="email" name="email" required&gt;
+        &lt;small class="error" id="email-error" role="alert"&gt;&lt;/small&gt;
+    &lt;/p&gt;
+
+    &lt;p&gt;
+        &lt;label for="password"&gt;كلمة المرور&lt;/label&gt;
+        &lt;input type="password" id="password" name="password"
+               required minlength="8"&gt;
+        &lt;small class="error" id="password-error" role="alert"&gt;&lt;/small&gt;
+    &lt;/p&gt;
+
+    &lt;button type="submit"&gt;إنشاء الحساب&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> validation.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>const form = document.getElementById('register-form');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const emailErr = document.getElementById('email-error');
+const passErr = document.getElementById('password-error');
+
+function setError(input, errEl, message) {
+    errEl.textContent = message;
+    input.classList.add('invalid');
+    input.setAttribute('aria-invalid', 'true');
+}
+
+function clearError(input, errEl) {
+    errEl.textContent = '';
+    input.classList.remove('invalid');
+    input.removeAttribute('aria-invalid');
+}
+
+function validateEmail(value) {
+    if (value.trim() === '') return 'البريد الإلكتروني مطلوب.';
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(value)) return 'صيغة البريد غير صحيحة.';
+    return '';
+}
+
+function validatePassword(value) {
+    if (value.length === 0) return 'كلمة المرور مطلوبة.';
+    if (value.length < 8) return 'كلمة المرور يجب أن تكون 8 أحرف أو أكثر.';
+    return '';
+}
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();  // منع الإرسال الافتراضي
+
+    let ok = true;
+
+    // بريد
+    const emailMsg = validateEmail(email.value);
+    if (emailMsg) {
+        setError(email, emailErr, emailMsg);
+        ok = false;
+    } else {
+        clearError(email, emailErr);
+    }
+
+    // كلمة مرور
+    const passMsg = validatePassword(password.value);
+    if (passMsg) {
+        setError(password, passErr, passMsg);
+        ok = false;
+    } else {
+        clearError(password, passErr);
+    }
+
+    if (!ok) return;
+
+    console.log('البيانات جاهزة للإرسال:');
+    console.log({
+        email: email.value,
+        password: password.value
+    });
+
+    // لاحقاً: fetch أو form.submit() إلى Flask
+});</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>مرة أخرى للتأكيد:</strong> تحقق JavaScript يمكن تجاوزه بسهولة
+                            (تعطيل JS، أدوات المطور، إرسال طلب مباشر بـcurl). تحققك في الواجهة يحسّن
+                            التجربة، لكنه ليس أماناً. في Flask لاحقاً سنكرر التحقق على الخادم.
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>لماذا <code>novalidate</code>؟</strong> إذا كتبنا التحقق المخصص،
+                            نستخدم <code>novalidate</code> على النموذج لتعطيل رسائل المتصفح الافتراضية.
+                            بهذا نعرض رسائلنا العربية الموحّدة بدل رسائل المتصفح الإنجليزية المتغيرة
+                            بين المتصفحات.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Accessible errors -->
+                <section class="lecture-section" id="accessible-errors" aria-labelledby="accessible-title">
+                    <h2 class="section-title" id="accessible-title">
+                        <i class="fas fa-universal-access"></i> رسائل خطأ مفيدة وقابلة للوصول
+                    </h2>
+                    <p>
+                        رسالة الخطأ ليست تفصيلاً جمالياً. هي أهم ما يراه المستخدم عند التعثر. جودة الرسالة
+                        تحدد إن كان سيعرف كيف يُصحّح الخطأ أو سيستسلم. والوصولية تجعلها مفهومة للجميع، بما
+                        فيهم من يعتمد على قارئ الشاشة.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-bullseye"></i> خصائص الرسالة الجيدة</h3>
+                            <ul>
+                                <li>واضحة: تصف المشكلة بالضبط</li>
+                                <li>قابلة للتنفيذ: تقول كيف تُصلح</li>
+                                <li>بالعربية: لا رسائل متصفح مبهمة</li>
+                                <li>قريبة من الحقل</li>
+                                <li>تختفي عند التصحيح</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-universal-access"></i> الوصولية</h3>
+                            <ul>
+                                <li><code>role="alert"</code> لقارئ الشاشة</li>
+                                <li><code>aria-invalid="true"</code> على الحقل</li>
+                                <li><code>aria-describedby</code> لربط الرسالة</li>
+                                <li>لا تعتمد على اللون وحده</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-bug"></i> رسائل سيئة</h3>
+                            <ul>
+                                <li>"خطأ!"</li>
+                                <li>"Invalid input"</li>
+                                <li>"الحقل مطلوب" (أي حقل؟)</li>
+                                <li>رسالة عامة فوق الصفحة لكل حقل</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-eye"></i> تحسين التجربة</h3>
+                            <ul>
+                                <li>تحقق عند <code>submit</code> لا عند كل ضغطة</li>
+                                <li><code>blur</code> خيار لطيف بعد الكتابة</li>
+                                <li>ركز على أول حقل خاطئ</li>
+                                <li>لا تصرخ بالأحمر في كل مكان</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> a11y-error.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;p&gt;
+    &lt;label for="email"&gt;البريد الإلكتروني&lt;/label&gt;
+    &lt;input type="email"
+           id="email"
+           name="email"
+           aria-describedby="email-error"
+           aria-invalid="false"&gt;
+    &lt;small id="email-error"
+           role="alert"
+           class="error"&gt;&lt;/small&gt;
+&lt;/p&gt;</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>تفصيل تقني:</strong> <code>role="alert"</code> يجعل قارئ الشاشة يُعلن
+                            النص فور ظهوره داخل العنصر. <code>aria-invalid</code> يخبر التقنيات المساعدة
+                            أن القيمة الحالية غير صحيحة. <code>aria-describedby</code> يربط الرسالة
+                            بالحقل. هذه الثلاثة معاً تنقل تجربة المستخدم البصري إلى المستخدم غير المبصر.
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> error.css</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>.error {
+    display: block;
+    min-height: 1.2em;     /* مساحة ثابتة لتفادي القفزات */
+    color: #fca5a5;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+input.invalid {
+    border-color: #ef4444;
+    outline: 2px solid rgba(239, 68, 68, 0.3);
+}
+
+input:focus {
+    outline: 2px solid #7dd3fc;
+    outline-offset: 2px;
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        المطلوب بناء صفحة تسجيل كاملة تعمل بالكامل في الواجهة الأمامية: نموذج، تحقق مخصص،
+                        رسائل خطأ عربية مرتبطة بالحقول، ومنع إعادة تحميل الصفحة عند الإرسال.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 8</h3>
+                        <ol>
+                            <li>أنشئ ملف <code>register.html</code> داخل مجلد <code>web-course</code>.</li>
+                            <li>اكتب مستند HTML5 كاملاً مع هيكل دلالي (<code>header</code>، <code>main</code>، <code>footer</code>).</li>
+                            <li>أضف نموذجاً فيه حقلان على الأقل:
+                                <ul>
+                                    <li>البريد الإلكتروني: <code>type="email"</code>، <code>required</code>، مع <code>&lt;small class="error"&gt;</code> تحته.</li>
+                                    <li>كلمة المرور: <code>type="password"</code>، <code>required</code>، <code>minlength="8"</code>.</li>
+                                    <li>رقم الهاتف (اختياري في التحدي): <code>type="tel"</code> مع <code>pattern</code> رقمي.</li>
+                                </ul>
+                            </li>
+                            <li>أضف <code>novalidate</code> على <code>&lt;form&gt;</code> لتستبدل رسائل المتصفح برسائلك.</li>
+                            <li>
+                                في <code>main.js</code> (أو ملف مخصص <code>register.js</code>)، اكتب دالتين:
+                                <ul>
+                                    <li><code>setError(input, errEl, msg)</code> — تضبط النص وتضيف صنفاً وتضبط <code>aria-invalid</code>.</li>
+                                    <li><code>clearError(input, errEl)</code> — تمسح النص وتزيل الصنف والصفة.</li>
+                                </ul>
+                            </li>
+                            <li>اكتب دالتَي تحقق: <code>validateEmail(value)</code> و<code>validatePassword(value)</code> تُرجعان نص الخطأ أو <code>''</code>.</li>
+                            <li>أضف <code>form.addEventListener('submit', e => { ... })</code>.</li>
+                            <li>في أول سطر من معالج <code>submit</code>: <code>e.preventDefault()</code>.</li>
+                            <li>نفّذ التحقق على الحقلين، اعرض الرسائل، وتوقف إذا وُجد خطأ.</li>
+                            <li>عند النجاح: اطبع البيانات في <code>console.log</code> (لاحقاً سنستبدلها بـ<code>fetch</code> إلى Flask).</li>
+                            <li>جرّب: إرسال فارغ، بريد بلا <code>@</code>، كلمة مرور 4 أحرف، ثم بيانات صحيحة.</li>
+                            <li>افحص الحقول بلوحة المفاتيح فقط، وتأكد أن رسائل الخطأ تُقرأ بوضوح.</li>
+                            <li>أرفق <code>register.html</code> و<code>register.js</code> وصورتين: واحدة تُظهر خطأً، والأخرى نجاحاً.</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> register.js — هيكل البداية</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// ==========================================
+// SYBS 2309 — المحاضرة 8 — التطبيق العملي
+// ==========================================
+
+const form = document.getElementById('register-form');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const emailErr = document.getElementById('email-error');
+const passErr = document.getElementById('password-error');
+
+function setError(input, errEl, message) {
+    errEl.textContent = message;
+    input.classList.add('invalid');
+    input.setAttribute('aria-invalid', 'true');
+}
+
+function clearError(input, errEl) {
+    errEl.textContent = '';
+    input.classList.remove('invalid');
+    input.removeAttribute('aria-invalid');
+}
+
+function validateEmail(value) {
+    if (value.trim() === '') return 'البريد الإلكتروني مطلوب.';
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(value)) return 'صيغة البريد الإلكتروني غير صحيحة.';
+    return '';
+}
+
+function validatePassword(value) {
+    if (value.length === 0) return 'كلمة المرور مطلوبة.';
+    if (value.length < 8) return 'كلمة المرور يجب أن تكون 8 أحرف على الأقل.';
+    return '';
+}
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    let ok = true;
+
+    const emailMsg = validateEmail(email.value);
+    if (emailMsg) { setError(email, emailErr, emailMsg); ok = false; }
+    else { clearError(email, emailErr); }
+
+    const passMsg = validatePassword(password.value);
+    if (passMsg) { setError(password, passErr, passMsg); ok = false; }
+    else { clearError(password, passErr); }
+
+    if (!ok) {
+        email.focus();
+        return;
+    }
+
+    console.log('جاهز للإرسال:', {
+        email: email.value,
+        password: password.value
+    });
+
+    // لاحقاً:
+    // fetch('/register', { method: 'POST', body: new FormData(form) });
+});</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> لا إعادة تحميل عند الإرسال، رسائل خطأ عربية
+                            واضحة مرتبطة بالحقول، كل حقل له <code>&lt;small role="alert"&gt;</code>،
+                            زر إرسال لا يُرسل إلا عند صحّة البيانات، والفشل لا يترك مستخدماً في حيرة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-ban"></i> نسيان e.preventDefault</h3>
+                            <p>
+                                النموذج يُرسل، الصفحة تُعيد التحميل، وكل رسائل الخطأ تختفي مباشرة. الحل:
+                                أول سطر في معالج <code>submit</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-null"></i> null عند السكربت المبكر</h3>
+                            <p>
+                                <code>querySelector</code> يعيد <code>null</code> إذا كان DOM لم يُبنَ
+                                بعد. الحل: <code>defer</code> أو نهاية <code>body</code>، والتحقق من
+                                النتيجة قبل الوصول لخصائصها.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-code"></i> innerHTML مع نص المستخدم</h3>
+                            <p>
+                                إدراج نص مستخدم في <code>innerHTML</code> يفتح ثغرة XSS. استخدم
+                                <code>textContent</code> للنصوص دائماً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-mouse-pointer"></i> الاعتماد على onclick</h3>
+                            <p>
+                                <code>element.onclick = fn</code> يستبدل المستمع السابق. إذا ربطت
+                                مستمعين، يتجاهل المتصفح كل ما قبل الأخير. استخدم
+                                <code>addEventListener</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-eye-slash"></i> إخفاء مؤشر التركيز</h3>
+                            <p>
+                                إزالة <code>outline</code> مع <code>:focus</code> يدمر الوصولية. لا
+                                تخفِ مؤشر التركيز أبداً. إن أردت جمالاً، استبدله بتصميم أوضح.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-equals"></i> مقارنة القيمة بـ==</h3>
+                            <p>
+                                مدخلات النماذج نصوص دائماً. <code>input.value == 0</code> تعمل بشكل
+                                مضلل. استخدم تحويلاً صريحاً: <code>Number(value) === 0</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-redo"></i> إعادة التحقق داخل كل ضغطة</h3>
+                            <p>
+                                التحقق فور كل حرف مزعج للمستخدم الذي لم يُكمل بعد. تحقق عند
+                                <code>submit</code> أو <code>blur</code> أفضل. <code>input</code>
+                                لتحقق خفيف فقط (مثل عدّاد الأحرف).
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-shield-slash"></i> الاعتقاد أن تحقق الواجهة أمان</h3>
+                            <p>
+                                يمكن تجاوزه بسهولة. كرر التحقق في الخادم (Flask). اعتبره تحسيناً
+                                للتجربة، لا خط دفاع أمنياً.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نصائح ذهبية:</strong>
+                            <br>• ضع كل مستمعات الأحداث في نهاية الملف أو داخل
+                            <code>DOMContentLoaded</code>.
+                            <br>• احتفظ بمراجع العناصر في متغيرات ثابتة (<code>const</code>) لتجنّب
+                            البحث المتكرر.
+                            <br>• استخدم <code>console.log</code> أولاً، وأزله قبل التسليم.
+                            <br>• اقرأ <code>event.target</code> لتعرف مصدر الحدث.
+                            <br>• اختبر دائماً بلوحة المفاتيح، لا بالفأرة فقط.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>DOM هو تمثيل شجري للصفحة يبنيه المتصفح من HTML.</li>
+                        <li><code>document</code> هو الجذر، وكل وسم يصبح عنصراً له خصائص وأبناء.</li>
+                        <li>الاختيار: <code>getElementById</code> للأيديهات، و<code>querySelector</code>
+                            و<code>querySelectorAll</code> للمحددات.</li>
+                        <li>التعديل: <code>textContent</code> للنصوص الآمنة، <code>innerHTML</code> لحذر شديد.</li>
+                        <li><code>classList.add/remove/toggle/contains</code> هو أسلوبك للتفاعل.</li>
+                        <li>الأحداث: <code>addEventListener</code> مع <code>click</code>،
+                            <code>submit</code>، <code>input</code>، <code>blur</code>.</li>
+                        <li><code>e.preventDefault()</code> ضروري لمنع الإرسال الافتراضي.</li>
+                        <li>التحقق من الواجهة يحسّن التجربة، لكن التحقق الحقيقي في الخادم.</li>
+                        <li>رسائل خطأ جيدة: واضحة، بالعربية، مرتبطة بالحقل، مع
+                            <code>role="alert"</code> و<code>aria-invalid</code>.</li>
+                        <li>ضع السكربت في نهاية <code>body</code> أو مع <code>defer</code> لتفادي
+                            أخطاء <code>null</code>.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما هو DOM ولماذا نحتاجه؟</summary>
+                        <p>
+                            DOM هو تمثيل برمجي للصفحة على شكل شجرة من الكائنات يبنيه المتصفح من HTML.
+                            نحتاجه لأن JavaScript لا تتعامل مع النص الخام، بل مع هذا النموذج. أي تعديل
+                            على DOM ينعكس مباشرة على الصفحة المرئية.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) ما الفرق بين <code>textContent</code> و<code>innerHTML</code>؟</summary>
+                        <p>
+                            <code>textContent</code> يعامل المحتوى كنص خام ولا يفسّر الوسوم. آمَن من
+                            XSS. <code>innerHTML</code> يفسّر الوسوم وينشئ عناصر، لذا خطر إذا كان
+                            المصدر نصاً من المستخدم.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) ما وظيفة <code>e.preventDefault()</code> في معالج <code>submit</code>؟</summary>
+                        <p>
+                            يمنع السلوك الافتراضي للمتصفح، وهو إرسال النموذج إلى الخادم (أو إعادة تحميل
+                            الصفحة). بدونها تفقد أي تحقق مخصص تقوم به، وكل رسائل الخطأ تختفي.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) ما معنى <code>Cannot read properties of null</code> وكيف نتفاداه؟</summary>
+                        <p>
+                            يعني أن <code>querySelector</code> لم يجد العنصر (أعطى <code>null</code>)،
+                            ثم حاول الكود الوصول لخاصية عليه. السبب: تشغيل السكربت قبل بناء DOM. الحل:
+                            <code>defer</code> أو نهاية <code>body</code>، أو التحقق من النتيجة.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) لماذا نقول "التحقق من الواجهة الأمامية ليس أماناً"؟</summary>
+                        <p>
+                            لأنه يمكن تجاوزه بسهولة: تعطيل JavaScript، أدوات المطور، أو إرسال طلب مباشر
+                            بـcurl. التحقق الحقيقي يجب أن يكون في الخادم (Flask). ما في الواجهة هو
+                            تحسين للتجربة فقط.
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="lecture7.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> المحاضرة السابقة
+                    </a>
+                    <a href="mid_exam.html">
+                        الامتحان النصفي <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 8 · DOM والأحداث والتحقق من المدخلات | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

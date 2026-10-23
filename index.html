@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SYBS 2309 | تصميم وبرمجة الويب (HTML · CSS · JavaScript · Python Flask)</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="SYBS 2309 تصميم وبرمجة الويب – دبلوم أمن المعلومات. مساق من 15 أسبوعاً يجمع بين الواجهة الأمامية HTML5 وCSS3 وJavaScript، وتطوير جهة الخادم باستخدام Python وFlask، وينتهي بمشروع ويب متكامل.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
+    <meta property="og:title" content="SYBS 2309 | تصميم وبرمجة الويب">
+<meta property="og:description" content="مساق متكامل يجمع HTML/CSS/JavaScript مع Python Flask خلال 15 أسبوعًا">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_PS">
+
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المساق</a>
+    <div class="container">
+
+        <!-- ================= HERO HEADER ================= -->
+        <header class="course-header">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>تصميم وبرمجة الويب</h1>
+            <div class="course-sub">
+                من <strong>HTML5 الدلالي</strong> و<strong>CSS3 المتجاوب</strong> إلى <strong>JavaScript
+                التفاعلي</strong> — ثم أساسيات <strong>Python</strong> وبناء تطبيق ويب كامل من جهة الخادم
+                باستخدام <strong>Flask</strong>، ينتهي بمشروع طلابي متكامل.
+            </div>
+            <div class="instructor-panel">
+                <div class="instructor-item"><i class="fas fa-user-tie"></i> <span>م.محمود خليل</span></div>
+                <div class="instructor-item"><i class="fas fa-envelope"></i> <span>makhalil@ucas.edu.ps</span></div>
+                <div class="instructor-item"><i class="fas fa-book"></i> <span>رمز المساق: SYBS 2309</span></div>
+                <div class="instructor-item"><i class="fas fa-calendar-alt"></i> <span>15 أسبوعاً | 3 ساعات أكاديمية أسبوعياً</span></div>
+            </div>
+        </header>
+        <main id="main-content">
+
+
+<!-- ================= COURSE METRICS ================= -->
+<div class="course-metrics">
+    <div class="metric front">
+        <div class="metric-icon"><i class="fas fa-paint-brush"></i></div>
+        <div class="metric-value">08</div>
+        <div class="metric-label">أسابيع <strong>تصميم الواجهات الأمامية</strong></div>
+    </div>
+        <div class="metric exam">
+        <div class="metric-icon"><i class="fas fa-file-pen"></i></div>
+        <div class="metric-value">01</div>
+        <div class="metric-label"><strong>امتحان نصفي</strong></div>
+    </div>
+    <div class="metric back">
+        <div class="metric-icon"><i class="fas fa-server"></i></div>
+        <div class="metric-value">05</div>
+        <div class="metric-label">أسابيع <strong>برمجة الواجهة الخلفية</strong></div>
+    </div>
+    <div class="metric project">
+        <div class="metric-icon"><i class="fas fa-diagram-project"></i></div>
+        <div class="metric-value">01</div>
+        <div class="metric-label"><strong>مشروع نهائي</strong></div>
+    </div>
+</div>
+
+
+        <!-- ================= METHOD NOTE ================= -->
+        <div class="method-note">
+            <i class="fas fa-compass-drafting"></i>
+            <p>
+                <strong>منهجية المساق:</strong> تُبنى المرحلة الأولى على <strong>أساسيات الواجهة الأمامية</strong> —
+                HTML5 الدلالي، CSS3 المتجاوب، وJavaScript التفاعلي — مع تطبيق عملي قصير كل أسبوع. تنتقل المرحلة
+                الثانية إلى <strong>تطوير جهة الخادم</strong>، بتقديم أساسيات Python وبناء تطبيقات ويب باستخدام
+                Flask، وتنتهي بـ<strong>مشروع متكامل</strong>. يُقدَّم المحتوى من خلال محاضرات قصيرة ومختبر موجّه،
+                والتعلّم قائم على المشروع ويُركّز على <strong>الكود النظيف</strong> و<strong>الاختبار</strong>
+                والتسليمات التدريجية.
+            </p>
+        </div>
+
+        <!-- ================= PHASE LEGEND ================= -->
+        <div class="phase-legend">
+            <span class="legend-item">
+                <span class="legend-dot dot-blue" aria-hidden="true"></span>
+                المرحلة 1 · تصميم الواجهات الأمامية (HTML · CSS · JavaScript)
+            </span>
+            <span class="legend-item">
+                <span class="legend-dot dot-green" aria-hidden="true"></span>
+                المرحلة 2 · برمجة الواجهة الخلفية (Python · Flask)
+            </span>
+        </div>
+
+
+        <!-- ============================================================ -->
+        <!-- PHASE 1: FRONT-END FOUNDATIONS + WEEK 9 MIDTERM              -->
+        <!-- ============================================================ -->
+        <section class="phase-section">
+            <div class="phase-header">
+                <div class="phase-icon"><i class="fas fa-laptop-code"></i></div>
+                <div class="phase-title-group">
+<h2>المرحلة 1 · تصميم الواجهات الأمامية</h2>
+                    <div class="phase-meta">الأسابيع 1 – 8 · <strong>HTML, CSS, JavaScript</strong> + تطبيق عملي كل أسبوع، وتنتهي بالامتحان النصفي</div>
+                </div>
+            </div>
+            <div class="weeks-container">
+
+                <!-- Week 1 -->
+                <div class="week-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge"><i class="fas fa-book"></i> الأسبوع 1</span>
+                        <h3 class="week-title-main">مقدمة إلى الويب وأدوات العمل</h3>
+                        <span class="week-type-tag"><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                        <a href="lecture1.html" class="lecture-btn"><i class="fas fa-play-circle"></i> المحاضرة 1</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>أساسيات الويب · نموذج العميل–الخادم · أدوات التطوير</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>وصف نموذج العميل–الخادم لشبكة الويب</li>
+                                    <li>التمييز بين مسؤوليات الواجهة الأمامية والخلفية</li>
+                                    <li>إعداد VS Code ومجلد مشروع أساسي</li>
+                                    <li>إنشاء أول ملف HTML وتشغيله في المتصفح</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-tools"></i> الأدوات والمفاهيم</h4>
+                                <ul>
+                                    <li>المتصفح وأدوات المطور وفحص شجرة DOM</li>
+                                    <li>إضافات VS Code لتطوير الويب</li>
+                                    <li>بنية ملفات ومجلدات المشروع</li>
+                                    <li>دور HTTP وخط عرض المتصفح</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="touch-lab">
+                            <i class="fas fa-terminal"></i>
+                            <strong>التطبيق العملي:</strong> أنشئ صفحتك التعريفية الأولى (الاسم، نبذة قصيرة) وافتحها
+                            في المتصفح. افحص شجرة DOM في أدوات المطور.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 2 -->
+                <div class="week-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge"><i class="fas fa-book"></i> الأسبوع 2</span>
+                        <h3 class="week-title-main">أساسيات HTML — البنية والدلالة</h3>
+                        <span class="week-type-tag"><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                        <a href="lecture2.html" class="lecture-btn"><i class="fas fa-play-circle"></i> المحاضرة 2</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>مستند HTML5 · النصوص · الروابط · الصور · القوائم</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>بناء مستند HTML5 سليم</li>
+                                    <li>استخدام العناوين والفقرات والوسوم الدلالية بشكل صحيح</li>
+                                    <li>إدراج الروابط والصور والقوائم المرتبة وغير المرتبة</li>
+                                    <li>فهم الفرق بين الروابط النسبية والمطلقة</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-code"></i> مفاهيم أساسية</h4>
+                                <ul>
+                                    <li>هيكل المستند: <code>&lt;!DOCTYPE html&gt;</code>، <code>&lt;html&gt;</code>، <code>&lt;head&gt;</code>، <code>&lt;body&gt;</code></li>
+                                    <li>الروابط <code>&lt;a&gt;</code>، الصور <code>&lt;img&gt;</code>، ونص alt</li>
+                                    <li>قوائم الوصف والقوائم المتداخلة</li>
+                                    <li>أفضل ممارسات التنسيق والتعليقات</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="touch-lab">
+                            <i class="fas fa-terminal"></i>
+                            <strong>التطبيق العملي:</strong> أنشئ صفحة ملف شخصي بعناوين مناسبة، صورة شخصية، قائمة
+                            مهارات، ورابط إلى موقعك المفضل.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 3 -->
+                <div class="week-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge"><i class="fas fa-book"></i> الأسبوع 3</span>
+                        <h3 class="week-title-main">HTML المتقدم — الجداول والنماذج</h3>
+                        <span class="week-type-tag"><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                        <a href="lecture3.html" class="lecture-btn"><i class="fas fa-play-circle"></i> المحاضرة 3</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>الجداول · عناصر النماذج · الوصولية · الدلالة</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>إنشاء جداول قابلة للوصول باستخدام <code>&lt;thead&gt;</code>، <code>&lt;tbody&gt;</code>، <code>&lt;caption&gt;</code></li>
+                                    <li>بناء نماذج تحتوي حقول إدخال، labels، selects، textareas، أزرار</li>
+                                    <li>اختيار أنواع حقول HTML5 المناسبة (email, password, number, date …)</li>
+                                    <li>تطبيق مبادئ الوصولية الأساسية (التسميات، التنقل بلوحة المفاتيح)</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-tools"></i> أساسيات النماذج</h4>
+                                <ul>
+                                    <li><code>action</code> و<code>method</code> (نظرة عامة GET مقابل POST)</li>
+                                    <li>التحقق في HTML5: <code>required</code>، <code>pattern</code>، <code>minlength</code></li>
+                                    <li>تجميع الحقول بـ <code>&lt;fieldset&gt;</code> و<code>&lt;legend&gt;</code></li>
+                                    <li>معالم دلالية: <code>&lt;header&gt;</code>، <code>&lt;nav&gt;</code>، <code>&lt;main&gt;</code>، <code>&lt;footer&gt;</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="touch-lab">
+                            <i class="fas fa-terminal"></i>
+                            <strong>التطبيق العملي:</strong> أنشئ نموذج تسجيل أو تواصل مع تسميات مناسبة، تجميع
+                            للحقول، وسمات تحقق HTML5.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 4 -->
+                <div class="week-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge"><i class="fas fa-book"></i> الأسبوع 4</span>
+                        <h3 class="week-title-main">أساسيات CSS — المحددات ونموذج الصندوق والطباعة</h3>
+                        <span class="week-type-tag"><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                        <a href="lecture4.html" class="lecture-btn"><i class="fas fa-play-circle"></i> المحاضرة 4</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>محددات CSS3 · نموذج الصندوق · الألوان · الخطوط</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>ربط CSS بـ HTML بثلاث طرق (خارجي، داخلي، ضمني)</li>
+                                    <li>استخدام محددات العنصر والصنف والمعرّف والمحددات المتداخلة</li>
+                                    <li>تطبيق الألوان والخطوط والخلفيات على عناصر التخطيط</li>
+                                    <li>استيعاب نموذج الصندوق (المحتوى، الحشو، الحد، الهامش)</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-palette"></i> مفاهيم أساسية</h4>
+                                <ul>
+                                    <li>الخطوط: <code>font-family</code>، <code>font-size</code>، <code>line-height</code></li>
+                                    <li>الخلفيات: ألوان، صور، تدرجات</li>
+                                    <li>الحدود: <code>border</code>، <code>border-radius</code>، <code>box-shadow</code></li>
+                                    <li>قواعد التخصيص (Specificity) والوراثة</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="touch-lab">
+                            <i class="fas fa-terminal"></i>
+                            <strong>التطبيق العملي:</strong> نسّق صفحة HTML متعددة الأقسام — أضف ألواناً وخطوطاً
+                            ومسافات وحدوداً تحسّن قابلية القراءة.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 5 -->
+                <div class="week-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge"><i class="fas fa-book"></i> الأسبوع 5</span>
+                        <h3 class="week-title-main">التخطيط والتصميم المتجاوب</h3>
+                        <span class="week-type-tag"><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                        <a href="lecture5.html" class="lecture-btn"><i class="fas fa-play-circle"></i> المحاضرة 5</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>Flexbox · مقدمة إلى Grid · وحدات القياس · Media Queries</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>الاختيار بين Flexbox وGrid حسب سيناريو التخطيط</li>
+                                    <li>استخدام وحدات مثل <code>px</code>، <code>%</code>، <code>rem</code>، <code>em</code>، <code>vh</code>/<code>vw</code></li>
+                                    <li>كتابة Media Queries لأحجام شاشات مختلفة</li>
+                                    <li>بناء تخطيط متجاوب موجه للهاتف أولاً</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-th-large"></i> أدوات التخطيط</h4>
+                                <ul>
+                                    <li><code>display: flex</code> مع <code>justify-content</code>، <code>align-items</code>، <code>gap</code></li>
+                                    <li><code>display: grid</code> مع <code>grid-template-columns</code> و<code>gap</code></li>
+                                    <li>نقاط توقف شائعة (480، 768، 1024)</li>
+                                    <li>اختبار التخطيطات في وضع الأجهزة بأدوات المطور</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="touch-lab">
+                            <i class="fas fa-terminal"></i>
+                            <strong>التطبيق العملي:</strong> ابنِ صفحة متجاوبة بعمودين تتحول إلى عمود واحد على
+                            الهاتف.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 6 -->
+                <div class="week-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge"><i class="fas fa-book"></i> الأسبوع 6</span>
+                        <h3 class="week-title-main">مقدمة إلى JavaScript</h3>
+                        <span class="week-type-tag"><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                        <a href="lecture6.html" class="lecture-btn"><i class="fas fa-play-circle"></i> المحاضرة 6</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>أساسيات JavaScript · المتغيرات · أنواع البيانات · Console</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>إضافة JavaScript إلى HTML عبر <code>&lt;script&gt;</code></li>
+                                    <li>تعريف المتغيرات بـ <code>let</code> و<code>const</code></li>
+                                    <li>التعامل مع النصوص والأرقام والقيم المنطقية والمصفوفات</li>
+                                    <li>استخدام Console لفحص النتائج وتصحيح الأخطاء</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-code"></i> أساسيات اللغة</h4>
+                                <ul>
+                                    <li>العمليات الحسابية والمقارنة والمنطقية</li>
+                                    <li>Template literals ودمج النصوص</li>
+                                    <li><code>console.log</code> وتصحيح الأخطاء الأساسي</li>
+                                    <li>قراءة الأخطاء وإصلاحها في أدوات المطور</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="touch-lab">
+                            <i class="fas fa-terminal"></i>
+                            <strong>التطبيق العملي:</strong> اكتب سكربتات قصيرة — حاسبة بقشيش، محول حرارة، منسق
+                            أسماء — وسجّل النتائج.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 7 -->
+                <div class="week-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge"><i class="fas fa-book"></i> الأسبوع 7</span>
+                        <h3 class="week-title-main">المنطق البرمجي والدوال</h3>
+                        <span class="week-type-tag"><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                        <a href="lecture7.html" class="lecture-btn"><i class="fas fa-play-circle"></i> المحاضرة 7</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>التحكم في التدفق · الدوال · المصفوفات · معالجة الأخطاء</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>كتابة شروط <code>if/else</code> و<code>switch</code></li>
+                                    <li>استخدام <code>for</code> و<code>while</code> والتكرار على المصفوفات</li>
+                                    <li>تعريف واستدعاء الدوال مع المعاملات و<code>return</code></li>
+                                    <li>معالجة الأخطاء الأساسية بـ <code>try/catch</code></li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-code"></i> التعامل مع المصفوفات</h4>
+                                <ul>
+                                    <li><code>push</code>، <code>pop</code>، <code>map</code>، <code>filter</code>، <code>length</code></li>
+                                    <li>تعبيرات الدوال مقابل تعريفاتها</li>
+                                    <li>النطاق: عام، دالة، كتلة</li>
+                                    <li>تمارين قصيرة لتعزيز المنطق</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="touch-lab">
+                            <i class="fas fa-terminal"></i>
+                            <strong>التطبيق العملي:</strong> حل مجموعة تحديات قصيرة — FizzBuzz، مجموع الأعداد
+                            الزوجية، وعداد كلمات بسيط.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 8 -->
+                <div class="week-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge"><i class="fas fa-book"></i> الأسبوع 8</span>
+                        <h3 class="week-title-main">DOM والأحداث والتحقق من المدخلات</h3>
+                        <span class="week-type-tag"><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                        <a href="lecture8.html" class="lecture-btn"><i class="fas fa-play-circle"></i> المحاضرة 8</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>التلاعب بـ DOM · الأحداث · التحقق · تجربة المستخدم</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>اختيار العناصر بـ <code>querySelector</code> و<code>getElementById</code></li>
+                                    <li>تعديل المحتوى والخصائص وأصناف CSS</li>
+                                    <li>إرفاق الأحداث (<code>click</code>، <code>submit</code>، <code>input</code>)</li>
+                                    <li>التحقق من بيانات النماذج وعرض رسائل خطأ مفيدة</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-hand-pointer"></i> أساسيات DOM</h4>
+                                <ul>
+                                    <li><code>addEventListener</code> وكائنات الأحداث</li>
+                                    <li><code>classList</code>، <code>textContent</code>، <code>innerHTML</code></li>
+                                    <li>منع السلوك الافتراضي بـ <code>e.preventDefault()</code></li>
+                                    <li>رسائل خطأ مدمجة قابلة للوصول</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="touch-lab">
+                            <i class="fas fa-terminal"></i>
+                            <strong>التطبيق العملي:</strong> أضف نموذج تسجيل/دخول تفاعلياً مع تحقق من جهة العميل
+                            ورسائل خطأ واضحة — دون إعادة تحميل الصفحة.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 9 (Midterm) -->
+                <div class="week-card exam-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge exam-badge"><i class="fas fa-star"></i> الأسبوع 9</span>
+                        <h3 class="week-title-main">مراجعة وامتحان نصفي</h3>
+                        <span class="week-type-tag"><i class="fas fa-graduation-cap"></i> امتحان</span>
+                        <a href="mid_exam.html" class="lecture-btn"><i class="fas fa-file-pen"></i> الامتحان النصفي</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>تثبيت المفاهيم · تقييم عملي</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>تثبيت أساسيات HTML وCSS وJavaScript</li>
+                                    <li>حل مهمة واجهة أمامية متكاملة قصيرة</li>
+                                    <li>الاستعداد للتقييم العملي النصفي</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-file-signature"></i> الامتحان النصفي (20%)</h4>
+                                <ul>
+                                    <li>يغطي أسابيع 1 – 8</li>
+                                    <li>مهام عملية + أسئلة نظرية</li>
+                                    <li>مدة 90 دقيقة</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="touch-lab">
+                            <i class="fas fa-terminal"></i>
+                            <strong>تطبيق المراجعة:</strong> أعد بناء صفحة صغيرة متكاملة — HTML دلالي، تنسيق CSS،
+                            وتعزيز JavaScript — قبل بدء الامتحان النصفي.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- PHASE 2: BACK-END WITH PYTHON & FLASK                        -->
+        <!-- ============================================================ -->
+        <section class="phase-section">
+            <div class="phase-header practical">
+                <div class="phase-icon"><i class="fas fa-server"></i></div>
+                <div class="phase-title-group">
+<h2>المرحلة 2 · برمجة الواجهة الخلفية باستخدام Python وFlask</h2>
+                    <div class="phase-meta">الأسابيع 10 – 14 · <strong>أساسيات Python</strong> ثم
+                        <strong>Flask</strong>: المسارات والقوالب والدمج — تنتهي بمختبر متكامل</div>
+                </div>
+            </div>
+            <div class="weeks-container">
+
+                <!-- Week 10 -->
+                <div class="week-card practical">
+                    <div class="week-header-bar">
+                        <span class="week-badge practical"><i class="fas fa-book"></i> الأسبوع 10</span>
+                        <h3 class="week-title-main">مقدمة إلى Python</h3>
+                        <span class="week-type-tag"><i class="fas fa-laptop-code"></i> مختبر معمّق</span>
+                        <a href="lecture10.html" class="lecture-btn practical"><i class="fas fa-play-circle"></i>
+                            المحاضرة 10</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>Python · الإدخال/الإخراج · الأنواع · الأدوات</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>تشغيل سكربتات Python من CLI وVS Code</li>
+                                    <li>استخدام المتغيرات والنصوص والأرقام والقوائم والقواميس</li>
+                                    <li>قراءة الإدخال وطباعة مخرجات منسقة</li>
+                                    <li>التحويل بين الأنواع بأمان</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-terminal"></i> أدوات Python</h4>
+                                <ul>
+                                    <li><code>python3</code>، REPL مقابل ملفات السكربت</li>
+                                    <li><code>print</code>، <code>input</code>، f-strings</li>
+                                    <li>الأنواع المدمجة والتحويل الأساسي</li>
+                                    <li>إضافة Python في VS Code</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="practical-lab">
+                            <i class="fas fa-laptop-code"></i>
+                            <strong>التطبيق العملي:</strong> اكتب سكربتات لحاسبة بقشيش، تحويل وحدات، وتنسيق بيانات
+                            بسيط.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 11 -->
+                <div class="week-card practical">
+                    <div class="week-header-bar">
+                        <span class="week-badge practical"><i class="fas fa-book"></i> الأسبوع 11</span>
+                        <h3 class="week-title-main">أساسيات Python البرمجية</h3>
+                        <span class="week-type-tag"><i class="fas fa-laptop-code"></i> مختبر معمّق</span>
+                        <a href="lecture11.html" class="lecture-btn practical"><i class="fas fa-play-circle"></i>
+                            المحاضرة 11</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>التحكم في التدفق · المجموعات · الدوال</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>كتابة الشروط <code>if/elif/else</code></li>
+                                    <li>التكرار بـ <code>for</code> و<code>while</code></li>
+                                    <li>استخدام القوائم والصفوف والقواميس</li>
+                                    <li>تعريف الدوال مع المعاملات و<code>return</code></li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-code"></i> Python التطبيقي</h4>
+                                <ul>
+                                    <li>List comprehensions (مقدمة)</li>
+                                    <li>معالجة الاستثناءات <code>try/except</code></li>
+                                    <li>تنظيم الكود في وحدات</li>
+                                    <li>تمارين CLI بسيطة</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="practical-lab">
+                            <i class="fas fa-laptop-code"></i>
+                            <strong>التطبيق العملي:</strong> حل مسائل تطبيقية — عدّ الكلمات، مخزون بسيط، ودفتر جهات
+                            اتصال.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 12 -->
+                <div class="week-card practical">
+                    <div class="week-header-bar">
+                        <span class="week-badge practical"><i class="fas fa-book"></i> الأسبوع 12</span>
+                        <h3 class="week-title-main">مقدمة إلى Flask — المسارات والطلبات</h3>
+                        <span class="week-type-tag"><i class="fas fa-laptop-code"></i> مختبر معمّق</span>
+                        <a href="lecture12.html" class="lecture-btn practical"><i class="fas fa-play-circle"></i>
+                            المحاضرة 12</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>أساسيات Flask · المسارات · الطلبات · التصحيح</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>شرح دور إطار العمل</li>
+                                    <li>إعداد بيئة افتراضية وتثبيت Flask</li>
+                                    <li>تشغيل تطبيق Flask محلي وتحديد المسارات</li>
+                                    <li>إرجاع استجابات نصية وHTML وقوالب</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-server"></i> أساسيات Flask</h4>
+                                <ul>
+                                    <li><code>pip install flask</code> و<code>flask run</code></li>
+                                    <li>مزخرفات المسار مثل <code>@app.route('/')</code></li>
+                                    <li>معاملات URL وطرق HTTP</li>
+                                    <li>وضع التصحيح وقراءة صفحات أخطاء Flask</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="practical-lab">
+                            <i class="fas fa-laptop-code"></i>
+                            <strong>التطبيق العملي:</strong> أنشئ تطبيق Flask بمسارات متعددة (<code>/</code>،
+                            <code>/about</code>، <code>/contact</code>) تعيد استجابات مختلفة.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 13 -->
+                <div class="week-card practical">
+                    <div class="week-header-bar">
+                        <span class="week-badge practical"><i class="fas fa-book"></i> الأسبوع 13</span>
+                        <h3 class="week-title-main">القوالب والنماذج في Flask</h3>
+                        <span class="week-type-tag"><i class="fas fa-laptop-code"></i> مختبر معمّق</span>
+                        <a href="lecture13.html" class="lecture-btn practical"><i class="fas fa-play-circle"></i>
+                            المحاضرة 13</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>قوالب Jinja · GET/POST · تحقق أساسي</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>استخدام مجلد <code>templates/</code> مع <code>render_template</code></li>
+                                    <li>تمرير البيانات من Python إلى HTML</li>
+                                    <li>التعامل مع إرسال النماذج بـ GET وPOST</li>
+                                    <li>التحقق من مدخلات المستخدم بفحوصات أساسية</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-tools"></i> القوالب والنماذج</h4>
+                                <ul>
+                                    <li>تعبيرات Jinja <code>{{ }}</code> وكتل <code>{% %}</code></li>
+                                    <li><code>request.form</code> و<code>request.args</code></li>
+                                    <li>وراثة القوالب وملف التخطيط</li>
+                                    <li>رسائل Flash لتغذية المستخدم الراجعة</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="practical-lab">
+                            <i class="fas fa-laptop-code"></i>
+                            <strong>التطبيق العملي:</strong> ابنِ نموذجاً يرسل بيانات إلى مسار Flask ويعرض القيم
+                            المرسلة في صفحة نتيجة.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 14 -->
+                <div class="week-card practical">
+                    <div class="week-header-bar">
+                        <span class="week-badge practical"><i class="fas fa-book"></i> الأسبوع 14</span>
+                        <h3 class="week-title-main">دمج الواجهة الأمامية والخلفية</h3>
+                        <span class="week-type-tag"><i class="fas fa-flask"></i> مختبر مشروع</span>
+                        <a href="lecture14.html" class="lecture-btn practical"><i class="fas fa-play-circle"></i>
+                            المحاضرة 14</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>بنية المشروع · التصحيح · أساسيات أمن المدخلات</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>تنظيم مشروع Flask بشكل صحيح (<code>static/</code>، <code>templates/</code>، routes)</li>
+                                    <li>ربط HTML وCSS وJS بتطبيق Flask</li>
+                                    <li>اختبار نقاط النهاية وتصحيح المشكلات الشائعة</li>
+                                    <li>تطبيق أساسيات أمن المدخلات (التهريب، التحقق)</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-toolbox"></i> أدوات الدمج</h4>
+                                <ul>
+                                    <li>تقديم الملفات الثابتة من <code>static/</code></li>
+                                    <li>مساعد <code>url_for()</code></li>
+                                    <li>قراءة التتبعات (Tracebacks) والسجلات</li>
+                                    <li>مقدمة إلى تعقيم المدخلات وسياق HTTPS</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="practical-lab">
+                            <i class="fas fa-laptop-code"></i>
+                            <strong>التطبيق العملي:</strong> ابنِ تطبيق “ملاحظات” صغيراً — نموذج، قائمة، تخزين في
+                            الذاكرة — أو نطاقاً مشابهاً يُحدد في المحاضرة.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- WEEK 15 — FINAL PROJECT                                      -->
+        <!-- ============================================================ -->
+        <section class="phase-section">
+            <div class="phase-header practical">
+                <div class="phase-icon"><i class="fas fa-diagram-project"></i></div>
+                <div class="phase-title-group">
+                    <h2>الأسبوع 15 · عرض المشاريع النهائية والمراجعة</h2>
+                    <div class="phase-meta">أسبوع الختام — <strong>يوم العرض</strong> ومراجعة شاملة قبل الامتحان النهائي</div>
+                </div>
+            </div>
+            <div class="weeks-container">
+                <div class="week-card project-card">
+                    <div class="week-header-bar">
+                        <span class="week-badge project-badge"><i class="fas fa-star"></i> الأسبوع 15</span>
+                        <h3 class="week-title-main">عرض المشاريع ومراجعة المساق</h3>
+                        <span class="week-type-tag"><i class="fas fa-microphone"></i> عرض</span>
+                        <a href="project.html" class="lecture-btn project"><i class="fas fa-diagram-project"></i>
+                            المشروع</a>
+                    </div>
+                    <div class="week-body">
+                        <div class="week-meta"><span>تسليم المخرجات — دفاع مباشر</span></div>
+                        <div class="content-grid">
+                            <div class="info-box">
+                                <h4><i class="fas fa-bullseye"></i> مخرجات التعلم</h4>
+                                <ul>
+                                    <li>عرض مشروع ويب عملي أمام الزملاء</li>
+                                    <li>شرح بنية الملفات وحزمة التقنيات</li>
+                                    <li>الإجابة عن أسئلة التصميم والكود بثقة</li>
+                                    <li>إكمال مراجعة شاملة للمساق</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h4><i class="fas fa-list-check"></i> المخرجات المطلوبة</h4>
+                                <ul>
+                                    <li>مشروع واجهة أمامية + خلفية Flask يعمل</li>
+                                    <li>الكود المصدري مع README</li>
+                                    <li>عرض مباشر خلال الجلسة</li>
+                                    <li>تقرير مكتوب قصير</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="practical-lab">
+                            <i class="fas fa-trophy"></i>
+                            <strong>المشروع النهائي:</strong> قدّم تطبيق ويب متكامل يعمل ويغطي الواجهة الأمامية
+                            وخلفية Flask، وأظهر وظائف تكاملية من البداية للنهاية.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- ASSESSMENT & GRADING                                         -->
+        <!-- ============================================================ -->
+        <div class="assessment-block">
+            <h2><i class="fas fa-chart-column"></i> التقييم والدرجات</h2>
+            <p class="section-desc">تقييم مستمر مع مختبرات أسبوعية، امتحان نصفي، مشروع نهائي، وامتحان نهائي تراكمي</p>
+            <div class="assess-grid">
+                <div class="assess-card">
+                    <h3>10%</h3>
+                    <p>تمارين قصيرة</p>
+                    <small>تمارين داخل الصف أو منزلية</small>
+                </div>
+                <div class="assess-card">
+                    <h3>20%</h3>
+                    <p>واجبات ومختبرات</p>
+                    <small>أعمال عملية أسبوعية</small>
+                </div>
+                <div class="assess-card">
+                    <h3>20%</h3>
+                    <p>امتحان نصفي</p>
+                    <small>عملي / نظري — الأسابيع 1–8</small>
+                </div>
+                <div class="assess-card">
+                    <h3>30%</h3>
+                    <p>المشروع النهائي</p>
+                    <small>تطبيق ويب متكامل + توثيق</small>
+                </div>
+                <div class="assess-card">
+                    <h3>20%</h3>
+                    <p>الامتحان النهائي</p>
+                    <small>شامل (نظري + تطبيقي)</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TEXTBOOK & REFERENCES                                        -->
+        <!-- ============================================================ -->
+        <div class="textbook-section">
+            <h3><i class="fas fa-book-open"></i> المراجع الرسمية والتوثيق</h3>
+            <div class="book-grid">
+
+                <div class="book-card">
+                    <span class="book-role main">المرجع الرئيسي للويب</span>
+                    <h4>MDN Web Docs</h4>
+                    <p>توثيق Mozilla الشامل لـ HTML وCSS وJavaScript — المرجع اليومي المستخدم طوال مرحلة الواجهة الأمامية.</p>
+                </div>
+
+                <div class="book-card">
+                    <span class="book-role free">مجاني وحديث</span>
+                    <h4>Eloquent JavaScript</h4>
+                    <p>Marijn Haverbeke — مورد حديث ومجاني لبناء فهم عميق لـ JavaScript وبرمجة المتصفح.</p>
+                </div>
+
+                <div class="book-card">
+                    <span class="book-role lab">HTML &amp; CSS</span>
+                    <h4>HTML and CSS: Design and Build Websites</h4>
+                    <p>Jon Duckett — دليل بصري ممتاز يتكامل مع أسابيع الواجهة الأمامية الأولى.</p>
+                </div>
+
+                <div class="book-card">
+                    <span class="book-role lab">Python</span>
+                    <h4>Python Crash Course</h4>
+                    <p>Eric Matthes — مقدمة عملية إلى Python مناسبة للمبتدئين المنتقلين من الواجهة الأمامية إلى البرمجة.</p>
+                </div>
+
+                <div class="book-card">
+                    <span class="book-role">Flask</span>
+                    <h4>Flask Web Development</h4>
+                    <p>Miguel Grinberg — المرجع الأساسي لبناء تطبيقات ويب حقيقية باستخدام Flask، من المسارات إلى القوالب.</p>
+                </div>
+
+                <div class="book-card">
+                    <span class="book-role">التوثيق الرسمي</span>
+                    <h4>Flask &amp; Python Official Documentation</h4>
+                    <p>المرجع الرسمي والمحدث باستمرار لمسارات Flask ومكتبة Python القياسية.</p>
+                </div>
+
+                <div class="book-card">
+                    <span class="book-role">تصميم</span>
+                    <h4>Learning Web Design</h4>
+                    <p>Jennifer Robbins — دليل ودود لمبادئ التصميم (التخطيط، الخطوط، الألوان) يتكامل مع أسبوع التصميم المتجاوب.</p>
+                </div>
+
+            </div>
+        </div>
+        </main>
+
+
+        <!-- ============================================================ -->
+        <!-- FOOTER                                                       -->
+        <!-- ============================================================ -->
+        <footer>
+            <p><i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات | رمز المساق: <strong>SYBS 2309</strong></p>
+            <p>بناءً على <strong>MDN Web Docs</strong>، <strong>Duckett (HTML &amp; CSS)</strong>،
+                <strong>Haverbeke (Eloquent JavaScript)</strong>، و<strong>توثيق Flask الرسمي</strong> | المحاضر:
+                <strong>م.محمود خليل</strong></p>
+            <p class="copyright-year">© <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

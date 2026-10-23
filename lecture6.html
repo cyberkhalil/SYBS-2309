@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 6 | مقدمة إلى JavaScript — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة السادسة من مساق SYBS 2309: مقدمة إلى JavaScript — إضافة JavaScript إلى HTML، المتغيرات بـ let وconst، أنواع البيانات، العمليات الحسابية والمقارنة والمنطقية، Template literals، المصفوفات الأساسية، واستخدام Console لتصحيح الأخطاء.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 6</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 6: مقدمة إلى JavaScript</h1>
+            <p class="lecture-lead">
+                حتى الآن، صفحتنا <strong>ساكنة</strong>: HTML يبني، وCSS يُنسّق. لكن ماذا لو أردنا
+                أن <strong>تتفاعل</strong> الصفحة؟ أن تحسب، وأن تتحقق من قيمة، وأن تردّ على نقرة
+                الزر قبل أن تصل إلى الخادم؟ هنا يبدأ دور <strong>JavaScript</strong>. في هذه
+                المحاضرة ندخل عالم <strong>لغة البرمجة الأولى في الويب</strong>: كيف نضيفها إلى
+                الصفحة، وكيف نكتب <strong>متغيرات</strong> بـ<code>let</code> و<code>const</code>،
+                ونتعامل مع <strong>النصوص والأرقام والقيم المنطقية والمصفوفات</strong>، ونجري
+                العمليات الحسابية والمقارنة والمنطقية، ثم ننتهي بـ<strong>Console</strong>، سلاحنا
+                الأول في تصحيح الأخطاء.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 6</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 1 · الواجهة الأمامية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script6.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script6.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#what-is-js">ما هي JavaScript ودورها في الويب</a></li>
+                        <li><a href="#adding-js">إضافة JavaScript إلى HTML</a></li>
+                        <li><a href="#variables">المتغيرات: let وconst</a></li>
+                        <li><a href="#data-types">أنواع البيانات</a></li>
+                        <li><a href="#operators">العمليات الحسابية والمقارنة والمنطقية</a></li>
+                        <li><a href="#template-literals">Template literals والنصوص</a></li>
+                        <li><a href="#arrays">المصفوفات</a></li>
+                        <li><a href="#console">Console وتصحيح الأخطاء</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> JavaScript لغة برمجة كاملة، ولن نغطيها في محاضرة واحدة.
+                    الهدف اليوم أن تفهم الأساسيات وتكتب أول سكربتاتك، وليس أن تحفظ كل شيء.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على إضافة JavaScript إلى صفحة HTML،
+                        وتعريف متغيرات بشكل سليم، والتعامل مع الأنواع الأساسية، وكتابة عمليات
+                        حسابية ومقارنات منطقية، واستخدام <code>console.log</code> لفحص النتائج.
+                        وستكتب أول سكربتات صغيرة: حاسبة بقشيش، ومحول حرارة، ومنسق أسماء.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>شرح دور JavaScript في تطبيقات الويب</li>
+                                <li>التمييز بين <code>let</code> و<code>const</code></li>
+                                <li>معرفة الأنواع الأساسية في JS</li>
+                                <li>فهم الفرق بين <code>==</code> و<code>===</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>إضافة سكربت عبر <code>&lt;script&gt;</code> أو ملف خارجي</li>
+                                <li>تعريف متغيرات بأسماء واضحة</li>
+                                <li>استخدام <code>console.log</code> لفحص القيم</li>
+                                <li>كتابة سكربتات صغيرة تعمل في المتصفح</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>تصحيح الأخطاء بمنهجية عبر Console</li>
+                                <li>بناء أساس للمحاضرة القادمة (DOM)</li>
+                                <li>الاستعداد لتحقق النماذج من جهة العميل</li>
+                                <li>قراءة الأخطاء بدل الهروب منها</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- What is JS -->
+                <section class="lecture-section" id="what-is-js" aria-labelledby="what-js-title">
+                    <h2 class="section-title" id="what-js-title">
+                        <i class="fas fa-bolt"></i> ما هي JavaScript ودورها في الويب
+                    </h2>
+                    <p>
+                        <strong>HTML</strong> يبني البنية، و<strong>CSS</strong> تنسّق الشكل،
+                        و<strong>JavaScript</strong> تضيف <strong>السلوك والتفاعل</strong>. هذه
+                        ثلاثية الويب. باختصار: JavaScript هي اللغة التي تجعل الصفحة <strong>حيّة</strong>
+                        بعد تحميلها في المتصفح.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-code"></i> HTML</h3>
+                            <ul>
+                                <li>البنية والمعنى</li>
+                                <li>عناوين، فقرات، روابط، نماذج</li>
+                                <li>يُقرأ من أعلى إلى أسفل</li>
+                                <li>لا يتفاعل من تلقاء نفسه</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-palette"></i> CSS</h3>
+                            <ul>
+                                <li>الشكل والعرض</li>
+                                <li>الألوان، الخطوط، التخطيط</li>
+                                <li>تفاعل بصري محدود عبر <code>:hover</code></li>
+                                <li>لا تُجري حسابات ولا منطقاً</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-bolt"></i> JavaScript</h3>
+                            <ul>
+                                <li>السلوك والتفاعل</li>
+                                <li>تحسب، تتحقق، تعدّل الصفحة</li>
+                                <li>تتفاعل مع النقر والإدخال</li>
+                                <li>تتواصل مع الخادم لاحقاً (fetch)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>
+                        أمثلة على ما تفعله JavaScript في أي موقع تقريباً: قوائم منسدلة، تبويبات،
+                        سلايدر، تحقق فوري من النماذج، تحميل محتوى دون إعادة تحميل الصفحة،
+                        إشعارات، وضع داكن/فاتح، وآلاف التفاعلات اليومية.
+                    </p>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>ملاحظة مهمة:</strong> JavaScript ليست Java. التشابه في الاسم فقط
+                            (لأسباب تسويقية تاريخية). اللغتان مختلفتان تماماً في التصميم والاستخدام.
+                        </div>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-window-maximize"></i> في المتصفح</h3>
+                            <ul>
+                                <li>تعمل عبر محرّك JS في المتصفح</li>
+                                <li>تصل إلى DOM وأحداث الصفحة</li>
+                                <li>يمكنها قراءة التخزين المحلي</li>
+                                <li>مقيّدة بسياسة أمان المتصفح</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-server"></i> خارج المتصفح</h3>
+                            <ul>
+                                <li>Node.js يشغّلها على الخادم</li>
+                                <li>نفس اللغة، بيئة مختلفة</li>
+                                <li>لا DOM، لكن ملفات وشبكة</li>
+                                <li>موجودة لكن ليست محور هذا المساق</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Adding JS -->
+                <section class="lecture-section" id="adding-js" aria-labelledby="adding-js-title">
+                    <h2 class="section-title" id="adding-js-title">
+                        <i class="fas fa-file-code"></i> إضافة JavaScript إلى HTML
+                    </h2>
+                    <p>
+                        نضيف JavaScript إلى HTML بثلاث طرق، تماماً كما في CSS: <strong>ضمني</strong>
+                        داخل السمة، و<strong>داخلي</strong> داخل وسم <code>&lt;script&gt;</code>،
+                        و<strong>خارجي</strong> في ملف <code>.js</code> منفصل. الطريقة الأفضل
+                        دائماً هي الملف الخارجي.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> الطرق الثلاث</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;!-- 1) ضمني: على العنصر — للتجربة فقط --&gt;
+&lt;button onclick="alert('مرحباً')"&gt;اضغط&lt;/button&gt;
+
+&lt;!-- 2) داخلي: وسم script داخل الصفحة --&gt;
+&lt;script&gt;
+    console.log('هذا سكربت داخلي');
+&lt;/script&gt;
+
+&lt;!-- 3) خارجي: الأفضل --&gt;
+&lt;script src="main.js" defer&gt;&lt;/script&gt;</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-tag"></i> Inline</h3>
+                            <ul>
+                                <li>داخل السمة <code>onclick</code> أو <code>onchange</code>…</li>
+                                <li>لا تُعاد استخدامها</li>
+                                <li>تُلوّث HTML</li>
+                                <li>مقبولة للتوضيح فقط</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-code"></i> Internal</h3>
+                            <ul>
+                                <li>داخل <code>&lt;script&gt;</code> في الصفحة</li>
+                                <li>مقبولة لصفحة واحدة</li>
+                                <li>لا تُخزَّن مؤقتاً</li>
+                                <li>يفضّل تجنبها عند التكرار</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-file-lines"></i> External ✔</h3>
+                            <ul>
+                                <li>ملف <code>.js</code> منفصل</li>
+                                <li>يُربط عبر <code>&lt;script src="main.js"&gt;</code></li>
+                                <li>قابل للتخزين المؤقت</li>
+                                <li>الأفضل في المساق دائماً</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>
+                        أين نضع وسم <code>&lt;script&gt;</code>؟ في نهاية <code>&lt;body&gt;</code>
+                        أو في <code>&lt;head&gt;</code> مع السمة <code>defer</code>. السبب أن السكربت
+                        عندما يعمل قبل بناء DOM، لن يجد العناصر التي يريد التعامل معها. السمة
+                        <code>defer</code> تُخبر المتصفح أن يُنزّل السكربت بالتوازي، لكن ينفّذه
+                        <strong>بعد</strong> بناء DOM كاملاً.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> index.html</span>
+                            <span class="code-lang">HTML</span>
+                        </div>
+                        <pre><code>&lt;body&gt;
+    &lt;h1&gt;مرحباً&lt;/h1&gt;
+
+    &lt;!-- الخيار الأفضل: في نهاية body --&gt;
+    &lt;script src="main.js"&gt;&lt;/script&gt;
+
+    &lt;!-- أو في head مع defer --&gt;
+    &lt;!-- &lt;script src="main.js" defer&gt;&lt;/script&gt; --&gt;
+&lt;/body&gt;</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>تحذير:</strong> إذا وضعت <code>&lt;script src="…"&gt;</code>
+                            في <code>head</code> بدون <code>defer</code> أو <code>async</code>،
+                            فقد يحاول السكربت الوصول إلى عناصر DOM قبل وجودها، وترى أخطاء
+                            <code>Cannot read property of null</code>. الحل: <code>defer</code>
+                            أو نهاية <code>body</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Variables -->
+                <section class="lecture-section" id="variables" aria-labelledby="variables-title">
+                    <h2 class="section-title" id="variables-title">
+                        <i class="fas fa-box"></i> المتغيرات: let وconst
+                    </h2>
+                    <p>
+                        المتغير هو <strong>اسم مرتبط بقيمة</strong>. بدونه لا يمكن أن نحتفظ بأي
+                        بيانات ونعيد استخدامها. JS الحديثة تستخدم <code>let</code> و
+                        <code>const</code>. الكلمة القديمة <code>var</code> موجودة، لكن لا ننصح
+                        بها في المشاريع الحديثة لأن سلوك نطاقها مربك.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-pen"></i> let</h3>
+                            <ul>
+                                <li>متغير قابل لإعادة التعيين</li>
+                                <li>عندما تعرف أن القيمة ستتغير</li>
+                                <li>مثال: عدّاد، مجموع، نص يُبنى تدريجياً</li>
+                                <li>لا يمكن إعادة تعريفه في نفس النطاق</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-lock"></i> const</h3>
+                            <ul>
+                                <li>قيمة ثابتة لا تُعاد</li>
+                                <li>الخيار الافتراضي في المشاريع</li>
+                                <li>مثال: نِسب ثابتة، عناصر ثابتة</li>
+                                <li>لا يمكن إعادة تعيينها بعد التعريف</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> variables.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// const للقيم الثابتة
+const TAX_RATE = 0.05;
+const APP_NAME = 'حاسبة البقشيش';
+
+// let للقيم المتغيرة
+let count = 0;
+let tip = 0;
+
+// تعديل قيمة let
+count = count + 1;
+tip = 25;
+
+// محاولة تعديل const تُحدث خطأ
+// TAX_RATE = 0.10;  // TypeError
+
+// مقارنة سريعة في Console
+console.log(APP_NAME, count, tip);</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>قاعدة عملية:</strong> استخدم <code>const</code> افتراضياً،
+                            ولا تستخدم <code>let</code> إلا إذا كنت تعرف أن القيمة ستتغير فعلاً.
+                            هذا يجعل الكود أسهل في القراءة والصيانة، لأنك تعرف فوراً أي قيم
+                            يُتوقع تعديلها.
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> naming.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// أسماء جيدة (camelCase)
+const userName = 'سارة';
+const finalTotal = 125;
+let itemsCount = 3;
+let isSubscribed = false;
+
+// أسماء سيئة
+const x = 'سارة';        // غير واضح
+const DATA1 = 125;       // لا معنى
+let aa_bb = 3;           // صعب القراءة</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>أخطاء شائعة:</strong>
+                            <br>• أسماء بحروف عربية: JavaScript تقبلها، لكنها تسبب صداعاً في المسارات
+                            والتبديل بين اللغات.
+                            <br>• أسماء تبدأ برقم: <code>let 1x</code> خطأ.
+                            <br>• كلمات محجوزة: <code>let if = 5;</code> خطأ.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data types -->
+                <section class="lecture-section" id="data-types" aria-labelledby="types-title">
+                    <h2 class="section-title" id="types-title">
+                        <i class="fas fa-shapes"></i> أنواع البيانات
+                    </h2>
+                    <p>
+                        JavaScript لغة ذات أنواع ديناميكية: المتغير يأخذ نوع القيمة التي فيه.
+                        أهم أنواع البيانات التي سنستخدمها:
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>النوع</th>
+                                    <th>أمثلة</th>
+                                    <th>ملاحظة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>string</code></td>
+                                    <td><code>'مرحباً'</code>، <code>"Hello"</code>، <code>`Hi`</code></td>
+                                    <td>نص، يمكن أن يكون بين علامات مفردة أو مزدوجة أو backticks</td>
+                                </tr>
+                                <tr>
+                                    <td><code>number</code></td>
+                                    <td><code>42</code>، <code>3.14</code>، <code>-7</code></td>
+                                    <td>لا يوجد فرق بين صحيح وعشري في JS</td>
+                                </tr>
+                                <tr>
+                                    <td><code>boolean</code></td>
+                                    <td><code>true</code>، <code>false</code></td>
+                                    <td>قيمة صواب/خطأ</td>
+                                </tr>
+                                <tr>
+                                    <td><code>undefined</code></td>
+                                    <td>متغير معلن بلا قيمة</td>
+                                    <td>الأنواع "غير المعرفة"</td>
+                                </tr>
+                                <tr>
+                                    <td><code>null</code></td>
+                                    <td>قيمة فارغة متعمدة</td>
+                                    <td>تأتي من صاحب الكود، لا من JS</td>
+                                </tr>
+                                <tr>
+                                    <td><code>array</code></td>
+                                    <td><code>[1, 2, 3]</code></td>
+                                    <td>قائمة مرتبة من القيم</td>
+                                </tr>
+                                <tr>
+                                    <td><code>object</code></td>
+                                    <td><code>{ name: 'سارة', age: 20 }</code></td>
+                                    <td>كائن بخصائص مفتاحية (لاحقاً)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> data-types.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// النصوص
+const name = 'سارة';
+const greeting = "أهلاً";
+const template = `مرحباً ${name}`;   // سنشرحها بعد قليل
+
+// الأرقام
+const age = 20;
+const price = 49.99;
+
+// القيم المنطقية
+const isStudent = true;
+const isAdmin = false;
+
+// التحقق من النوع باستخدام typeof
+console.log(typeof 'سارة');    // string
+console.log(typeof 42);         // number
+console.log(typeof true);       // boolean
+console.log(typeof undefined);  // undefined
+console.log(typeof null);       // object (سلوك تاريخي غريب)
+console.log(typeof [1,2,3]);    // object</code></pre>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>تحويل الأنواع:</strong> يمكن تحويل النص إلى رقم بـ
+                            <code>Number('14')</code> أو <code>parseInt('14')</code>، والرقم إلى
+                            نص بـ<code>String(14)</code> أو <code>(14).toString()</code>.
+                            كن حذراً: <code>Number('abc')</code> ترجع <code>NaN</code>
+                            (ليس رقماً)، وهو مؤشر على إدخال غير صالح.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Operators -->
+                <section class="lecture-section" id="operators" aria-labelledby="operators-title">
+                    <h2 class="section-title" id="operators-title">
+                        <i class="fas fa-calculator"></i> العمليات الحسابية والمقارنة والمنطقية
+                    </h2>
+                    <p>
+                        JavaScript تعرف العمليات الحسابية المعتادة، وعمليات المقارنة، والعمليات
+                        المنطقية. هذه العمليات ستكون العصب الأساسي لكل شروطك وقراراتك لاحقاً.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-plus"></i> حسابية</h3>
+                            <ul>
+                                <li><code>+</code> جمع (وأيضاً دمج نصوص)</li>
+                                <li><code>-</code> طرح</li>
+                                <li><code>*</code> ضرب</li>
+                                <li><code>/</code> قسمة</li>
+                                <li><code>%</code> باقي القسمة</li>
+                                <li><code>**</code> أس</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-code-compare"></i> مقارنة</h3>
+                            <ul>
+                                <li><code>===</code> يساوي (قيمة ونوع)</li>
+                                <li><code>!==</code> لا يساوي (قيمة ونوع)</li>
+                                <li><code>&gt;</code>، <code>&lt;</code></li>
+                                <li><code>&gt;=</code>، <code>&lt;=</code></li>
+                                <li><code>==</code> يساوي (بعد تحويل النوع) — تجنّبها</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-code-branch"></i> منطقية</h3>
+                            <ul>
+                                <li><code>&amp;&amp;</code> و (كلاهما صحيح)</li>
+                                <li><code>||</code> أو (أحدهما صحيح)</li>
+                                <li><code>!</code> نفي</li>
+                                <li>تُستخدم بكثافة في الشروط</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> operators.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// حسابية
+const a = 10;
+const b = 3;
+
+console.log(a + b);      // 13
+console.log(a - b);      // 7
+console.log(a * b);      // 30
+console.log(a / b);      // 3.3333...
+console.log(a % b);      // 1
+console.log(a ** b);     // 1000
+
+// مقارنة — استخدم === دائماً
+console.log(5 === 5);        // true
+console.log(5 === '5');      // false  (نوع مختلف)
+console.log(5 == '5');       // true   (تحويل نوع — تجنّبها)
+console.log(5 !== 3);        // true
+console.log(10 > 5);         // true
+
+// منطقية
+const isAdult = true;
+const hasTicket = false;
+
+console.log(isAdult && hasTicket);  // false
+console.log(isAdult || hasTicket);  // true
+console.log(!isAdult);              // false</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>خطأ شائع:</strong> استخدام <code>==</code> بدل <code>===</code>.
+                            <code>'5' == 5</code> ترجع <code>true</code> لأن JS تحوّل النوع تلقائياً.
+                            هذا يُنتج أخطاء منطقية غامضة. استخدم <code>===</code> دائماً.
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>ملاحظة على <code>+</code>:</strong> هي عملية "متعددة الأغراض":
+                            <br><code>5 + 3</code> = 8 (جمع)
+                            <br><code>'5' + 3</code> = '53' (دمج نصوص)
+                            <br>انتبه، فهي مصدر أخطاء متكرر عند التعامل مع مدخلات النماذج التي
+                            تأتي دائماً كنصوص. حلّل النص إلى رقم بـ<code>Number()</code> أولاً.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Template literals -->
+                <section class="lecture-section" id="template-literals" aria-labelledby="template-title">
+                    <h2 class="section-title" id="template-title">
+                        <i class="fas fa-quote-right"></i> Template literals والنصوص
+                    </h2>
+                    <p>
+                        في الإصدارات القديمة، كان دمج النصوص مملاً:
+                        <code>'مرحباً ' + name + '، عمرك ' + age</code>. JS الحديثة وفّرت
+                        <strong>Template literals</strong> باستخدام backticks
+                        <code>`</code> مع <code>${ }</code> لإدراج القيم داخل النص مباشرة.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> template-literals.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>const name = 'سارة';
+const age = 20;
+
+// الطريقة القديمة
+const msgOld = 'مرحباً ' + name + '، عمرك ' + age + ' سنة';
+
+// الطريقة الحديثة (Template literal)
+const msgNew = `مرحباً ${name}، عمرك ${age} سنة`;
+
+console.log(msgNew);
+
+// ميزات إضافية
+const multiLine = `السطر الأول
+السطر الثاني
+السطر الثالث`;
+console.log(multiLine);
+
+// يمكن وضع تعبيرات داخل ${}
+const sum = `المجموع: ${10 + 5}`;
+console.log(sum);   // المجموع: 15</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check"></i> مزايا</h3>
+                            <ul>
+                                <li>دمج نصوص أنظف</li>
+                                <li>دعم الأسطر المتعددة تلقائياً</li>
+                                <li>إمكانية إدراج تعبيرات لا مجرد متغيرات</li>
+                                <li>الطريقة المفضّلة في المساق</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> انتبه</h3>
+                            <ul>
+                                <li>Backticks <code>`</code> ليست علامات اقتباس عادية</li>
+                                <li>على لوحة المفاتيح: تحت زر Esc عادة</li>
+                                <li>الخلط بينها وبين <code>'</code> يُنتج أخطاء غامضة</li>
+                                <li>لا تنسَ إغلاقها</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> نص-متعدد-الأسطر.html</span>
+                            <span class="code-lang">HTML+JS</span>
+                        </div>
+                        <pre><code>// إدراج محتوى HTML بالكامل عبر template literal
+const card = `
+    &lt;article class="card"&gt;
+        &lt;h2&gt;${name}&lt;/h2&gt;
+        &lt;p&gt;العمر: ${age}&lt;/p&gt;
+    &lt;/article&gt;
+`;
+document.body.innerHTML = card;</code></pre>
+                    </div>
+                </section>
+
+                <!-- Arrays -->
+                <section class="lecture-section" id="arrays" aria-labelledby="arrays-title">
+                    <h2 class="section-title" id="arrays-title">
+                        <i class="fas fa-list"></i> المصفوفات
+                    </h2>
+                    <p>
+                        المصفوفة (<code>array</code>) هي قائمة مرتبة من القيم. تفيدنا حين نريد
+                        تجميع قيم متعددة في متغير واحد: قائمة أسماء، درجات، منتجات، إلخ.
+                        العناصر تُفهرَس من <strong>0</strong>، لا من 1.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> arrays.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// إنشاء مصفوفة
+const skills = ['HTML', 'CSS', 'JavaScript'];
+const numbers = [10, 20, 30, 40];
+
+// الوصول إلى عنصر (يبدأ من 0)
+console.log(skills[0]);      // HTML
+console.log(skills[2]);      // JavaScript
+
+// الطول
+console.log(skills.length);  // 3
+
+// آخر عنصر
+console.log(skills[skills.length - 1]);  // JavaScript
+
+// إضافة عنصر (تعديل مصفوفة const مسموح)
+skills.push('Python');
+console.log(skills);         // HTML, CSS, JavaScript, Python
+
+// حذف آخر عنصر
+skills.pop();
+console.log(skills);
+
+// الدوران عبر المصفوفة
+for (let i = 0; i < skills.length; i++) {
+    console.log(i, skills[i]);
+}</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-plus"></i> إضافة وحذف</h3>
+                            <ul>
+                                <li><code>push(x)</code> إضافة في الأخير</li>
+                                <li><code>unshift(x)</code> إضافة في الأول</li>
+                                <li><code>pop()</code> حذف من الأخير</li>
+                                <li><code>shift()</code> حذف من الأول</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-magnifying-glass"></i> فحص</h3>
+                            <ul>
+                                <li><code>includes(x)</code> هل يحتوي على x؟</li>
+                                <li><code>indexOf(x)</code> أين موقعه؟</li>
+                                <li><code>length</code> عدد العناصر</li>
+                                <li><code>join(sep)</code> دمج في نص</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-code-branch"></i> تحويل (لاحقاً)</h3>
+                            <ul>
+                                <li><code>map</code> تحويل كل عنصر</li>
+                                <li><code>filter</code> تصفية العناصر</li>
+                                <li><code>forEach</code> المرور على العناصر</li>
+                                <li>ستراها في المحاضرة القادمة</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>ملاحظة على <code>const</code> والمصفوفات:</strong>
+                            <code>const skills = [...]</code> تعني أن المرجع ثابت، لا أن المحتوى
+                            ثابت. يمكنك <code>push</code> و<code>pop</code> لأنك تعدّل المحتوى،
+                            لكن لا يمكنك إعادة تعيين المصفوفة كلها بـ<code>skills = [];</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Console -->
+                <section class="lecture-section" id="console" aria-labelledby="console-title">
+                    <h2 class="section-title" id="console-title">
+                        <i class="fas fa-terminal"></i> Console وتصحيح الأخطاء
+                    </h2>
+                    <p>
+                        <strong>Console</strong> هو أفضل صديق لك. هو محرّك التصحيح الأولي.
+                        افتحه بـ<strong>F12</strong> ثم تبويب <strong>Console</strong>. تكتب
+                        فيه أي تعبير JS وتُنفّذه فوراً، وترى مخرجات <code>console.log</code>
+                        من سكربتاتك.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> console.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// طباعة بسيطة
+console.log('مرحباً بالعالم');
+
+// طباعة قيم متعددة
+const name = 'سارة';
+const age = 20;
+console.log('الاسم:', name, '— العمر:', age);
+
+// طباعة template literal
+console.log(`الاسم ${name} والعمر ${age}`);
+
+// أنواع مختلفة
+console.info('رسالة معلومات');
+console.warn('تحذير');
+console.error('خطأ واضح');
+
+// جدول مصفوفة (مفيد للمصفوفات والكائنات)
+const skills = ['HTML', 'CSS', 'JS'];
+console.table(skills);
+
+// توقيت عملية
+console.time('loop');
+for (let i = 0; i < 10000; i++) {}
+console.timeEnd('loop');</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-circle-info"></i> console.log</h3>
+                            <ul>
+                                <li>الطباعة الأساسية</li>
+                                <li>ملائمة للفحص السريع</li>
+                                <li>لا تُستخدم بدلُّ التصحيح المنهجي</li>
+                                <li>احذفها قبل التسليم</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-bug"></i> قراءة الأخطاء</h3>
+                            <ul>
+                                <li>الخطأ يظهر بالأحمر في Console</li>
+                                <li>السطر الذي حصل فيه الخطأ ظاهر</li>
+                                <li>اقرأ النص حرفياً قبل التخمين</li>
+                                <li><code>ReferenceError</code> يعني متغيراً غير معرّف</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> أنواع الأخطاء</h3>
+                            <ul>
+                                <li><code>SyntaxError</code> خطأ كتابي</li>
+                                <li><code>ReferenceError</code> متغير مفقود</li>
+                                <li><code>TypeError</code> نوع غير مناسب</li>
+                                <li><code>RangeError</code> خارج النطاق</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> نصائح</h3>
+                            <ul>
+                                <li>اطبع القيمة قبل استخدامها</li>
+                                <li>اعزل السطر المشكوك فيه</li>
+                                <li>علّق أجزاءً لتحديد مصدر الخطأ</li>
+                                <li>لا تخف من الرسائل، اقرأها</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>قاعدة ذهبية:</strong> عندما لا يعمل الكود، أول سؤال تسأله
+                            لنفسك: "هل طبعت القيم فعلاً لأتأكد من صحتها؟". 80% من الأخطاء
+                            تُكشف بمجرد <code>console.log</code> قبل السطر الذي يبدو أنه يفشل.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        المطلوب اليوم كتابة <strong>ثلاثة سكربتات صغيرة</strong>، تُشغّلها في
+                        Console أولاً، ثم تُنقل إلى ملف <code>main.js</code> مع وظيفة تشغيل
+                        تعرض النتائج.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 6</h3>
+                        <ol>
+                            <li>أنشئ ملف <code>lecture6-lab.html</code> داخل مجلد <code>web-course</code>.</li>
+                            <li>أضف في نهايته: <code>&lt;script src="lab6.js" defer&gt;&lt;/script&gt;</code>.</li>
+                            <li>أنشئ ملف <code>lab6.js</code> وابدأه بتعليق يوضح البيانات.</li>
+                            <li>أنشئ السكربت الأول: <strong>حاسبة بقشيش</strong>.
+                                <ul>
+                                    <li>عرّف <code>const bill</code> بقيمة 120.</li>
+                                    <li>عرّف <code>const tipPercent</code> بقيمة 15.</li>
+                                    <li>احسب <code>const tip</code> = bill × tipPercent ÷ 100.</li>
+                                    <li>احسب <code>const total</code> = bill + tip.</li>
+                                    <li>اطبع النتيجة بـtemplate literal.</li>
+                                </ul>
+                            </li>
+                            <li>أنشئ السكربت الثاني: <strong>محول حرارة</strong>.
+                                <ul>
+                                    <li>عرّف <code>const celsius</code> بقيمة 25.</li>
+                                    <li>عرّف <code>const fahrenheit</code> = celsius × 9 ÷ 5 + 32.</li>
+                                    <li>اطبع النتيجة بـtemplate literal مع الوحدة.</li>
+                                </ul>
+                            </li>
+                            <li>أنشئ السكربت الثالث: <strong>منسّق أسماء</strong>.
+                                <ul>
+                                    <li>عرّف <code>const firstName</code> و<code>const lastName</code>.</li>
+                                    <li>استخدم <code>trim()</code> لإزالة الفراغات.</li>
+                                    <li>استخدم <code>toUpperCase()</code> على الأحرف الأولى.</li>
+                                    <li>اطبع الاسم الكامل بالصيغة: <code>سارة أحمد</code>.</li>
+                                </ul>
+                            </li>
+                            <li>افتح الصفحة في المتصفح، ثم افتح Console.</li>
+                            <li>تأكد من ظهور نتائج السكربتات الثلاثة.</li>
+                            <li>جرّب تغيير القيم ومراقبة النتائج في Console.</li>
+                            <li>جرّب إدخال قيمة نصية مكان قيمة رقمية، ولاحظ ما يحدث.</li>
+                            <li>أرفق <code>lab6.js</code> وصورة من Console تعرض المخرجات.</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> lab6.js — نموذج البداية</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// 1) حاسبة بقشيش
+const bill = 120;
+const tipPercent = 15;
+
+const tip = (bill * tipPercent) / 100;
+const total = bill + tip;
+
+console.log(`فاتورة: ${bill} | بقشيش: ${tip} | المجموع: ${total}`);
+
+// 2) محول حرارة
+const celsius = 25;
+const fahrenheit = (celsius * 9) / 5 + 32;
+
+console.log(`${celsius}°C = ${fahrenheit}°F`);
+
+// 3) منسق أسماء
+const firstName = '  سارة ';
+const lastName = '  أحمد  ';
+
+const cleanFirst = firstName.trim();
+const cleanLast = lastName.trim();
+const fullName = `${cleanFirst} ${cleanLast}`;
+
+console.log(`الاسم الكامل: ${fullName}`);</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> Console يعرض ثلاث نتائج واضحة،
+                            لا أخطاء حمراء، وكل سكربت يستخدم <code>const</code> و<code>let</code>
+                            بشكل صحيح، والأسماء واضحة، والقيم الرقمية معالجة كأرقام لا نصوص.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-equals"></i> استخدام == بدل ===</h3>
+                            <p>
+                                <code>'5' == 5</code> ترجع <code>true</code> بسبب تحويل النوع،
+                                وهذا يسبب أخطاء منطقية غامضة. استخدم <code>===</code> دائماً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-quote-left"></i> خلط علامات النصوص</h3>
+                            <p>
+                                <code>'مرحباً"</code> — بداية بعلامة وإغلاق بأخرى. JS لن تفهم.
+                                التزم بنفس العلامة في الطرفين. وتذكّر أن <code>`</code> (backticks)
+                                شيء ثالث مختلف للـ template literals.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-calculator"></i> جمع نص ورقم</h3>
+                            <p>
+                                <code>'10' + 5</code> ترجع <code>'105'</code>، لأن <code>+</code>
+                                مع نص تعني دمجاً. حوّل النص إلى رقم بـ<code>Number()</code> أو
+                                <code>parseInt()</code> قبل الجمع.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-redo"></i> إعادة تعريف const</h3>
+                            <p>
+                                <code>const x = 5; x = 10;</code> خطأ. استخدم <code>let</code>
+                                إذا كنت تنوي تعديل القيمة، أو عرّف متغيراً جديداً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-semicolon"></i> نسيان الفاصلة المنقوطة</h3>
+                            <p>
+                                JS في الغالب تتسامح (Automatic Semicolon Insertion)، لكنها قد
+                                تسبب أخطاء غامضة. اكتب <code>;</code> في نهاية كل جملة — عادة
+                                صحية أفضل.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-hourglass"></i> تشغيل السكربت قبل DOM</h3>
+                            <p>
+                                إذا وضعت السكربت في head بدون <code>defer</code>، أو في body قبل
+                                العناصر، فلن يجدها. الحل: نهاية body أو <code>defer</code>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نصائح سريعة:</strong>
+                            <br>• اقرأ الخطأ في Console حرفياً.
+                            <br>• اطبع القيم قبل استخدامها.
+                            <br>• رتّب السكربت في أقسام بتعليقات.
+                            <br>• استخدم <code>typeof</code> عند الشك في نوع قيمة.
+                            <br>• سمّ المتغيرات بأسماء معبّرة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>JavaScript تضيف السلوك للصفحة، بعد HTML للبنية وCSS للشكل.</li>
+                        <li>نضيفها عبر <code>external</code> (الأفضل)، أو <code>internal</code>، أو <code>inline</code>.</li>
+                        <li>ضع السكربت في نهاية <code>body</code> أو استخدم <code>defer</code>.</li>
+                        <li><code>const</code> للقيم الثابتة، و<code>let</code> للقيم المتغيرة.</li>
+                        <li>الأنواع الأساسية: string، number، boolean، array، undefined، null.</li>
+                        <li>عمليات حسابية ومقارنة (<code>===</code> دائماً) ومنطقية.</li>
+                        <li>Template literals بـ<code>`...${expr}...`</code> لأنظف نصوص.</li>
+                        <li>المصفوفات تُفهرَس من 0، وتدعم <code>push</code>، <code>pop</code>، <code>length</code>.</li>
+                        <li><code>console.log</code> هو سلاحك الأول للتصحيح.</li>
+                        <li>اقرأ أنواع الأخطاء: SyntaxError، ReferenceError، TypeError.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما الفرق بين <code>let</code> و<code>const</code>؟</summary>
+                        <p>
+                            <code>let</code> يسمح بإعادة تعيين القيمة لاحقاً، و<code>const</code>
+                            لا يسمح بذلك بعد التعريف. قاعدة عملية: استخدم <code>const</code>
+                            افتراضياً، ولا تستخدم <code>let</code> إلا إذا كانت القيمة ستتغير.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) لماذا نفضّل <code>===</code> على <code>==</code>؟</summary>
+                        <p>
+                            لأن <code>===</code> يقارن القيمة والنوع معاً دون تحويل تلقائي،
+                            بينما <code>==</code> يحوّل النوع تلقائياً. هذا التحويل يسبب أخطاء
+                            منطقية غامضة، مثل اعتبار <code>'5'</code> و<code>5</code> متساويين.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) أين نضع وسم <code>&lt;script&gt;</code> ولماذا؟</summary>
+                        <p>
+                            في نهاية <code>&lt;body&gt;</code>، أو في <code>&lt;head&gt;</code>
+                            مع السمة <code>defer</code>. السبب أن السكربت قد يحتاج عناصر DOM
+                            التي لم تُبنَ بعد، فيحدث خطأ <code>Cannot read property of null</code>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) ماذا يطبع <code>typeof null</code>؟</summary>
+                        <p>
+                            يطبع <code>"object"</code>. هذه قضية تاريخية معروفة في JavaScript،
+                            وليست خطأ اليوم. للتحقق من <code>null</code> استخدم مقارنة صريحة:
+                            <code>value === null</code>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) ما وظيفة <code>console.log</code>؟</summary>
+                        <p>
+                            طباعة رسالة أو قيمة في تبويب Console بأدوات المطور. هي أداة التصحيح
+                            الأساسية، وتساعد في فحص القيم أثناء تنفيذ السكربت.
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="lecture5.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> المحاضرة السابقة
+                    </a>
+                    <a href="lecture7.html">
+                        المحاضرة التالية: المنطق البرمجي والدوال <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 6 · مقدمة إلى JavaScript | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

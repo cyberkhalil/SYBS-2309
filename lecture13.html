@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 13 | القوالب والنماذج في Flask — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة الثالثة عشرة من مساق SYBS 2309: القوالب والنماذج في Flask — Jinja2، تمرير البيانات من Python إلى القوالب، وراثة القوالب (extends/block)، static وurl_for، استقبال GET وPOST، request.form وrequest.args، رسائل Flash، والتحقق في الخادم. التطبيق: نموذج تواصل يرسل بيانات ويعرضها في صفحة نتيجة.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 13</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 13: القوالب والنماذج في Flask</h1>
+            <p class="lecture-lead">
+                في المحاضرة السابقة رأينا أول تطبيق Flask يعمل على الخادم، لكن كل مسار كان يُرجع
+                <strong>نصاً بسيطاً</strong>. اليوم ننتقل إلى <strong>تطبيق ويب حقيقي</strong>: قوالب
+                <strong>HTML</strong> منفصلة، وبيانات تُمرَّر من Python إلى الصفحة، ومشروع منظّم
+                بـ<code>templates/</code> و<code>static/</code>. سنتعلّم <strong>Jinja2</strong>
+                (<code>{{ }}</code> و<code>{% %}</code>)، و<strong>وراثة القوالب</strong>
+                (<code>extends</code>/<code>block</code>) التي تُنهي تكرار الترويسة والتذييل، ثم ندخل
+                إلى <strong>النماذج</strong>: <strong>GET</strong> و<strong>POST</strong>، وقراءة
+                البيانات في الخادم بـ<code>request.form</code> و<code>request.args</code>، و<strong>رسائل
+                Flash</strong> لتغذية المستخدم الراجعة، وننهي بـ<strong>التحقق في الخادم</strong> —
+                وهو التحقق الوحيد الذي لا يمكن تجاوزه.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 13</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-laptop-code"></i> مختبر معمّق</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 2 · الواجهة الخلفية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script13.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script13.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#jinja-basics">Jinja2: تعابير وكتل</a></li>
+                        <li><a href="#passing-data">تمرير البيانات من Python إلى القالب</a></li>
+                        <li><a href="#template-inheritance">وراثة القوالب وبنية المشروع</a></li>
+                        <li><a href="#static-urlfor">static وurl_for</a></li>
+                        <li><a href="#get-post">GET وPOST في النماذج</a></li>
+                        <li><a href="#form-handling">استقبال بيانات النموذج في Python</a></li>
+                        <li><a href="#flash-messages">رسائل Flash</a></li>
+                        <li><a href="#server-validation">التحقق في الخادم</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> هذه المحاضرة تحوّل تطبيقك من "دالة ترجع نصاً" إلى
+                    <strong>تطبيق ويب حقيقي</strong>. ستستخدم فيها كل ما تعلمته من HTML وCSS
+                    وJavaScript في المرحلة الأولى، مع Flask في المرحلة الثانية. هذا هو الجسر
+                    بين المرحلتين.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على بناء تطبيق Flask من عدّة صفحات، يستخدم
+                        قالباً موحّداً للترويسة والتذييل، ويستقبل بيانات من نموذج HTML، ويتحقق منها
+                        في الخادم، ويعرض رسائل واضحة للمستخدم. هذه هي المهارات التي ستحتاجها في
+                        مشروعك النهائي.
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>شرح دور Jinja2 كـtemplate engine</li>
+                                <li>التمييز بين <code>{{ }}</code> و<code>{% %}</code></li>
+                                <li>فهم فائدة وراثة القوالب</li>
+                                <li>فهم الفرق بين <code>request.form</code> و<code>request.args</code></li>
+                                <li>معرفة أن التحقق في الخادم هو الأساس الأمني</li>
+                                <li>فهم آلية Flash والجلسة (session)</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>إنشاء <code>base.html</code> وقوالب ترث منه</li>
+                                <li>تمرير متغيرات من Python إلى القوالب</li>
+                                <li>ربط CSS وJS عبر <code>url_for('static', ...)</code></li>
+                                <li>بناء نموذج POST واستقبال بياناته</li>
+                                <li>عرض رسائل Flash للمستخدم</li>
+                                <li>تنفيذ تحقق خادم على الاسم والبريد</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>بناء مشروع Flask منظّم قابل للتوسعة</li>
+                                <li>فصل المنطق عن العرض (Separation of Concerns)</li>
+                                <li>منع تكرار الترويسة والتذييل</li>
+                                <li>تطبيق مبدأ "لا تثق بمدخلات المستخدم"</li>
+                                <li>الاقتراب من المشروع النهائي خطوة</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Jinja basics -->
+                <section class="lecture-section" id="jinja-basics" aria-labelledby="jinja-title">
+                    <h2 class="section-title" id="jinja-title">
+                        <i class="fas fa-code"></i> Jinja2: تعابير وكتل
+                    </h2>
+                    <p>
+                        <strong>Jinja2</strong> هو مُحرّك القوالب الذي يأتي مع Flask. يحوّل ملفات
+                        HTML التي تحتوي على <strong>صياغة خاصة</strong> إلى HTML نهائي قبل إرسالها
+                        للمتصفح. الصياغة نوعان:
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-brackets-curly"></i> {{ }} — تعابير</h3>
+                            <ul>
+                                <li>تُستخدم لطباعة قيمة</li>
+                                <li>مثل متغير أو تعبير حسابي</li>
+                                <li>مثال: <code>{{ name }}</code></li>
+                                <li>يمكن استدعاء دوال داخلها</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-percent"></i> {% %} — كتل تحكم</h3>
+                            <ul>
+                                <li>للتحكم في التدفق والعرض</li>
+                                <li><code>if</code>، <code>for</code>، <code>block</code>، <code>extends</code></li>
+                                <li>لا تُطبع قيمتها</li>
+                                <li>تتحكم في بنية القالب</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-hashtag"></i> {# #} — تعليقات</h3>
+                            <ul>
+                                <li>تعليقات لا تظهر في HTML</li>
+                                <li>مفيدة لتوثيق القوالب</li>
+                                <li>لا تُرسل للمتصفح</li>
+                                <li>لا تُنفّذ</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-shield-halved"></i> الهروب التلقائي</h3>
+                            <ul>
+                                <li>Jinja يهرّب HTML افتراضياً</li>
+                                <li>يمنع XSS من القيم</li>
+                                <li><code>|safe</code> يعطّل الهروب</li>
+                                <li>استخدمها فقط مع HTML موثوق</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> templates/hello.html</span>
+                            <span class="code-lang">HTML + JINJA</span>
+                        </div>
+                        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ar" dir="rtl"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;{{ title }}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    {# عنوان الصفحة #}
+    &lt;h1&gt;{{ title }}&lt;/h1&gt;
+
+    &lt;p&gt;مرحباً {{ name }}، عمرك {{ age }} سنة.&lt;/p&gt;
+
+    {# شرط #}
+    {% if age &gt;= 18 %}
+        &lt;p&gt;أنت بالغ.&lt;/p&gt;
+    {% else %}
+        &lt;p&gt;أنت قاصر.&lt;/p&gt;
+    {% endif %}
+
+    {# حلقة #}
+    &lt;ul&gt;
+    {% for skill in skills %}
+        &lt;li&gt;{{ skill }}&lt;/li&gt;
+    {% else %}
+        &lt;li&gt;لا توجد مهارات.&lt;/li&gt;
+    {% endfor %}
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — استدعاء القالب</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>from flask import Flask, render_template
+
+app = Flask(__name__)
+
+
+@app.route("/hello")
+def hello():
+    return render_template(
+        "hello.html",
+        title="صفحة ترحيب",
+        name="سارة",
+        age=20,
+        skills=["HTML", "CSS", "Python"]
+    )</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>فوائد القوالب:</strong> HTML صار في ملفه، ومنطق Python في ملفه.
+                            لا مزيد من <code>return "&lt;h1&gt;...&lt;/h1&gt;"</code> داخل الدالة.
+                            الكود يُقرأ ويُصان بسهولة، ويمكن لمصمم HTML أن يعمل على القالب دون لمس Python.
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>قيم افتراضية ومرشحات:</strong>
+                            <br>• <code>{{ name | default('زائر') }}</code> يعطي قيمة افتراضية.
+                            <br>• <code>{{ price | round(2) }}</code> يقرّب لخانتين.
+                            <br>• <code>{{ text | upper }}</code> يحوّل للأحرف الكبيرة.
+                            <br>• <code>{{ items | length }}</code> يعيد عدد العناصر.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Passing data -->
+                <section class="lecture-section" id="passing-data" aria-labelledby="passing-title">
+                    <h2 class="section-title" id="passing-title">
+                        <i class="fas fa-arrow-right-arrow-left"></i> تمرير البيانات من Python إلى القالب
+                    </h2>
+                    <p>
+                        دالة <code>render_template()</code> تقبل اسم القالب أولاً، ثم سلسلة من
+                        <strong>المعاملات المسماة</strong> (keyword arguments). كل معامل يُصبح متغيراً
+                        متاحاً داخل القالب. وهذه هي الطريقة التي تعرض بها بياناتك.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — تمرير بيانات متعددة</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>from flask import Flask, render_template
+
+app = Flask(__name__)
+
+
+@app.route("/courses")
+def courses():
+    # بيانات من أي مصدر: قاعدة بيانات، ملف، API...
+    courses_list = [
+        {"code": "SYBS 2309", "title": "تصميم وبرمجة الويب", "active": True},
+        {"code": "SYBS 1010", "title": "مقدمة إلى الأمن", "active": False},
+        {"code": "SYBS 2020", "title": "شبكات الحاسوب", "active": True},
+    ]
+
+    return render_template(
+        "courses.html",
+        title="قائمة المقررات",
+        courses=courses_list,
+        total=len(courses_list)
+    )</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> templates/courses.html</span>
+                            <span class="code-lang">HTML + JINJA</span>
+                        </div>
+                        <pre><code>&lt;h1&gt;{{ title }}&lt;/h1&gt;
+&lt;p&gt;عدد المقررات: {{ total }}&lt;/p&gt;
+
+&lt;table&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;الرمز&lt;/th&gt;
+            &lt;th&gt;العنوان&lt;/th&gt;
+            &lt;th&gt;الحالة&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+    {% for c in courses %}
+        &lt;tr&gt;
+            &lt;td&gt;{{ c.code }}&lt;/td&gt;
+            &lt;td&gt;{{ c.title }}&lt;/td&gt;
+            &lt;td&gt;
+            {% if c.active %}
+                نشط
+            {% else %}
+                متوقف
+            {% endif %}
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    {% endfor %}
+    &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-tag"></i> أنواع البيانات</h3>
+                            <ul>
+                                <li>يمكن تمرير أي نوع Python</li>
+                                <li>نص، رقم، قائمة، قاموس</li>
+                                <li>دالة، كائن، خصائص</li>
+                                <li>Jinja يصل إليها مباشرة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-key"></i> الوصول للخصائص</h3>
+                            <ul>
+                                <li><code>d.key</code> أو <code>d["key"]</code></li>
+                                <li>Jinja جرّبت الاثنين</li>
+                                <li>لو لم يوجد المفتاح → undefined</li>
+                                <li>لا يرفع KeyError</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-calculator"></i> تعابير</h3>
+                            <ul>
+                                <li>عمليات حسابية: <code>{{ a + b }}</code></li>
+                                <li>مقارنات منطقية داخل <code>{% if %}</code></li>
+                                <li>سلاسل: <code>{{ 'x' ~ name }}</code></li>
+                                <li>مرشحات: <code>{{ price | round(2) }}</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> undefined</h3>
+                            <ul>
+                                <li>قيمة غير مزوّدة → undefined فارغ</li>
+                                <li>لا خطأ، لكن النتيجة فارغة</li>
+                                <li>تحقق في التطوير قبل النشر</li>
+                                <li>استخدم <code>| default</code> عند الحاجة</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>لا تعتمد على ترتيب المعاملات!</strong>
+                            <code>render_template("x.html", name, email)</code> خطأ. يجب
+                            استخدام المعاملات المسماة: <code>name=name, email=email</code>.
+                            الترتيب بلا أسماء يُنتج استدعاءً غير معروف للدالة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Template inheritance -->
+                <section class="lecture-section" id="template-inheritance" aria-labelledby="inheritance-title">
+                    <h2 class="section-title" id="inheritance-title">
+                        <i class="fas fa-sitemap"></i> وراثة القوالب وبنية المشروع
+                    </h2>
+                    <p>
+                        تخيل أن لديك 10 صفحات، كل واحدة تحتاج نفس <code>&lt;head&gt;</code> ونفس
+                        <code>&lt;header&gt;</code> و<code>&lt;footer&gt;</code>. تكرارها في كل ملف
+                        كارثة صيانة. <strong>وراثة القوالب</strong> تحل هذا نهائياً: نكتب
+                        <code>base.html</code> مرة واحدة، ثم كل صفحة ترث منه وتضيف محتواها.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-file"></i> base.html</h3>
+                            <ul>
+                                <li>القالب الأب</li>
+                                <li>يحتوي الترتيب العام</li>
+                                <li>يُعرّف <code>{% block %}</code></li>
+                                <li>لا يُعرض مباشرة عادة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-clone"></i> extends</h3>
+                            <ul>
+                                <li>السطر الأول في القالب الابن</li>
+                                <li><code>{% extends "base.html" %}</code></li>
+                                <li>يجب أن يكون أول شيء</li>
+                                <li>يكتب مرة واحدة فقط</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-box"></i> block</h3>
+                            <ul>
+                                <li>مكان قابل للاستبدال</li>
+                                <li>يعرَّف في الأب ويُملأ في الابن</li>
+                                <li>مثال: <code>{% block content %}</code></li>
+                                <li>يمكن استدعاء محتوى الأب بـ<code>{{ super() }}</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-folder-open"></i> هيكل المشروع</span>
+                            <span class="code-lang">TREE</span>
+                        </div>
+                        <pre><code>flask-lab13/
+├── app.py
+├── requirements.txt
+├── templates/
+│   ├── base.html
+│   ├── home.html
+│   ├── about.html
+│   ├── contact.html
+│   └── result.html
+└── static/
+    ├── css/
+    │   └── style.css
+    └── js/
+        └── main.js</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> templates/base.html</span>
+                            <span class="code-lang">HTML + JINJA</span>
+                        </div>
+                        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ar" dir="rtl"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;{% block title %}SYBS 2309{% endblock %}&lt;/title&gt;
+
+    &lt;link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header class="site-header"&gt;
+        &lt;h1&gt;SYBS 2309&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;a href="{{ url_for('home') }}"&gt;الرئيسية&lt;/a&gt;
+            &lt;a href="{{ url_for('about') }}"&gt;عن المساق&lt;/a&gt;
+            &lt;a href="{{ url_for('contact') }}"&gt;تواصل&lt;/a&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+        {# رسائل Flash (سنشرحها لاحقاً) #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                &lt;ul class="flash-list"&gt;
+                {% for category, msg in messages %}
+                    &lt;li class="flash flash-{{ category }}"&gt;{{ msg }}&lt;/li&gt;
+                {% endfor %}
+                &lt;/ul&gt;
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    &lt;/main&gt;
+
+    &lt;footer class="site-footer"&gt;
+        &lt;p&gt;© 2025 Cyber Khalil — جميع الحقوق محفوظة&lt;/p&gt;
+    &lt;/footer&gt;
+
+    &lt;script src="{{ url_for('static', filename='js/main.js') }}" defer&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> templates/home.html</span>
+                            <span class="code-lang">HTML + JINJA</span>
+                        </div>
+                        <pre><code>{% extends "base.html" %}
+
+{% block title %}الرئيسية — SYBS 2309{% endblock %}
+
+{% block content %}
+    &lt;h2&gt;مرحباً بكم في مساق تصميم وبرمجة الويب&lt;/h2&gt;
+    &lt;p&gt;هذه الصفحة الرئيسية للتطبيق.&lt;/p&gt;
+    &lt;a href="{{ url_for('contact') }}"&gt;تواصل معنا&lt;/a&gt;
+{% endblock %}</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>النتيجة:</strong> كل صفحة جديدة = 10–15 سطراً فقط. الترويسة
+                            والتذييل وروابط CSS/JS تُكتب مرة واحدة في <code>base.html</code>.
+                            لو أردت إضافة رابط جديد في التنقل، تُعدّل سطراً واحداً فيتغير في كل
+                            الصفحات. هذا هو مبدأ DRY — Don't Repeat Yourself.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>تحذير:</strong> <code>{% extends %}</code> يجب أن يكون
+                            <strong>أول وسم</strong> في الملف. أي مسافة بيضاء أو تعليق قبله
+                            يسبب خطأ <code>TemplateSyntaxError</code>. لا <code>&lt;!DOCTYPE&gt;</code>
+                            في ملفات الأبناء — هي في <code>base.html</code> فقط.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Static & url_for -->
+                <section class="lecture-section" id="static-urlfor" aria-labelledby="static-title">
+                    <h2 class="section-title" id="static-title">
+                        <i class="fas fa-link"></i> static وurl_for
+                    </h2>
+                    <p>
+                        الملفات الثابتة — CSS، JavaScript، الصور، الخطوط — تُوضع في مجلد
+                        <code>static/</code>. Flask يخدمها مباشرة للمتصفح دون المرور عبر
+                        <code>render_template</code>. الأمر الأهم: لا تكتب مساراتها يدوياً،
+                        استخدم <code>url_for</code>.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-folder"></i> static/</h3>
+                            <ul>
+                                <li>مجلد افتراضي في Flask</li>
+                                <li>CSS · JS · صور · خطوط</li>
+                                <li>تُقدَّم مباشرة للمتصفح</li>
+                                <li>لا تمر بـPython</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-wand-magic-sparkles"></i> url_for</h3>
+                            <ul>
+                                <li>يولّد المسار تلقائياً</li>
+                                <li>للملفات الثابتة وللمسارات</li>
+                                <li>يعمل مهما كان اسم الملف</li>
+                                <li>يفضّل على الكتابة اليدوية</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-route"></i> url_for لمسار</h3>
+                            <ul>
+                                <li><code>url_for('home')</code></li>
+                                <li>يعيد المسار من اسم الدالة</li>
+                                <li>يمكن تمرير معاملات URL</li>
+                                <li><code>url_for('student', sid=42)</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> لا تكتب يدوياً</h3>
+                            <ul>
+                                <li><code>href="/static/css/style.css"</code> قد ينكسر</li>
+                                <li>إذا نُشر التطبيق على subpath</li>
+                                <li>أو تغيّر اسم المجلد</li>
+                                <li><code>url_for</code> يحلّها دائماً</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> استخدام url_for في القوالب</span>
+                            <span class="code-lang">HTML + JINJA</span>
+                        </div>
+                        <pre><code>{# ربط ملف CSS #}
+&lt;link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"&gt;
+
+{# ربط ملف JavaScript #}
+&lt;script src="{{ url_for('static', filename='js/main.js') }}" defer&gt;&lt;/script&gt;
+
+{# صورة #}
+&lt;img src="{{ url_for('static', filename='images/logo.png') }}"
+     alt="شعار المساق"&gt;
+
+{# رابط لمسار داخلي #}
+&lt;a href="{{ url_for('home') }}"&gt;الرئيسية&lt;/a&gt;
+
+{# رابط لمسار بمعامل #}
+&lt;a href="{{ url_for('student', sid=42) }}"&gt;ملف الطالب 42&lt;/a&gt;</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — ربط الأسماء بالدوال</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>from flask import Flask, render_template
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+
+@app.route("/student/&lt;int:sid&gt;")
+def student(sid):
+    return render_template("student.html", sid=sid)</code></pre>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>اسم الدالة هو اسم المسار:</strong> <code>url_for('home')</code>
+                            يشير إلى الدالة المسماة <code>home</code>، لا إلى <code>/</code>.
+                            لو غيّرت <code>@app.route("/home")</code> إلى <code>@app.route("/start")</code>،
+                            ستبقى <code>url_for('home')</code> تعمل، وستولّد
+                            <code>/start</code> تلقائياً. هذه ميزة كبيرة عند التطور.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- GET/POST -->
+                <section class="lecture-section" id="get-post" aria-labelledby="get-post-title">
+                    <h2 class="section-title" id="get-post-title">
+                        <i class="fas fa-right-left"></i> GET وPOST في النماذج
+                    </h2>
+                    <p>
+                        النموذج في HTML يرسل بيانات إلى مسار. اختيار <code>method</code>
+                        (<code>GET</code> أو <code>POST</code>) يحدد <strong>أين</strong> تُرسل
+                        البيانات و<strong>كيف</strong> يقرأها الخادم.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>المحور</th>
+                                    <th>GET</th>
+                                    <th>POST</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>مكان البيانات</td>
+                                    <td>في URL (query string)</td>
+                                    <td>في جسم الطلب (body)</td>
+                                </tr>
+                                <tr>
+                                    <td>قراءتها في Flask</td>
+                                    <td><code>request.args</code></td>
+                                    <td><code>request.form</code></td>
+                                </tr>
+                                <tr>
+                                    <td>يظهر في السجل</td>
+                                    <td>نعم</td>
+                                    <td>لا عادة</td>
+                                </tr>
+                                <tr>
+                                    <td>للبيانات الحساسة</td>
+                                    <td>ممنوع</td>
+                                    <td>مع HTTPS</td>
+                                </tr>
+                                <tr>
+                                    <td>آمن للإعادة</td>
+                                    <td>نعم (Idempotent)</td>
+                                    <td>لا (يُنشئ/يعدّل)</td>
+                                </tr>
+                                <tr>
+                                    <td>الاستخدام الشائع</td>
+                                    <td>بحث، تصفية، تصفح</td>
+                                    <td>تسجيل، دخول، إرسال</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> مسار يستقبل GET وPOST</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    if request.method == "POST":
+        # بيانات النموذج من جسم الطلب
+        name = request.form.get("name", "")
+        email = request.form.get("email", "")
+        return render_template(
+            "result.html",
+            name=name,
+            email=email
+        )
+
+    # GET: نعرض النموذج
+    return render_template("contact.html")</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> templates/contact.html</span>
+                            <span class="code-lang">HTML + JINJA</span>
+                        </div>
+                        <pre><code>{% extends "base.html" %}
+
+{% block title %}تواصل معنا{% endblock %}
+
+{% block content %}
+    &lt;h2&gt;تواصل معنا&lt;/h2&gt;
+
+    &lt;form action="{{ url_for('contact') }}" method="post"&gt;
+        &lt;p&gt;
+            &lt;label for="name"&gt;الاسم&lt;/label&gt;
+            &lt;input type="text" id="name" name="name" required&gt;
+        &lt;/p&gt;
+
+        &lt;p&gt;
+            &lt;label for="email"&gt;البريد الإلكتروني&lt;/label&gt;
+            &lt;input type="email" id="email" name="email" required&gt;
+        &lt;/p&gt;
+
+        &lt;button type="submit"&gt;إرسال&lt;/button&gt;
+    &lt;/form&gt;
+{% endblock %}</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>لا تنسَ <code>methods=["POST"]</code>:</strong> بدونها،
+                            المسار يقبل GET فقط، ويرجع Flask خطأ 405 Method Not Allowed عند
+                            إرسال POST. هذا من أشهر أخطاء المبتدئين.
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نمط Post/Redirect/Get (PRG):</strong> إذا أراد المستخدم بعد
+                            POST تحديث الصفحة، فقد يُعاد إرسال البيانات. الحل الاحترافي:
+                            بعد معالجة POST، اعمل <code>redirect(url_for('...'))</code>.
+                            بهذا لا يمكن للمستخدم إعادة الإرسال بتحديث الصفحة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Form handling -->
+                <section class="lecture-section" id="form-handling" aria-labelledby="form-title">
+                    <h2 class="section-title" id="form-title">
+                        <i class="fas fa-inbox"></i> استقبال بيانات النموذج في Python
+                    </h2>
+                    <p>
+                        في Flask، نقرأ بيانات النموذج من كائن <code>request</code>. لكل طريقة
+                        مصدرها الخاص: <code>request.form</code> لـPOST، و<code>request.args</code>
+                        لـGET، و<code>request.files</code> للملفات.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-file-arrow-up"></i> request.form</h3>
+                            <ul>
+                                <li>بيانات POST</li>
+                                <li>قاموس بأزواج name/value</li>
+                                <li><code>.get('name')</code> للقراءة الآمنة</li>
+                                <li>نصوص دائماً</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-link"></i> request.args</h3>
+                            <ul>
+                                <li>بيانات GET (query string)</li>
+                                <li><code>?q=python&page=2</code></li>
+                                <li><code>.get('q')</code> للقراءة</li>
+                                <li>نصوص دائماً</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-file"></i> request.files</h3>
+                            <ul>
+                                <li>ملفات مرفوعة</li>
+                                <li><code>input type="file"</code></li>
+                                <li>يحتاج <code>enctype</code> في النموذج</li>
+                                <li>حذر أمني شديد</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-key"></i> .get() مقابل []</h3>
+                            <ul>
+                                <li><code>request.form['name']</code> ← KeyError</li>
+                                <li><code>request.form.get('name')</code> ← None</li>
+                                <li>الأفضل: <code>.get('name', '')</code></li>
+                                <li>قيمة افتراضية تتجنب أخطاء</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> قراءة الحقول بأمان</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>@app.route("/subscribe", methods=["GET", "POST"])
+def subscribe():
+    if request.method == "POST":
+        # قراءة آمنة — قيمة افتراضية لو المفتاح مفقود
+        email = request.form.get("email", "").strip()
+        name = request.form.get("name", "").strip()
+        topics = request.form.getlist("topics")   # checkboxes
+
+        # تحقق بسيط
+        errors = []
+        if not email:
+            errors.append("البريد مطلوب")
+        if "@" not in email:
+            errors.append("البريد غير صالح")
+
+        if errors:
+            return render_template(
+                "subscribe.html",
+                errors=errors,
+                email=email,     # نُعيد القيمة للمستخدم
+                name=name
+            )
+
+        # نجاح
+        return render_template("thanks.html", name=name)
+
+    return render_template("subscribe.html", errors=[], email="", name="")</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>عند الفشل، أعد القيم للمستخدم:</strong> لو أخطأ المستخدم في
+                            حقل واحد، لا تجعله يعيد كتابة كل شيء. أعد إليه القيم الصحيحة في النموذج:
+                            <code>value="{{ name }}"</code>. هذه بادرة صغيرة لكنها تحسّن التجربة
+                            كثيراً.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>لا تثق بأي قيمة:</strong> كل ما في <code>request.form</code>
+                            و<code>request.args</code> جاء من المستخدم. قد يكون فارغاً، طويلاً جداً،
+                            أو يحتوي وسوم HTML. لا تستخدمه أبداً في SQL بلا تعقيم، ولا تعرضه بـ
+                            <code>|safe</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Flash messages -->
+                <section class="lecture-section" id="flash-messages" aria-labelledby="flash-title">
+                    <h2 class="section-title" id="flash-title">
+                        <i class="fas fa-bullhorn"></i> رسائل Flash
+                    </h2>
+                    <p>
+                        <strong>Flash</strong> هي رسالة قصيرة تُخزَّن في الجلسة (session)، ثم تُعرض
+                        في الصفحة التالية مرة واحدة. إنها الحل الأمثل لرسائل "تم الحفظ بنجاح" أو
+                        "البريد غير صالح" بعد إعادة التوجيه.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-message"></i> flash()</h3>
+                            <ul>
+                                <li>تخزين رسالة في الجلسة</li>
+                                <li>تظهر في الطلب التالي</li>
+                                <li>ثم تُحذف تلقائياً</li>
+                                <li>تقبل فئة (category)</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-list"></i> get_flashed_messages</h3>
+                            <ul>
+                                <li>قراءة الرسائل المخزّنة</li>
+                                <li>في القالب</li>
+                                <li>تُستدعى مرة واحدة عادة</li>
+                                <li>تُفرّغ بعد القراءة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-key"></i> secret_key</h3>
+                            <ul>
+                                <li>إلزامي لـFlash</li>
+                                <li>لتوقيع الجلسة</li>
+                                <li>قيمة عشوائية طويلة</li>
+                                <li>لا تُرفع إلى Git</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-tag"></i> الفئات</h3>
+                            <ul>
+                                <li><code>success</code> للنجاح</li>
+                                <li><code>error</code> للفشل</li>
+                                <li><code>info</code> للمعلومات</li>
+                                <li><code>warning</code> للتحذير</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — إعداد key + استخدام Flash</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>import os
+from flask import Flask, render_template, request, redirect, url_for, flash
+
+app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-me")
+
+
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        email = request.form.get("email", "").strip()
+
+        # تحقق
+        if not name or not email:
+            flash("يُرجى ملء جميع الحقول", "error")
+            return redirect(url_for("contact"))
+
+        if "@" not in email:
+            flash("صيغة البريد غير صحيحة", "error")
+            return redirect(url_for("contact"))
+
+        # نجاح
+        flash(f"شكراً {name}، تم استلام رسالتك", "success")
+        return redirect(url_for("contact"))
+
+    return render_template("contact.html")</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> templates/base.html — عرض الرسائل</span>
+                            <span class="code-lang">HTML + JINJA</span>
+                        </div>
+                        <pre><code>&lt;main&gt;
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            &lt;ul class="flash-list"&gt;
+            {% for category, message in messages %}
+                &lt;li class="flash flash-{{ category }}" role="alert"&gt;
+                    {{ message }}
+                &lt;/li&gt;
+            {% endfor %}
+            &lt;/ul&gt;
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+&lt;/main&gt;</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> static/css/style.css — تنسيق الرسائل</span>
+                            <span class="code-lang">CSS</span>
+                        </div>
+                        <pre><code>.flash-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+}
+
+.flash {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    border: 1px solid;
+}
+
+.flash-success { background: rgba(16,185,129,0.15); border-color: #10b981; color: #d1fae5; }
+.flash-error   { background: rgba(239,68,68,0.15);  border-color: #ef4444; color: #fecaca; }
+.flash-info    { background: rgba(59,130,246,0.15); border-color: #3b82f6; color: #dbeafe; }
+.flash-warning { background: rgba(245,158,11,0.15); border-color: #f59e0b; color: #fde68a; }</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>بدون <code>secret_key</code> سيتعطل Flash:</strong>
+                            <code>flash()</code> يستخدم الجلسة (session)، والجلسة تحتاج
+                            <code>secret_key</code> للتوقيع. بدونها ستحصل على
+                            <code>RuntimeError: The session is unavailable because no secret key was set</code>.
+                            ضع قيمة عشوائية طويلة في التطوير، واقرأها من متغير بيئة في الإنتاج.
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>لماذا Flash وليس تمرير خطأ في render_template مباشرة؟</strong>
+                            لأننا نستخدم <strong>Post/Redirect/Get</strong>. بعد كل POST نعيد
+                            التوجيه إلى نفس الصفحة، فلا تظهر رسالة من الاستدعاء السابق. Flash
+                            يخزّنها في الجلسة لتظهر في الطلب التالي (بعد الـredirect).
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Server validation -->
+                <section class="lecture-section" id="server-validation" aria-labelledby="validation-title">
+                    <h2 class="section-title" id="validation-title">
+                        <i class="fas fa-shield-halved"></i> التحقق في الخادم
+                    </h2>
+                    <p>
+                        في المحاضرة الثامنة تعلّمنا التحقق من النماذج في الواجهة الأمامية
+                        بـJavaScript. ذلك تحسينٌ للتجربة، لكنه ليس أماناً: يمكن تجاوزه بسهولة.
+                        <strong>التحقق الحقيقي يجب أن يكون في الخادم</strong>، لأن هذا هو المكان
+                        الذي لا يمكن للمستخدم تجاوزه.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-list-check"></i> تحقق شائع</h3>
+                            <ul>
+                                <li>الحقل غير فارغ</li>
+                                <li>الطول الأدنى والأقصى</li>
+                                <li>صيغة البريد</li>
+                                <li>المدى الرقمي</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-user-check"></i> تحقق منطقي</h3>
+                            <ul>
+                                <li>البريد غير مستخدم مسبقاً</li>
+                                <li>المستخدم له صلاحية</li>
+                                <li>الطلب موجود</li>
+                                <li>لا يمكن شراء سلعة غير متوفرة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-shield-virus"></i> تحقق أمني</h3>
+                            <ul>
+                                <li>تنقية HTML المرفوع</li>
+                                <li>منع حقن SQL (المعاملات)</li>
+                                <li>منع CSRF</li>
+                                <li>التحقق من الملفات المرفوعة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> لا تعتمد على الواجهة</h3>
+                            <ul>
+                                <li>يمكن تعطيل JavaScript</li>
+                                <li>يمكن إرسال طلب مباشر</li>
+                                <li>أدوات المطور تعدّل كل شيء</li>
+                                <li>الخادم هو خط الدفاع</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> التحقق الكامل في الخادم</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>import re
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
+
+
+def validate_register(username, email, password):
+    """تُرجع قاموساً من الأخطاء. فارغ = صحيح."""
+    errors = {}
+
+    if not username:
+        errors["username"] = "الاسم مطلوب."
+    elif len(username) < 3:
+        errors["username"] = "الاسم قصير جداً (3 أحرف على الأقل)."
+    elif len(username) > 30:
+        errors["username"] = "الاسم طويل جداً (30 حرفاً كحد أقصى)."
+
+    if not email:
+        errors["email"] = "البريد الإلكتروني مطلوب."
+    elif not EMAIL_RE.match(email):
+        errors["email"] = "صيغة البريد غير صحيحة."
+
+    if not password:
+        errors["password"] = "كلمة المرور مطلوبة."
+    elif len(password) < 8:
+        errors["password"] = "كلمة المرور قصيرة (8 أحرف على الأقل)."
+
+    return errors
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    errors = {}
+    values = {"username": "", "email": ""}
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password", "")
+
+        values["username"] = username
+        values["email"] = email
+
+        errors = validate_register(username, email, password)
+
+        if not errors:
+            # هنا: حفظ في قاعدة البيانات (لاحقاً)
+            return render_template("register_ok.html", username=username)
+
+    return render_template("register.html", errors=errors, **values)</code></pre>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> templates/register.html</span>
+                            <span class="code-lang">HTML + JINJA</span>
+                        </div>
+                        <pre><code>{% extends "base.html" %}
+{% block title %}تسجيل حساب{% endblock %}
+{% block content %}
+&lt;h2&gt;إنشاء حساب&lt;/h2&gt;
+
+&lt;form action="{{ url_for('register') }}" method="post" novalidate&gt;
+
+    &lt;p&gt;
+        &lt;label for="username"&gt;الاسم&lt;/label&gt;
+        &lt;input type="text" id="username" name="username"
+               value="{{ username }}"
+               aria-invalid="{{ 'true' if errors.username else 'false' }}"&gt;
+        {% if errors.username %}
+            &lt;small class="error" role="alert"&gt;{{ errors.username }}&lt;/small&gt;
+        {% endif %}
+    &lt;/p&gt;
+
+    &lt;p&gt;
+        &lt;label for="email"&gt;البريد الإلكتروني&lt;/label&gt;
+        &lt;input type="email" id="email" name="email"
+               value="{{ email }}"
+               aria-invalid="{{ 'true' if errors.email else 'false' }}"&gt;
+        {% if errors.email %}
+            &lt;small class="error" role="alert"&gt;{{ errors.email }}&lt;/small&gt;
+        {% endif %}
+    &lt;/p&gt;
+
+    &lt;p&gt;
+        &lt;label for="password"&gt;كلمة المرور&lt;/label&gt;
+        &lt;input type="password" id="password" name="password"
+               aria-invalid="{{ 'true' if errors.password else 'false' }}"&gt;
+        {% if errors.password %}
+            &lt;small class="error" role="alert"&gt;{{ errors.password }}&lt;/small&gt;
+        {% endif %}
+    &lt;/p&gt;
+
+    &lt;button type="submit"&gt;تسجيل&lt;/button&gt;
+&lt;/form&gt;
+{% endblock %}</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>لماذا هذا أفضل من التحقق في الواجهة؟</strong>
+                            لأن المستخدم قد يعطّل JS، أو يعدّل النموذج، أو يرسل طلباً مباشراً
+                            بـ<code>curl</code>. التحقق في الخادم هو آخر ما يمكنه تجاوزه.
+                            حتى لو عملت تحققاً في الواجهة (وهو مفيد للتجربة)، فالخادم يجب أن
+                            يتحقق مرة أخرى <strong>دائماً</strong>.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>تحذير على تخزين كلمة المرور:</strong> لا تحفظ كلمة المرور
+                            كنص صريح أبداً. عند الانتقال لقاعدة بيانات لاحقاً، استخدم
+                            <code>werkzeug.security.generate_password_hash</code>
+                            و<code>check_password_hash</code>. هذا موضوع المحاضرة القادمة
+                            عند الحديث عن الاستمرارية.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        المطلوب بناء تطبيق Flask يحتوي نموذج تواصل، يستقبل بياناته، ويعرضها في
+                        صفحة نتيجة. هذا التطبيق سيكون أساس تطبيق "الملاحظات" الذي سنبنيه في
+                        المحاضرة القادمة.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 13</h3>
+                        <ol>
+                            <li>أنشئ مجلد <code>flask-lab13/</code>، وانتقل إليه.</li>
+                            <li>أنشئ بيئة افتراضية <code>venv</code>، فعّلها، ثم
+                                <code>pip install flask</code>.</li>
+                            <li>أنشئ البنية:
+                                <ul>
+                                    <li><code>app.py</code>.</li>
+                                    <li><code>templates/base.html</code>.</li>
+                                    <li><code>templates/home.html</code>.</li>
+                                    <li><code>templates/contact.html</code>.</li>
+                                    <li><code>templates/result.html</code>.</li>
+                                    <li><code>static/css/style.css</code>.</li>
+                                </ul>
+                            </li>
+                            <li>في <code>app.py</code>، أنشئ <code>app</code>، واضبط
+                                <code>app.secret_key</code> بقيمة عشوائية.</li>
+                            <li>أنشئ ثلاثة مسارات:
+                                <ul>
+                                    <li><code>/</code> — تعرض <code>home.html</code>.</li>
+                                    <li><code>/contact</code> — GET: النموذج، POST: معالجة البيانات.</li>
+                                    <li><code>/result</code> — تعرض نتيجة بإعادة توجيه (اختياري).</li>
+                                </ul>
+                            </li>
+                            <li>في <code>base.html</code>، ضع: الترويسة، التنقل، الـfooter،
+                                وعرض رسائل Flash. استخدم <code>{{ url_for }}</code> لكل
+                                الروابط وCSS/JS.</li>
+                            <li>في <code>contact.html</code>، ضع نموذجاً بحقلين: الاسم والبريد،
+                                مع <code>label</code> و<code>required</code> و<code>novalidate</code>.</li>
+                            <li>في مسار POST:
+                                <ul>
+                                    <li>اقرأ الحقول بـ<code>request.form.get()</code>.</li>
+                                    <li>تحقق: كل حقل مطلوب، البريد يحتوي <code>@</code>.</li>
+                                    <li>عند الفشل: <code>flash</code> برسالة مناسبة،
+                                        ثم <code>redirect</code> إلى <code>/contact</code>.</li>
+                                    <li>عند النجاح: اعرض <code>result.html</code> بـ<code>render_template</code>.</li>
+                                </ul>
+                            </li>
+                            <li>في <code>result.html</code>: وراثة من base، واعرض الاسم والبريد
+                                من متغيرات Jinja.</li>
+                            <li>أضف <code>style.css</code> بتنسيق بسيط لكن مقبول: ألوان متناسقة،
+                                حواف دائرية، خط Tajawal.</li>
+                            <li>اختبر جميع الحالات:
+                                <ul>
+                                    <li>فتح <code>/contact</code> → النموذج يظهر.</li>
+                                    <li>إرسال فارغ → رسالة خطأ عبر Flash.</li>
+                                    <li>بريد بلا <code>@</code> → رسالة خطأ.</li>
+                                    <li>بيانات صحيحة → صفحة النتيجة تُعرض.</li>
+                                </ul>
+                            </li>
+                            <li>أرفق <code>app.py</code> والمجلدين <code>templates/</code> و
+                                <code>static/</code>، وصوراً لكل حالة.</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> app.py — هيكل البداية الكامل</span>
+                            <span class="code-lang">PYTHON</span>
+                        </div>
+                        <pre><code>import os
+from flask import (
+    Flask, render_template, request, redirect, url_for, flash
+)
+
+app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
+
+
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        email = request.form.get("email", "").strip()
+
+        if not name or not email:
+            flash("جميع الحقول مطلوبة.", "error")
+            return redirect(url_for("contact"))
+
+        if "@" not in email:
+            flash("صيغة البريد غير صحيحة.", "error")
+            return redirect(url_for("contact"))
+
+        return render_template(
+            "result.html",
+            name=name,
+            email=email
+        )
+
+    return render_template("contact.html")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> جميع القوالب ترث من
+                            <code>base.html</code>. لا يوجد HTML مكرر في الترويسة أو التذييل.
+                            الروابط كلها عبر <code>url_for</code>. النموذج يعمل ويستقبل
+                            البيانات. رسائل Flash تظهر وتختفي بعد عرضها. عند الفشل،
+                            المستخدم يعيد الإرسال من نفس الصفحة بدون فقدان السياق.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-file"></i> نسيان {% extends %} أولاً</h3>
+                            <p>
+                                <code>{% extends "base.html" %}</code> يجب أن يكون أول سطر.
+                                أي شيء قبله — حتى مسافة — يسبب
+                                <code>TemplateSyntaxError</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-memory"></i> نسيان namespace</h3>
+                            <p>
+                                في <code>render_template("home.html", name=n)</code>،
+                                استخدم <code>n</code> داخل القالب كـ<code>{{ n }}</code>،
+                                لا <code>{{ name }}</code>. اسم المعامل هو ما يصل.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-key"></i> لا secret_key</h3>
+                            <p>
+                                <code>flash()</code> يحتاج جلسة، والجلسة تحتاج
+                                <code>app.secret_key</code>. بدونه:
+                                <code>RuntimeError: session unavailable</code>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-tag"></i> نسيان methods</h3>
+                            <p>
+                                مسار يستقبل POST يجب أن يعلن
+                                <code>methods=["GET","POST"]</code>. بدونه يرفض
+                                الطلب بـ405.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-link-slash"></i> مسارات يدوية في القالب</h3>
+                            <p>
+                                <code>href="/static/style.css"</code> أو <code>"/about"</code>
+                                تعمل أحياناً وتنكسر أحياناً. استخدم <code>url_for</code>
+                                دائماً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-shield-virus"></i> استخدام |safe مع مدخلات</h3>
+                            <p>
+                                <code>{{ comment | safe }}</code> على نص من المستخدم
+                                = ثغرة XSS. Jinja يهرّب تلقائياً — لا تعطّل هذا السلوك
+                                إلا لـ HTML تكتبه أنت.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-clipboard"></i> نسخ نموذج بلا name</h3>
+                            <p>
+                                نسيان <code>name="..."</code> في حقل يعني أنه لن يُرسل.
+                                تحقّق من كل حقل: <code>name</code> و<code>id</code>
+                                مختلفان، وكلاهما مهم.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-magnifying-glass"></i> البحث في مجلد خاطئ</h3>
+                            <p>
+                                Flask يبحث في <code>templates/</code>. لو وضعت
+                                <code>home.html</code> في الجذر، ستحصل على
+                                <code>TemplateNotFound</code>. تحقق من اسم المجلد
+                                وحالة الحروف.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نصائح ذهبية:</strong>
+                            <br>• استخدم <code>debug=True</code> أثناء التطوير فقط.
+                            <br>• في كل مرة تنشئ قالباً جديداً، ابدأ بـ<code>{% extends %}</code>.
+                            <br>• مرّر قاموساً لقيم الخطأ بدل نصوص متعددة.
+                            <br>• تحقق من <code>request.method</code> قبل قراءة البيانات.
+                            <br>• دائمًا استخدم <code>.get()</code> بدل <code>[]</code>.
+                            <br>• استخدم <code>|safe</code> مرة واحدة في السنة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>Jinja2 هو template engine يعمل مع Flask لتحويل HTML قبل الإرسال.</li>
+                        <li><code>{{ }}</code> لطباعة قيمة، و<code>{% %}</code> للتحكم (if، for، block).</li>
+                        <li><code>{# #}</code> للتعليقات التي لا تُرسل للمتصفح.</li>
+                        <li><code>render_template("name.html", key=value, ...)</code> يمرّر البيانات للقالب.</li>
+                        <li>وراثة القوالب: <code>{% extends %}</code> + <code>{% block %}</code> تمنع تكرار الترويسة/التذييل.</li>
+                        <li><code>url_for</code> يولّد المسارات ويعمل مهما تغيّرت.</li>
+                        <li>ملفات CSS وJS والصور توضع في <code>static/</code> وتُربط بـ<code>url_for('static', filename='...')</code>.</li>
+                        <li>النماذج: <code>POST</code> للبيانات الحساسة، <code>GET</code> للبحث والفلاتر.</li>
+                        <li><code>request.form</code> لـPOST، <code>request.args</code> لـGET، <code>request.files</code> للملفات.</li>
+                        <li><code>.get('field', '')</code> أأمن من <code>['field']</code> لأنه لا يرفع KeyError.</li>
+                        <li>Flash يحتاج <code>app.secret_key</code>، ويُعرض في <code>base.html</code> عبر <code>get_flashed_messages</code>.</li>
+                        <li>التحقق يكون في الخادم دائماً — لا يمكن تجاوزه.</li>
+                        <li>عند الفشل: استخدم PRG (Post/Redirect/Get) مع Flash لعرض رسالة الخطأ.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما الفرق بين <code>{{ }}</code> و<code>{% %}</code> في Jinja؟</summary>
+                        <p>
+                            <code>{{ }}</code> تعبير يُطبع في الناتج (قيمة متغير، نتيجة عملية،
+                            استدعاء دالة). <code>{% %}</code> كتلة تحكم لا تُطبع شيئاً:
+                            <code>if</code>، <code>for</code>، <code>block</code>،
+                            <code>extends</code>، <code>include</code>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) لماذا نستخدم <code>url_for</code> بدل كتابة المسارات يدوياً؟</summary>
+                        <p>
+                            لأن <code>url_for</code> يولّد المسار الصحيح تلقائياً، ويعمل حتى
+                            لو غيّرت <code>@app.route</code> أو نشرت التطبيق تحت subpath.
+                            الكتابة اليدوية تنكسر بسهولة، خاصة مع <code>static/</code>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) ما الفرق بين <code>request.form</code> و<code>request.args</code>؟</summary>
+                        <p>
+                            <code>request.form</code> يحتوي بيانات POST (جسم الطلب).
+                            <code>request.args</code> يحتوي بيانات GET (query string في الـURL،
+                            مثل <code>?q=python</code>). لكل مصدر استخدامه: POST للبيانات
+                            الحساسة، GET للبحث والفلاتر.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) لماذا نحتاج <code>app.secret_key</code> قبل استخدام Flash؟</summary>
+                        <p>
+                            لأن Flash يخزّن الرسائل في الجلسة (session)، والجلسة ملف توقعه
+                            Flask بـ<code>secret_key</code> لمنع التلاعب. بدونها، لا يستطيع
+                            Flask تشفير أو التحقق من الجلسة، فيرفع RuntimeError.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) لماذا التحقق في الواجهة الأمامية لا يكفي أمنياً؟</summary>
+                        <p>
+                            لأنه يمكن تجاوزه بسهولة: تعطيل JS، تعديل الحقول بأدوات المطور،
+                            إرسال طلب مباشر بـ<code>curl</code> أو <code>Postman</code>.
+                            التحقق الحقيقي يجب أن يكون في الخادم، لأنه المكان الوحيد الذي
+                            يتحكم به المطور.
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="lecture12.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> المحاضرة السابقة
+                    </a>
+                    <a href="lecture14.html">
+                        المحاضرة التالية: دمج الواجهة الأمامية والخلفية <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 13 · القوالب والنماذج في Flask | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

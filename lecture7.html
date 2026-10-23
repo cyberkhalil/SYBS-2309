@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>المحاضرة 7 | المنطق البرمجي والدوال — SYBS 2309</title>
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description"
+        content="المحاضرة السابعة من مساق SYBS 2309: المنطق البرمجي والدوال — التحكم في التدفق (if/else, switch)، الحلقات (for, while, do-while)، الدوال (declaration, expression, arrow)، المصفوفات المتقدمة (map, filter, forEach, reduce)، ومعالجة الأخطاء بـ try/catch.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lecture.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <a class="skip-link" href="#main-content">تجاوز إلى محتوى المحاضرة</a>
+
+    <div class="container lecture-container">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> الصفحة الرئيسية</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">المحاضرة 7</span>
+        </nav>
+
+        <!-- ================= LECTURE HERO ================= -->
+        <header class="lecture-hero" id="top">
+            <div class="course-badge">
+                <i class="fas fa-code"></i> SYBS 2309 | دبلوم أمن المعلومات
+            </div>
+            <h1>المحاضرة 7: المنطق البرمجي والدوال</h1>
+            <p class="lecture-lead">
+                في المحاضرة السابقة تعلّمنا <strong>المتغيرات والأنواع والعمليات</strong>.
+                اليوم ننتقل من سطر واحد يُنفَّذ مباشرة إلى <strong>برنامج حقيقي</strong> يتخذ قرارات
+                ويتكرر وينظَّم في دوال. سنتعلّم <strong>التحكم في التدفق</strong>
+                (<code>if/else</code>، <code>switch</code>)، و<strong>الحلقات</strong>
+                (<code>for</code>، <code>while</code>)، ثم <strong>الدوال</strong> بأنواعها
+                (<code>declaration</code>، <code>expression</code>، <code>arrow</code>) مع
+                <strong>المعاملات</strong> و<code>return</code> والنطاق، ثم
+                <strong>دوال المصفوفات</strong> الحديثة (<code>map</code>، <code>filter</code>،
+                <code>forEach</code>، <code>reduce</code>)، ونختم بـ<strong>معالجة الأخطاء</strong>
+                عبر <code>try/catch</code>. هذه المحاضرة هي التي تحوّل سكربتات صغيرة إلى
+                <strong>منطق برمجي حقيقي</strong>.
+            </p>
+            <div class="lecture-meta">
+                <span><i class="fas fa-calendar-week"></i> الأسبوع 7</span>
+                <span><i class="fas fa-clock"></i> 3 ساعات أكاديمية</span>
+                <span><i class="fas fa-chalkboard"></i> نظري + عملي</span>
+                <span><i class="fas fa-layer-group"></i> المرحلة 1 · الواجهة الأمامية</span>
+                <span><i class="fas fa-user-tie"></i> م. محمود خليل</span>
+            </div>
+            <div class="lecture-tools">
+                <a class="tool-btn" href="script7.txt" download>
+                    <i class="fas fa-file-arrow-down"></i> تحميل تفريغ الشرح الصوتي
+                </a>
+                <a class="tool-btn" href="script7.txt" target="_blank" rel="noopener">
+                    <i class="fas fa-book-open-reader"></i> قراءة التفريغ
+                </a>
+            </div>
+        </header>
+
+        <div class="lecture-layout">
+
+            <!-- ================= ASIDE / TOC ================= -->
+            <aside class="lecture-aside" aria-label="محتويات المحاضرة">
+                <nav class="toc-card" aria-labelledby="toc-title">
+                    <h2 id="toc-title"><i class="fas fa-list-ul"></i> محتويات المحاضرة</h2>
+                    <ol class="toc-list">
+                        <li><a href="#objectives">أهداف المحاضرة ومخرجات التعلم</a></li>
+                        <li><a href="#flow-control">التحكم في التدفق: if وelse وswitch</a></li>
+                        <li><a href="#loops">الحلقات: for وwhile وdo-while</a></li>
+                        <li><a href="#functions">الدوال: التعريف والمعاملات وreturn</a></li>
+                        <li><a href="#scope">النطاق وأنواع الدوال</a></li>
+                        <li><a href="#array-methods">دوال المصفوفات: map وfilter وreduce</a></li>
+                        <li><a href="#error-handling">معالجة الأخطاء: try/catch</a></li>
+                        <li><a href="#lab">التطبيق العملي</a></li>
+                        <li><a href="#mistakes">أخطاء شائعة ونصائح</a></li>
+                        <li><a href="#summary">ملخص المحاضرة</a></li>
+                        <li><a href="#quick-check">تقييم سريع</a></li>
+                    </ol>
+                </nav>
+
+                <div class="aside-note">
+                    <strong>ملاحظة:</strong> هذه المحاضرة هي مفترق طرق في المساق. من يفهم
+                    الدوال والمصفوفات جيداً سيجد JavaScript سهلة، ومن يتجاوزها سيتعثر في المحاضرة
+                    القادمة (DOM والأحداث). خذ وقتك في التطبيق العملي.
+                </div>
+            </aside>
+
+            <!-- ================= MAIN ================= -->
+            <main id="main-content" class="lecture-main">
+
+                <!-- Objectives -->
+                <section class="lecture-section" id="objectives" aria-labelledby="objectives-title">
+                    <h2 class="section-title" id="objectives-title">
+                        <i class="fas fa-bullseye"></i> أهداف المحاضرة ومخرجات التعلم
+                    </h2>
+                    <p>
+                        بنهاية هذه المحاضرة ستكون قادراً على كتابة منطق برمجي كامل: تتخذ قرارات
+                        بشروط، تكرر عمليات بحلقات، تنظم الكود في دوال قابلة لإعادة الاستخدام،
+                        تتعامل مع المصفوفات بأدوات حديثة، وتحمي برنامجك من الأخطاء المتوقعة.
+                        هذه المهارات هي الفرق بين "من يعرف كتابة سطر" و"من يعرف بناء تطبيق".
+                    </p>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-check-circle"></i> مخرجات معرفية</h3>
+                            <ul>
+                                <li>كتابة شروط <code>if/else</code> و<code>switch</code></li>
+                                <li>اختيار الحلقة المناسبة لكل سيناريو</li>
+                                <li>شرح الفرق بين الدوال بأنواعها</li>
+                                <li>فهم النطاق (Scope) والفرق بينه وبين الوراثة</li>
+                                <li>معرفة دوال المصفوفات الحديثة</li>
+                                <li>التعرف على دور <code>try/catch</code></li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-tools"></i> مخرجات عملية</h3>
+                            <ul>
+                                <li>كتابة دالة تحسب وتُرجع قيمة</li>
+                                <li>استخدام <code>map</code> و<code>filter</code> على مصفوفة</li>
+                                <li>بناء حلقة تمر على مصفوفة وتعالجها</li>
+                                <li>حل تحديات: FizzBuzz، مجموع الأعداد الزوجية، عدّاد الكلمات</li>
+                                <li>التقاط الأخطاء ومعالجتها دون انهيار البرنامج</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-lightbulb"></i> قيمة مهنية</h3>
+                            <ul>
+                                <li>كتابة كود منظّم في دوال صغيرة</li>
+                                <li>تجنّب تكرار المنطق نفسه</li>
+                                <li>الاستعداد لمحاضرة DOM والأحداث</li>
+                                <li>بناء أساس يجعل Flask أسهل لاحقاً</li>
+                                <li>قراءة كود الآخرين وفهم بنيته</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Flow control -->
+                <section class="lecture-section" id="flow-control" aria-labelledby="flow-control-title">
+                    <h2 class="section-title" id="flow-control-title">
+                        <i class="fas fa-code-branch"></i> التحكم في التدفق: if وelse وswitch
+                    </h2>
+                    <p>
+                        البرنامج الافتراضي ينفّذ الأسطر بالترتيب من الأعلى إلى الأسفل. لكن
+                        كل تطبيق حقيقي يحتاج <strong>قرارات</strong>: إن تحقّق شرط افعل شيئاً،
+                        وإلا افعل شيئاً آخر. هذا هو <strong>التحكم في التدفق</strong>. الأدوات
+                        الأساسية هي <code>if</code> و<code>else if</code> و<code>else</code>،
+                        ثم <code>switch</code> للحالات المتعددة المنتظمة.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> if-else.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>const grade = 85;
+
+if (grade >= 90) {
+    console.log('امتياز');
+} else if (grade >= 80) {
+    console.log('جيد جداً');
+} else if (grade >= 70) {
+    console.log('جيد');
+} else if (grade >= 60) {
+    console.log('مقبول');
+} else {
+    console.log('راسب');
+}
+// الناتج: جيد جداً</code></pre>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>الشكل</th>
+                                    <th>الاستخدام</th>
+                                    <th>مثال</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>if (cond) { }</code></td>
+                                    <td>حالة واحدة فقط</td>
+                                    <td>إظهار رسالة خطأ</td>
+                                </tr>
+                                <tr>
+                                    <td><code>if / else</code></td>
+                                    <td>حالتان متضادتان</td>
+                                    <td>ناجح / راسب</td>
+                                </tr>
+                                <tr>
+                                    <td><code>if / else if / else</code></td>
+                                    <td>عدة احتمالات</td>
+                                    <td>تقدير الدرجات</td>
+                                </tr>
+                                <tr>
+                                    <td><code>switch</code></td>
+                                    <td>مطابقة قيمة واحدة</td>
+                                    <td>أيام الأسبوع</td>
+                                </tr>
+                                <tr>
+                                    <td><code>ternary ? :</code></td>
+                                    <td>شرط قصير في تعبير</td>
+                                    <td><code>age &gt;= 18 ? 'بالغ' : 'قاصر'</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>
+                        عندنا أيضاً <code>switch</code>، وهو مفيد عندما نقارن <strong>قيمة
+                        واحدة</strong> بعدة قيم ثابتة. الفرق أن <code>if/else</code> يقبل
+                        شروطاً معقدة، بينما <code>switch</code> يطابق قيمة بقيم ثابتة.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> switch.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>const day = 'الجمعة';
+
+switch (day) {
+    case 'السبت':
+    case 'الأحد':
+    case 'الاثنين':
+    case 'الثلاثاء':
+    case 'الأربعاء':
+    case 'الخميس':
+        console.log('يوم عمل');
+        break;
+    case 'الجمعة':
+        console.log('نهاية الأسبوع');
+        break;
+    default:
+        console.log('قيمة غير معروفة');
+}
+// الناتج: نهاية الأسبوع</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>خطأ شائع:</strong> نسيان <code>break</code> داخل
+                            <code>switch</code>. بدونه، سيقوم البرنامج بتنفيذ الحالات التالية
+                            حتى يجد <code>break</code> أو <code>default</code> — وهذا ما يسمى
+                            <strong>fall-through</strong>، وينتج سلوكاً غير متوقع في معظم الحالات.
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>مفهوم مهم: Truthy / Falsy.</strong>
+                            JavaScript تعتبر قيماً معينة "خطأ" في الشروط:
+                            <code>false</code>، <code>0</code>، <code>""</code> (نص فارغ)،
+                            <code>null</code>، <code>undefined</code>، <code>NaN</code>.
+                            كل ما عدا ذلك "صحيح" بما فيه النص <code>"0"</code> والمصفوفة
+                            الفارغة <code>[]</code>. هذا يسبب مفاجآت إن لم تكن منتبهاً.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Loops -->
+                <section class="lecture-section" id="loops" aria-labelledby="loops-title">
+                    <h2 class="section-title" id="loops-title">
+                        <i class="fas fa-rotate"></i> الحلقات: for وwhile وdo-while
+                    </h2>
+                    <p>
+                        الحلقات تكرر مجموعة عمليات. بدلاً من كتابة نفس السطر عشر مرات، نكتبه
+                        مرة داخل حلقة. الأنواع الأساسية ثلاث، ولكل منها استخدامه الصحيح.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-list-ol"></i> for</h3>
+                            <ul>
+                                <li>عندما تعرف عدد التكرارات مسبقاً</li>
+                                <li>المرور على مصفوفة بفهرستها</li>
+                                <li>العدّاد معلن داخل الحلقة</li>
+                                <li>الأكثر شيوعاً في JS</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-circle-notch"></i> while</h3>
+                            <ul>
+                                <li>عندما يعتمد التكرار على شرط</li>
+                                <li>قد ينفّذ صفر مرة</li>
+                                <li>احذر الحلقات اللانهائية</li>
+                                <li>مفيد لقراءة مدخلات حتى شرط</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-arrow-rotate-right"></i> do-while</h3>
+                            <ul>
+                                <li>مثل while، لكن ينفّذ مرة على الأقل</li>
+                                <li>الشرط يُفحص بعد التنفيذ</li>
+                                <li>مناسب للقوائم التي تظهر ثم تسأل</li>
+                                <li>استخدامه أقل شيوعاً</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> loops.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// 1) for — عندما تعرف العدد
+for (let i = 0; i < 5; i++) {
+    console.log('التكرار رقم', i);
+}
+// يطبع: 0, 1, 2, 3, 4
+
+// 2) المرور على مصفوفة
+const skills = ['HTML', 'CSS', 'JS'];
+for (let i = 0; i < skills.length; i++) {
+    console.log(i, skills[i]);
+}
+
+// 3) while — عندما يعتمد على شرط
+let count = 0;
+while (count < 3) {
+    console.log('count =', count);
+    count++;
+}
+
+// 4) do-while — ينفّذ مرة على الأقل
+let num = 10;
+do {
+    console.log('num =', num);
+    num++;
+} while (num < 3);
+// يطبع 10 مرة واحدة، ثم يتوقف</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-forward"></i> break</h3>
+                            <ul>
+                                <li>يوقف الحلقة فوراً</li>
+                                <li>يخرج من الحلقة الحالية فقط</li>
+                                <li>مفيد عند إيجاد نتيجة</li>
+                                <li>لا يخرج من الدالة</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-forward-step"></i> continue</h3>
+                            <ul>
+                                <li>يتجاوز التكرار الحالي</li>
+                                <li>ينتقل للتكرار التالي</li>
+                                <li>لا يوقف الحلقة</li>
+                                <li>مفيد لتصفية السريع</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>احذر من الحلقات اللانهائية:</strong> إذا نسيت
+                            <code>i++</code> أو <code>count++</code>، ستبقى الحلقة تعمل إلى الأبد
+                            وتجمّد المتصفح. في حالة حدوث ذلك، أغلق علامة التبويب وأصلح الكود.
+                            دائماً تفقّد: هل يوجد شيء يقرّب الشرط من الانتهاء؟
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>قاعدة اختيار الحلقة:</strong>
+                            <br>• تعرف العدد المرات؟ استخدم <code>for</code>.
+                            <br>• تعتمد على شرط لا تعرف متى ينتهي؟ استخدم <code>while</code>.
+                            <br>• تحتاج تنفيذ مرة على الأقل بغض النظر عن الشرط؟ استخدم
+                            <code>do-while</code>.
+                            <br>• تمرّ على مصفوفة؟ <code>for...of</code> أو <code>forEach</code>
+                            (سنراها بعد قليل).
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Functions -->
+                <section class="lecture-section" id="functions" aria-labelledby="functions-title">
+                    <h2 class="section-title" id="functions-title">
+                        <i class="fas fa-cube"></i> الدوال: التعريف والمعاملات وreturn
+                    </h2>
+                    <p>
+                        الدالة (<code>function</code>) هي <strong>كتلة من الكود</strong> لها اسم،
+                        تُنفَّذ عند استدعائها. فائدتها الأولى: <strong>تجنّب التكرار</strong>.
+                        بدلاً من نسخ نفس السطور في كل مكان، تكتبها مرة في دالة وتستدعيها
+                        باسمها. فائدتها الثانية: <strong>التنظيم</strong> — كودك يصبح مجموعة
+                        من الوظائف الواضحة، لا كتلة من السطور المتشابكة.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> functions-basic.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// 1) دالة بسيطة بلا معاملات
+function greet() {
+    console.log('مرحباً');
+}
+greet();   // تنفيذ
+
+// 2) دالة بمعاملات (parameters)
+function greetUser(name) {
+    console.log(`مرحباً يا ${name}`);
+}
+greetUser('سارة');
+greetUser('أحمد');
+
+// 3) دالة تُرجع قيمة (return)
+function add(a, b) {
+    return a + b;
+}
+const sum = add(5, 3);   // sum = 8
+console.log(sum);
+
+// 4) return يوقف تنفيذ الدالة
+function checkAge(age) {
+    if (age < 0) {
+        return 'عمر غير صالح';
+    }
+    if (age >= 18) {
+        return 'بالغ';
+    }
+    return 'قاصر';
+}
+
+console.log(checkAge(20));   // بالغ
+console.log(checkAge(15));   // قاصر
+console.log(checkAge(-1));   // عمر غير صالح</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-arrow-right"></i> المعاملات (Parameters)</h3>
+                            <ul>
+                                <li>أسماء في تعريف الدالة</li>
+                                <li>تُمرَّر بين قوسين عند الاستدعاء</li>
+                                <li>يمكن أن تكون بلا عدد</li>
+                                <li>مرتبة بحسب موقعها</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-arrow-left"></i> القيم المُرجَعة (Return)</h3>
+                            <ul>
+                                <li>تُعاد القيمة عند الوصول إلى <code>return</code></li>
+                                <li><code>return</code> يُنهي الدالة فوراً</li>
+                                <li>الدالة بلا <code>return</code> تُرجع <code>undefined</code></li>
+                                <li>يمكن إرجاع أي نوع: رقم، نص، مصفوفة، كائن</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-infinity"></i> القيم الافتراضية</h3>
+                            <ul>
+                                <li><code>function f(x = 10) { }</code></li>
+                                <li>إذا لم تُمرَّر قيمة، يأخذ الأصل</li>
+                                <li>مفيد لتجنّب <code>undefined</code></li>
+                                <li>يمكن استخدام القيم السابقة</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>الفرق بين <code>console.log</code> و<code>return</code>:</strong>
+                            <br><code>console.log</code> تطبع قيمة في الطرفية فقط، ولا تُرجع شيئاً.
+                            <br><code>return</code> تُرجع القيمة للكود الذي استدعى الدالة،
+                            فيمكن استخدامها في حسابات أخرى.
+                            <br>هذا الفرق حاسم: من يخلطهما يجد أن دواله "لا تعمل" في الحساب.
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> return-vs-log.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// خطأ شائع: الطباعة بدل الإرجاع
+function addBad(a, b) {
+    console.log(a + b);
+}
+
+const r1 = addBad(2, 3);   // 5 (يطبع)، لكن r1 = undefined
+// console.log(r1 * 2);   // NaN لأن undefined * 2 = NaN
+
+// الصواب: استخدم return
+function addGood(a, b) {
+    return a + b;
+}
+
+const r2 = addGood(2, 3); // r2 = 5
+console.log(r2 * 2);      // 10</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>قاعدة الدالة الجيدة:</strong> كل دالة ينبغي أن تفعل
+                            <strong>شيئاً واحداً</strong> بوضوح، واسمها يصف هذا الشيء.
+                            دالة اسمها <code>calculateTotal</code> يجب أن تحسب الإجمالي
+                            وتُرجع رقماً، لا أن تطبعه وتطبع رسالة نجاح وتغيّر DOM في نفس الوقت.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Scope and function types -->
+                <section class="lecture-section" id="scope" aria-labelledby="scope-title">
+                    <h2 class="section-title" id="scope-title">
+                        <i class="fas fa-layer-group"></i> النطاق وأنواع الدوال
+                    </h2>
+                    <p>
+                        <strong>النطاق (Scope)</strong> هو المكان الذي يكون فيه المتغير متاحاً
+                        للاستخدام. فهم النطاق ضروري، لأن متغيراً في مكان واحد قد لا يكون
+                        مرئياً في مكان آخر، وهذا يسبب أخطاء <code>ReferenceError</code>.
+                    </p>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-globe"></i> النطاق العام (Global)</h3>
+                            <ul>
+                                <li>متغيرات في أعلى الملف</li>
+                                <li>متاحة في كل مكان</li>
+                                <li>الإكثار منها خطر</li>
+                                <li>تصطدم بسهولة بأسماء أخرى</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-box"></i> نطاق الدالة (Function)</h3>
+                            <ul>
+                                <li>متغيرات داخل دالة</li>
+                                <li>لا تخرج خارجها</li>
+                                <li>محمية من التداخل</li>
+                                <li>الأكثر أماناً</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-code"></i> نطاق الكتلة (Block)</h3>
+                            <ul>
+                                <li>بين <code>{ }</code> في let/const</li>
+                                <li>لا يعمل مع var</li>
+                                <li>شائع في الحلقات</li>
+                                <li>يحل مشاكل كثيرة قديمة</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> scope.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>const appName = 'المساق';   // Global
+
+function showTotal() {
+    const total = 100;       // Function scope
+    if (total > 50) {
+        const msg = 'كبير'; // Block scope
+        console.log(appName, total, msg);  // الكل متاح
+    }
+    // console.log(msg);     // خطأ — خارج الكتلة
+}
+
+showTotal();
+// console.log(total);       // خطأ — خارج الدالة
+console.log(appName);        // صحيح</code></pre>
+                    </div>
+
+                    <p>
+                        أما <strong>أنواع تعريف الدوال</strong> فهي ثلاث طرق شائعة،
+                        ويكفي اليوم أن تعرف أشكالها، وستفضّل النوع المناسب حسب السياق:
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> function-types.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// 1) Function Declaration — تعريف بالاسم
+function square(n) {
+    return n * n;
+}
+// يمكن استدعاؤها قبل تعريفها (hoisting)
+
+// 2) Function Expression — تعريف داخل متغير
+const cube = function (n) {
+    return n * n * n;
+};
+// لا يمكن استدعاؤها قبل تعريفها
+
+// 3) Arrow Function — شكل مختصر
+const double = (n) => n * 2;
+const triple = n => n * 3;              // بلا أقواس لمعامل واحد
+const add = (a, b) => a + b;
+const greet = () => console.log('مرحباً');
+
+// شائع جداً في دوال المصفوفات التي سنراها بعد قليل
+const nums = [1, 2, 3, 4];
+const squared = nums.map(n => n * n);
+console.log(squared);   // [1, 4, 9, 16]</code></pre>
+                    </div>
+
+                    <div class="callout">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>متى نستخدم Arrow Function؟</strong> في الدوال القصيرة
+                            التي تُستخدم مرة واحدة، خاصة داخل دوال المصفوفات
+                            (<code>map</code>، <code>filter</code>، <code>forEach</code>).
+                            أما الدوال الرئيسية والمعقدة فيُفضّل تعريفها بـ<code>function</code>
+                            لتحصل على اسم واضح في تتبع الأخطاء (Stack Trace).
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Array methods -->
+                <section class="lecture-section" id="array-methods" aria-labelledby="array-methods-title">
+                    <h2 class="section-title" id="array-methods-title">
+                        <i class="fas fa-list"></i> دوال المصفوفات: map وfilter وreduce
+                    </h2>
+                    <p>
+                        في المحاضرة السابقة تعلّمنا <code>push</code> و<code>pop</code>
+                        و<code>length</code> — وهي أدوات أساسية. اليوم نضيف أدوات JavaScript
+                        الحديثة التي تحوّل الحلقات الطويلة إلى سطر واحد واضح. هذه الدوال هي
+                        <strong>أساس كتابة كود أنيق</strong>، وستراها في كل مشروع حقيقي.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th>الدالة</th>
+                                    <th>الوظيفة</th>
+                                    <th>مثال</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>forEach</code></td>
+                                    <td>المرور على العناصر دون إرجاع</td>
+                                    <td><code>arr.forEach(x =&gt; console.log(x))</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>map</code></td>
+                                    <td>تحويل كل عنصر وإرجاع مصفوفة جديدة بنفس الطول</td>
+                                    <td><code>arr.map(x =&gt; x * 2)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>filter</code></td>
+                                    <td>إرجاع عناصر تحقق شرطاً</td>
+                                    <td><code>arr.filter(x =&gt; x &gt; 10)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>reduce</code></td>
+                                    <td>تجريد المصفوفة إلى قيمة واحدة</td>
+                                    <td><code>arr.reduce((s, x) =&gt; s + x, 0)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>find</code></td>
+                                    <td>أول عنصر يطابق شرطاً</td>
+                                    <td><code>arr.find(x =&gt; x &gt; 5)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>some</code></td>
+                                    <td>هل يوجد عنصر واحد يحقق الشرط؟</td>
+                                    <td><code>arr.some(x =&gt; x &gt; 100)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>every</code></td>
+                                    <td>هل كل العناصر تحقق الشرط؟</td>
+                                    <td><code>arr.every(x =&gt; x &gt; 0)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>includes</code></td>
+                                    <td>هل تحتوي المصفوفة على قيمة؟</td>
+                                    <td><code>arr.includes('JS')</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> array-methods.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>const numbers = [1, 2, 3, 4, 5, 6];
+const skills = ['HTML', 'CSS', 'JS', 'Python'];
+
+// forEach — المرور فقط
+numbers.forEach(n => console.log('الرقم:', n));
+
+// map — تحويل
+const doubled = numbers.map(n => n * 2);
+console.log(doubled);   // [2, 4, 6, 8, 10, 12]
+
+const labels = skills.map(s => `مهارة: ${s}`);
+console.log(labels);
+
+// filter — تصفية
+const evens = numbers.filter(n => n % 2 === 0);
+console.log(evens);     // [2, 4, 6]
+
+const shortSkills = skills.filter(s => s.length <= 3);
+console.log(shortSkills); // ['CSS', 'JS']
+
+// reduce — تجميع
+const total = numbers.reduce((sum, n) => sum + n, 0);
+console.log(total);     // 21
+
+const evenSum = numbers
+    .filter(n => n % 2 === 0)
+    .reduce((sum, n) => sum + n, 0);
+console.log(evenSum);   // 12
+
+// find — أول تطابق
+const firstBig = numbers.find(n => n > 3);
+console.log(firstBig);  // 4
+
+// some / every — اختبارات
+console.log(numbers.some(n => n > 10));  // false
+console.log(numbers.every(n => n > 0));  // true</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>مفهوم مهم:</strong> <code>map</code> و<code>filter</code>
+                            لا تُعدّلان المصفوفة الأصلية، بل تُرجعان <strong>مصفوفة جديدة</strong>.
+                            هذا يسمى "البرمجة غير المتغيرة" (Immutable)، وهو مبدأ أساسي في
+                            JavaScript الحديثة. إذا أردت تعديل نفس المصفوفة، استخدم
+                            <code>forEach</code> مع إعادة تعيين العناصر، لكن ذلك يُنصح بتجنبه.
+                        </div>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>خطأ شائع:</strong> نسيان قيمة البداية في <code>reduce</code>.
+                            <br><code>arr.reduce((s, n) => s + n)</code> يعمل مع الأرقام فقط إذا
+                            كانت المصفوفة غير فارغة. مع مصفوفة فارغة يعطي خطأ.
+                            <br>القاعدة: <strong>دائماً</strong> مرّر قيمة بداية:
+                            <code>arr.reduce((s, n) => s + n, 0)</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Error handling -->
+                <section class="lecture-section" id="error-handling" aria-labelledby="error-title">
+                    <h2 class="section-title" id="error-title">
+                        <i class="fas fa-shield-halved"></i> معالجة الأخطاء: try/catch
+                    </h2>
+                    <p>
+                        الأخطاء جزء طبيعي من البرمجة. أهم شيء هو ألا يتوقف التطبيق عند الخطأ.
+                        <code>try/catch</code> تسمح لك بـ"تجربة" كود قد يفشل، ثم التعامل مع
+                        الفشل بشكل معلوم بدل انهيار البرنامج.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> try-catch.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>try {
+    // كود قد يُحدث خطأ
+    const data = JSON.parse('{ "name": "سارة" }');
+    console.log(data.name);   // سارة
+
+    // مثال على خطأ
+    JSON.parse('{ name: bad }');   // خطأ
+} catch (error) {
+    // هنا يُلتقط الخطأ
+    console.error('حدث خطأ:', error.message);
+} finally {
+    // يُنفَّذ دائماً، سواء حدث خطأ أم لا
+    console.log('انتهت المحاولة');
+}
+
+// البرنامج يستمر بعد catch
+console.log('السطر التالي يعمل');</code></pre>
+                    </div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3><i class="fas fa-play"></i> try</h3>
+                            <ul>
+                                <li>ضع فيه الكود الذي قد يفشل</li>
+                                <li>لا يضع فيه كل البرنامج</li>
+                                <li>ضع فقط العملية الحساسة</li>
+                                <li>كود قصير وواضح</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card green">
+                            <h3><i class="fas fa-hand"></i> catch</h3>
+                            <ul>
+                                <li>يستقبل كائن الخطأ</li>
+                                <li>فيه <code>error.message</code></li>
+                                <li>وفيه <code>error.name</code></li>
+                                <li>عالج الخطأ هنا</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card violet">
+                            <h3><i class="fas fa-check"></i> finally</h3>
+                            <ul>
+                                <li>يُنفَّذ دائماً</li>
+                                <li>سواء حدث خطأ أم لا</li>
+                                <li>جيد لتحرير الموارد</li>
+                                <li>اختياري</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-triangle-exclamation"></i> throw</h3>
+                            <ul>
+                                <li>لإطلاق خطأ يدوياً</li>
+                                <li><code>throw new Error('رسالة')</code></li>
+                                <li>لحالة غير صالحة</li>
+                                <li>يُلتقط بـ<code>catch</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>
+                        مثال على استخدام <code>throw</code> مع دالة تتحقق من المدخلات:
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> throw-example.js</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>function divide(a, b) {
+    if (typeof a !== 'number' || typeof b !== 'number') {
+        throw new Error('يجب تمرير أرقام');
+    }
+    if (b === 0) {
+        throw new Error('لا يمكن القسمة على صفر');
+    }
+    return a / b;
+}
+
+try {
+    console.log(divide(10, 2));   // 5
+    console.log(divide(10, 0));   // سيُطلق خطأ
+} catch (err) {
+    console.error('فشلت العملية:', err.message);
+}
+
+console.log('البرنامج يستمر');</code></pre>
+                    </div>
+
+                    <div class="callout warn">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>لا تكثر من <code>try/catch</code>،</strong> ولا تستخدمه
+                            بدل التحقق المنطقي. القاعدة: تحقّق من المتوقع مسبقاً، واستخدم
+                            <code>try/catch</code> للأخطاء غير المتوقعة (شبكة، ملفات، JSON
+                            خاطئ). التحقق من نوع المدخلات يُكتب يدوياً، لا يُبتلع بابتسامة.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab -->
+                <section class="lecture-section" id="lab" aria-labelledby="lab-title">
+                    <h2 class="section-title" id="lab-title">
+                        <i class="fas fa-flask"></i> التطبيق العملي
+                    </h2>
+                    <p>
+                        المطلوب ثلاث دالات قصيرة، كل واحدة تعالج موضوعاً مختلفاً. اكتبها في
+                        ملف <code>lab7.js</code>، واربطه بصفحة HTML، ثم اختبر النتائج في
+                        Console.
+                    </p>
+
+                    <div class="lab-box">
+                        <h3><i class="fas fa-list-check"></i> تطبيق المحاضرة 7</h3>
+                        <ol>
+                            <li>أنشئ ملف <code>lecture7-lab.html</code> داخل <code>web-course</code>.</li>
+                            <li>أضف في نهايته: <code>&lt;script src="lab7.js" defer&gt;&lt;/script&gt;</code>.</li>
+                            <li>أنشئ ملف <code>lab7.js</code> وابدأه بقسم تعليقات.</li>
+                            <li><strong>التحدي الأول: FizzBuzz.</strong>
+                                <ul>
+                                    <li>اكتب دالة <code>fizzbuzz(n)</code> تطبع الأرقام من 1 إلى n.</li>
+                                    <li>إن كان الرقم يقبل القسمة على 3 و5، اطبع <code>FizzBuzz</code>.</li>
+                                    <li>إن كان يقبل القسمة على 3 فقط، اطبع <code>Fizz</code>.</li>
+                                    <li>إن كان يقبل القسمة على 5 فقط، اطبع <code>Buzz</code>.</li>
+                                    <li>استخدم <code>for</code> و<code>if/else if</code>.</li>
+                                </ul>
+                            </li>
+                            <li><strong>التحدي الثاني: مجموع الأعداد الزوجية.</strong>
+                                <ul>
+                                    <li>أنشئ مصفوفة من 10 أرقام.</li>
+                                    <li>اكتب دالة <code>sumEven(arr)</code> تستخدم <code>filter</code> و<code>reduce</code>.</li>
+                                    <li>أرجع المجموع، واطبعه في Console.</li>
+                                </ul>
+                            </li>
+                            <li><strong>التحدي الثالث: عدّاد الكلمات.</strong>
+                                <ul>
+                                    <li>اكتب دالة <code>wordCount(text)</code>.</li>
+                                    <li>استخدم <code>split(' ')</code> لتقسيم النص.</li>
+                                    <li>استخدم <code>filter</code> لاستبعاد العناصر الفارغة.</li>
+                                    <li>أرجع <code>length</code> النهائي.</li>
+                                </ul>
+                            </li>
+                            <li>غطِّ كل دالة بـ<code>try/catch</code> في الاختبار، بحيث لا يتوقف السكربت عند مدخل خاطئ.</li>
+                            <li>اختبر الدوال الثلاث في Console بالمدخلات المطلوبة.</li>
+                            <li>جرّب تمرير مدخل خاطئ (نص لـ<code>fizzbuzz</code>)، ولا حظ أن <code>catch</code> يلتقطه.</li>
+                            <li>أرفق <code>lab7.js</code> وصورة من Console تعرض النتائج.</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-head">
+                            <span><i class="fas fa-file-code"></i> lab7.js — هيكل البداية</span>
+                            <span class="code-lang">JS</span>
+                        </div>
+                        <pre><code>// ============================================
+// SYBS 2309 — المحاضرة 7 — التطبيق العملي
+// ============================================
+
+// ---------- 1) FizzBuzz ----------
+function fizzbuzz(n) {
+    if (typeof n !== 'number' || n < 1) {
+        throw new Error('المدخل يجب أن يكون رقماً موجباً');
+    }
+
+    for (let i = 1; i <= n; i++) {
+        if (i % 15 === 0) {
+            console.log('FizzBuzz');
+        } else if (i % 3 === 0) {
+            console.log('Fizz');
+        } else if (i % 5 === 0) {
+            console.log('Buzz');
+        } else {
+            console.log(i);
+        }
+    }
+}
+
+// ---------- 2) مجموع الأعداد الزوجية ----------
+function sumEven(arr) {
+    if (!Array.isArray(arr)) {
+        throw new Error('المدخل يجب أن يكون مصفوفة');
+    }
+    return arr
+        .filter(n => n % 2 === 0)
+        .reduce((sum, n) => sum + n, 0);
+}
+
+// ---------- 3) عدّاد الكلمات ----------
+function wordCount(text) {
+    if (typeof text !== 'string') {
+        throw new Error('المدخل يجب أن يكون نصاً');
+    }
+    return text
+        .split(' ')
+        .filter(word => word.trim().length > 0)
+        .length;
+}
+
+// ---------- الاختبار ----------
+try {
+    console.log('--- FizzBuzz (15) ---');
+    fizzbuzz(15);
+
+    console.log('--- مجموع الزوجي ---');
+    console.log(sumEven([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));   // 30
+
+    console.log('--- عدد الكلمات ---');
+    console.log(wordCount('مرحباً بكم في مساق تصميم وبرمجة الويب'));   // 6
+
+} catch (err) {
+    console.error('خطأ:', err.message);
+}
+
+// جرّب مدخلاً خاطئاً
+try {
+    fizzbuzz('abc');
+} catch (err) {
+    console.error('الالتقاط الثاني:', err.message);
+}</code></pre>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>معيار الإنجاز:</strong> الثلاث دالات تعمل، Console يعرض
+                            النتائج المتوقعة، <code>try/catch</code> يلتقط الأخطاء دون إيقاف
+                            السكربت، كل دالة تفعل شيئاً واحداً واضحاً، وأسماء الدوال تشرح نفسها
+                            دون تعليق.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mistakes -->
+                <section class="lecture-section" id="mistakes" aria-labelledby="mistakes-title">
+                    <h2 class="section-title" id="mistakes-title">
+                        <i class="fas fa-bug"></i> أخطاء شائعة ونصائح
+                    </h2>
+                    <div class="concept-grid">
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-equals"></i> الخلط بين = و===</h3>
+                            <p>
+                                <code>=</code> تعني تعيين، <code>===</code> تعني مقارنة.
+                                <code>if (x = 5)</code> صحيحة نحوياً لكنها تعيّن دائماً 5،
+                                ثم تعتبر الشرط صحيحاً. استخدم <code>===</code> في الشروط دائماً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-infinity"></i> حلقة لانهائية</h3>
+                            <p>
+                                نسيت <code>i++</code> أو <code>break</code>؟ سيتجمد المتصفح.
+                                راجع شرط الحلقة قبل التشغيل. إن حدث، أغلق التبويب بـ
+                                <kbd>Ctrl + W</kbd>.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-rotate-left"></i> نسيان return</h3>
+                            <p>
+                                دالة تستخدم <code>console.log</code> داخلها لا تُرجع شيئاً.
+                                الناتج <code>undefined</code>. أضف <code>return</code> إذا كنت
+                                تحتاج القيمة في مكان آخر.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-project-diagram"></i> تعديل المصفوفة أثناء المرور</h3>
+                            <p>
+                                حذف عناصر من مصفوفة داخل <code>forEach</code> يسبب تخطي عناصر.
+                                إذا احتجت حذفاً، استخدم <code>filter</code> لإنشاء مصفوفة
+                                جديدة، ثم أعطها للاسم القديم.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-copy"></i> نسيان قيمة البداية في reduce</h3>
+                            <p>
+                                <code>arr.reduce((s, n) => s + n)</code> يفشل مع مصفوفة فارغة.
+                                مرّر <code>0</code> كقيمة بداية دائماً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-hand"></i> استخدام try/catch لكل شيء</h3>
+                            <p>
+                                <code>try/catch</code> للأخطاء غير المتوقعة (JSON، شبكة، ملف).
+                                التحقق من المدخلات يُكتب يدوياً بـ<code>if</code> و<code>throw</code>.
+                                لا تغطي منطقك بطبقة عمياء.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-arrow-right"></i> نسيان return في arrow طويلة</h3>
+                            <p>
+                                سهم بجسم واحد <code>x => x * 2</code> يُرجع تلقائياً.
+                                لكن <code>x => { x * 2 }</code> (بأقواس معقوفة) لا يُرجع شيئاً.
+                                إما تحذف الأقواس، أو تستخدم <code>return</code> صريحاً.
+                            </p>
+                        </div>
+                        <div class="concept-card warn">
+                            <h3><i class="fas fa-cube"></i> دالة تفعل كل شيء</h3>
+                            <p>
+                                دالة تطبع وتُعيد وتحسب وتُعدّل DOM — كل هذا في نفس الدالة —
+                                صعبة الاختبار والصيانة. اكتب دوالاً صغيرة، كل واحدة
+                                <strong>مسؤولية واحدة</strong>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="callout success">
+                        <i class="fas fa-circle-check"></i>
+                        <div>
+                            <strong>نصائح ذهبية:</strong>
+                            <br>• اطبع القيم قبل السطور التي "لا تعمل".
+                            <br>• اختبر كل دالة على حدة قبل الجمع.
+                            <br>• ابدأ بالحالة البسيطة، ثم أضف التعقيد.
+                            <br>• اقرأ رسائل الخطأ في Console حرفياً.
+                            <br>• سمّ الدوال بأفعال: <code>calculate</code>، <code>render</code>،
+                            <code>validate</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="lecture-section" id="summary" aria-labelledby="summary-title">
+                    <h2 class="section-title" id="summary-title">
+                        <i class="fas fa-clipboard-check"></i> ملخص المحاضرة
+                    </h2>
+                    <ul class="steps-list">
+                        <li>التحكم في التدفق يصنع قرارات: <code>if/else if/else</code> و<code>switch</code>.</li>
+                        <li><code>switch</code> يناسب المطابقة بقيمة ثابتة، لا الشروط المعقدة.</li>
+                        <li>الحلقات: <code>for</code> للعدد المعروف، <code>while</code> للشرط، <code>do-while</code> لمرة على الأقل.</li>
+                        <li><code>break</code> يوقف، <code>continue</code> يتجاوز التكرار الحالي.</li>
+                        <li>الدوال تنظّم الكود وتُعيد الاستخدام، وتستقبل معاملات وتُرجع قيماً.</li>
+                        <li><code>return</code> تُرجع قيمة للكود المستدعي، و<code>console.log</code> تطبع فقط.</li>
+                        <li>النطاق (Scope) يحدد من يرى المتغير: عام، دالة، أو كتلة.</li>
+                        <li>أنواع الدوال: declaration، expression، arrow — كل واحدة لها الاستخدام الأمثل.</li>
+                        <li><code>map</code> تحوّل، <code>filter</code> تصفّي، <code>reduce</code> تجمّع، <code>forEach</code> تمرّ.</li>
+                        <li><code>try/catch/finally</code> تحمي البرنامج من الانهيار عند الأخطاء المتوقعة.</li>
+                        <li><code>throw</code> يطلق خطأ يدوياً عند مدخل غير صالح.</li>
+                    </ul>
+                </section>
+
+                <!-- Quick check -->
+                <section class="lecture-section quiz" id="quick-check" aria-labelledby="quick-title">
+                    <h2 class="section-title" id="quick-title">
+                        <i class="fas fa-circle-question"></i> تقييم سريع
+                    </h2>
+                    <details>
+                        <summary>1) ما الفرق بين <code>for</code> و<code>while</code>؟</summary>
+                        <p>
+                            <code>for</code> يُستخدم عندما تعرف عدد التكرارات مسبقاً، أو عند
+                            المرور على مصفوفة بفهرستها. <code>while</code> يُستخدم عندما
+                            يعتمد التكرار على شرط قد لا يتحقق أبداً (ينفّذ صفر مرة).
+                        </p>
+                    </details>
+                    <details>
+                        <summary>2) ما الفرق بين <code>console.log</code> و<code>return</code>؟</summary>
+                        <p>
+                            <code>console.log</code> تطبع قيمة في الطرفية ولا تُرجع شيئاً (الناتج
+                            <code>undefined</code>). <code>return</code> تُرجع قيمة للكود
+                            المستدعي، فيمكن استخدامها في حسابات أخرى.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>3) ما وظيفة <code>map</code> و<code>filter</code>؟</summary>
+                        <p>
+                            <code>map</code> تحوّل كل عنصر وتُرجع مصفوفة جديدة بنفس الطول.
+                            <code>filter</code> تُرجع مصفوفة جديدة بالعناصر التي تحقق شرطاً،
+                            وقد تكون أقصر. كلتاهما لا تُعدّلان المصفوفة الأصلية.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>4) متى نستخدم <code>try/catch</code>؟</summary>
+                        <p>
+                            عند وجود كود قد يفشل بخطأ غير متوقع: قراءة JSON، طلب شبكة، قراءة
+                            ملف. هذا يمنع انهيار البرنامج، ويسمح بالتعامل مع الخطأ.
+                            لا يُستخدم بديلاً عن التحقق المنطقي من المدخلات.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>5) ما خطورة نسيان <code>break</code> في <code>switch</code>؟</summary>
+                        <p>
+                            يحدث <strong>fall-through</strong>: ينفّذ البرنامج الحالات التالية
+                            حتى يجد <code>break</code> أو <code>default</code>. النتيجة عادة
+                            غير متوقعة، وتنفّذ كوداً لم يكن مقصوداً.
+                        </p>
+                    </details>
+                </section>
+
+                <!-- Lesson navigation -->
+                <div class="lesson-nav">
+                    <a href="lecture6.html" class="secondary">
+                        <i class="fas fa-arrow-right"></i> المحاضرة السابقة
+                    </a>
+                    <a href="lecture8.html">
+                        المحاضرة التالية: DOM والأحداث <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="lecture-footer">
+            <p>
+                <i class="fas fa-university"></i> الكلية الجامعية للعلوم التطبيقية — قسم هندسة الحاسوب / أمن المعلومات |
+                رمز المساق: <strong>SYBS 2309</strong>
+            </p>
+            <p>المحاضرة 7 · المنطق البرمجي والدوال | المحاضر: <strong>م. محمود خليل</strong></p>
+            <p class="copyright-year">
+                © <span id="current-year"></span> Cyber Khalil — جميع الحقوق محفوظة
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
